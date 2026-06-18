@@ -17,6 +17,24 @@
 #define BNO055_MODE_ACCONLY     0x01
 #define BNO055_PWR_NORMAL       0x00
 
+#define BNO055_ACC_CONFIG_REG   0x08
+
+#define BNO055_ACC_RANGE_2G     0x00
+#define BNO055_ACC_RANGE_4G     0x01
+#define BNO055_ACC_RANGE_8G     0x02
+#define BNO055_ACC_RANGE_16G    0x03
+
+#define BNO055_ACC_BW_7_81HZ    (0x00 << 2)
+#define BNO055_ACC_BW_15_63HZ   (0x01 << 2)
+#define BNO055_ACC_BW_31_25HZ   (0x02 << 2)
+#define BNO055_ACC_BW_62_5HZ    (0x03 << 2)
+#define BNO055_ACC_BW_125HZ     (0x04 << 2)
+#define BNO055_ACC_BW_250HZ     (0x05 << 2)
+#define BNO055_ACC_BW_500HZ     (0x06 << 2)
+#define BNO055_ACC_BW_1000HZ    (0x07 << 2)
+
+#define BNO055_ACC_PWR_NORMAL   (0x00 << 5)
+
 void bno055_init_struct(bno055_t *dev, i2c_inst_t *i2c, uint8_t addr) {
     dev->i2c = i2c;
     dev->addr = addr;
@@ -113,6 +131,32 @@ static bool bno055_wait_for_chip(const bno055_t *dev) {
     return false;
 }
 
+static bool bno055_configure_accel(const bno055_t *dev) {
+    uint8_t acc_config =
+        BNO055_ACC_RANGE_4G |
+        BNO055_ACC_BW_1000HZ |
+        BNO055_ACC_PWR_NORMAL;
+
+    // Accelerometer config is on page 1.
+    if (!bno055_write_reg(dev, BNO055_PAGE_ID_REG, 0x01)) {
+        return false;
+    }
+    sleep_ms(10);
+
+    if (!bno055_write_reg(dev, BNO055_ACC_CONFIG_REG, acc_config)) {
+        return false;
+    }
+    sleep_ms(10);
+
+    // Return to page 0 for normal operation registers.
+    if (!bno055_write_reg(dev, BNO055_PAGE_ID_REG, 0x00)) {
+        return false;
+    }
+    sleep_ms(10);
+
+    return true;
+}
+
 bool bno055_begin_acconly(const bno055_t *dev) {
     if (!bno055_wait_for_chip(dev)) {
         return false;
@@ -140,7 +184,10 @@ bool bno055_begin_acconly(const bno055_t *dev) {
     }
     sleep_ms(10);
 
-    // Accelerometer-only mode.
+    if (!bno055_configure_accel(dev)) {
+        return false;
+    }
+
     if (!bno055_write_reg(dev, BNO055_OPR_MODE_REG, BNO055_MODE_ACCONLY)) {
         return false;
     }
