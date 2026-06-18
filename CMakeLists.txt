@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
-include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+set(PICO_SDK_PATH ${CMAKE_CURRENT_LIST_DIR}/external/pico-sdk)
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
 project(trinkey_bno055 C CXX ASM)
 
