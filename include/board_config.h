@@ -1,0 +1,10 @@
+#ifndef BOARD_CONFIG_H
+#define BOARD_CONFIG_H
+
+#define TRINKEY_I2C_PORT i2c0
+#define TRINKEY_I2C_SDA_PIN 16
+#define TRINKEY_I2C_SCL_PIN 17
+
+#define TRINKEY_NEOPIXEL_PIN 27
+
+#endif
