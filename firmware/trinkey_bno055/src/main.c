@@ -66,6 +66,7 @@ int main(void) {
 
     neopixel_set_rgb(&led, 0, 40, 0); // green = running
 
+    uint32_t sample = 0;
     printf("csv,t_us,ax_raw,ay_raw,az_raw\n");
 
     while (true) {
@@ -73,15 +74,13 @@ int main(void) {
 
         if (bno055_read_accel_raw(&imu, &accel)) {
             printf(
-                "%llu,%d,%d,%d\n",
+                "%lu,%llu,%d,%d,%d\n",
+                sample++,
                 (unsigned long long)time_us_64(),
                 accel.x,
                 accel.y,
                 accel.z
-            );
-        } else {
-            printf("accel_read_failed\n");
-            neopixel_set_rgb(&led, 60, 0, 0);
+                );
         }
 
         sleep_ms(10);
