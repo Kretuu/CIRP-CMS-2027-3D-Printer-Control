@@ -3,4 +3,4 @@
 	url = https://github.com/raspberrypi/pico-sdk.git
 [submodule "external/klipper"]
 	path = external/klipper
-	url = git@github.com:Kretuu/klipper.git
+	url = git@github.com:Kretuu/Ender-3_V3_KE_Klipper.git
