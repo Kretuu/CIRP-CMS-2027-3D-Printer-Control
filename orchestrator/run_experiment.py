@@ -20,6 +20,7 @@ SERIAL_TIMEOUT_SECONDS = 1.0
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MOONRAKER_URL = "http://localhost:7125"
 OUTPUT_DIR = REPO_ROOT / "data" / "raw"
+GCODE_ROOT = REPO_ROOT / "trajectories"
 GCODE_DIR = REPO_ROOT / "trajectories" / "gcode"
 GCODE_FILE = "simple_x_sweep.gcode"
 
@@ -32,6 +33,11 @@ def utc_stamp() -> str:
 
 
 def gcode_path() -> Path:
+    configured_path = Path(GCODE_FILE)
+    if configured_path.is_absolute():
+        return configured_path
+    if len(configured_path.parts) > 1:
+        return GCODE_ROOT / configured_path
     return GCODE_DIR / GCODE_FILE
 
 

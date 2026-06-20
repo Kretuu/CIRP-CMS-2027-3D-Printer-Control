@@ -23,7 +23,7 @@ Check the serial port. The default is `/dev/ttyACM0`; update `SERIAL_PORT` at th
 
 Check the Moonraker URL. The default is `http://localhost:7125`; update `MOONRAKER_URL` if Moonraker runs elsewhere.
 
-Choose the G-code file. G-code files are loaded from `trajectories/gcode/`; add other `.gcode` files there and update the `GCODE_FILE` filename at the top of `run_experiment.py`.
+Choose the G-code file. Bare `GCODE_FILE` filenames are loaded from `trajectories/gcode/`. Generated trajectories can be selected with a relative path from `trajectories/`, for example `GCODE_FILE = "generated/stationary_10s.gcode"`.
 
 Run the experiment:
 

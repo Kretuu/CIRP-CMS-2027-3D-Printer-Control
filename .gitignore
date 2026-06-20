@@ -78,6 +78,7 @@ data/processed/*
 !data/processed/.gitkeep
 trajectories/generated/*
 !trajectories/generated/.gitkeep
+!trajectories/generated/*.gcode
 
 # Editors
 .idea/
