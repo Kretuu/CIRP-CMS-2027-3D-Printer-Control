@@ -11,10 +11,5 @@
     <mapping directory="$PROJECT_DIR$/external/pico-sdk/lib/mbedtls" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/external/pico-sdk/lib/mbedtls/framework" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/external/pico-sdk/lib/tinyusb" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../pico-sdk/lib/btstack" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../pico-sdk/lib/cyw43-driver" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../pico-sdk/lib/lwip" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../pico-sdk/lib/mbedtls" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../pico-sdk/lib/tinyusb" vcs="Git" />
   </component>
 </project>

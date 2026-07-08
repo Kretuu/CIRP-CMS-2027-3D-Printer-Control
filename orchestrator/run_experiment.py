@@ -13,12 +13,12 @@ import requests
 import serial
 
 
-SERIAL_PORT = "/dev/ttyACM0"
+SERIAL_PORT = "/dev/tty.usbmodem13301"
 SERIAL_BAUDRATE = 115200
 SERIAL_TIMEOUT_SECONDS = 1.0
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MOONRAKER_URL = "http://localhost:7125"
+MOONRAKER_URL = "http://192.168.0.100:7125"
 OUTPUT_DIR = REPO_ROOT / "data" / "raw"
 GCODE_ROOT = REPO_ROOT / "trajectories"
 GCODE_DIR = REPO_ROOT / "trajectories" / "gcode"
