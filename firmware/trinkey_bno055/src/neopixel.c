@@ -1,6 +1,7 @@
 #include "neopixel.h"
 
 #include "ws2812.pio.h"
+#include "pico/time.h"
 
 static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b) {
     // WS2812 / NeoPixel expects GRB order, not RGB.
@@ -39,6 +40,7 @@ void neopixel_set_rgb(neopixel_t *np, uint8_t r, uint8_t g, uint8_t b) {
     }
 
     neopixel_put_raw(np, urgb_u32(r, g, b));
+    sleep_us(100);
 }
 
 void neopixel_off(neopixel_t *np) {
