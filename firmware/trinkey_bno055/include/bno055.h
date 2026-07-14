@@ -33,8 +33,8 @@ typedef struct {
     int16_t z;
 } bno055_accel_raw_t;
 
-extern const bno055_axis_remap_t TOOLHEAD_AXIS_REMAP_IDENTITY;
-extern const bno055_axis_remap_t BASE_AXIS_REMAP_IDENTITY;
+extern const bno055_axis_remap_t TOOLHEAD_AXIS_REMAP;
+extern const bno055_axis_remap_t BASE_AXIS_REMAP;
 
 void bno055_init_struct(bno055_t *dev, i2c_inst_t *i2c, uint8_t addr, bno055_axis_remap_t axis_remap);
 

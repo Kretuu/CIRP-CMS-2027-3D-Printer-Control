@@ -35,12 +35,12 @@
 
 #define BNO055_ACC_PWR_NORMAL   (0x00 << 5)
 
-const bno055_axis_remap_t TOOLHEAD_AXIS_REMAP_IDENTITY = {
+const bno055_axis_remap_t TOOLHEAD_AXIS_REMAP = {
     .src = {BNO055_AXIS_X, BNO055_AXIS_Z, BNO055_AXIS_Y},
     .sign = {1, -1, -1},
 };
 
-const bno055_axis_remap_t BASE_AXIS_REMAP_IDENTITY = {
+const bno055_axis_remap_t BASE_AXIS_REMAP = {
     .src = {BNO055_AXIS_X, BNO055_AXIS_Y, BNO055_AXIS_Z},
     .sign = {-1, 1, 1},
 };

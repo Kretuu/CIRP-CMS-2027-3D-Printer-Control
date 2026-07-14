@@ -71,13 +71,13 @@ int main(void) {
         &imu_base,
         TRINKEY_I2C_PORT,
         BNO055_ADDR_DEFAULT,
-        BASE_AXIS_REMAP_IDENTITY
+        BASE_AXIS_REMAP
     );
     bno055_init_struct(
         &imu_toolhead,
         TRINKEY_I2C_PORT,
         BNO055_ADDR_ALT,
-        TOOLHEAD_AXIS_REMAP_IDENTITY
+        TOOLHEAD_AXIS_REMAP
     );
 
     const char *base_chip_id = "base";
@@ -93,7 +93,7 @@ int main(void) {
     uint32_t next_sample_us = time_us_32();
 
     printf("Sample rate target: %u Hz per IMU\n", SAMPLE_RATE_HZ);
-    printf("chip_id,csv,t_us,ax_raw,ay_raw,az_raw\n");
+    printf("chip_id,sample,t_us,ax_raw,ay_raw,az_raw\n");
 
     while (true) {
         bno055_accel_raw_t accel;

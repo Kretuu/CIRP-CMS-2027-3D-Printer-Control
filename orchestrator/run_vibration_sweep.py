@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run Klipper sinusoidal vibration sweeps while logging Trinkey acceleration."""
+"""Run X/Y fixed-acceleration FRF sweeps while logging Trinkey acceleration."""
 
 from __future__ import annotations
 
@@ -29,21 +29,22 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_ROOT = REPO_ROOT / "data" / "raw"
 
 DEFAULT_SERIAL_PORT = "/dev/tty.usbmodem13301"
-DEFAULT_SERIAL_BAUDRATE = 115200
+SERIAL_BAUDRATE = 115200
 SERIAL_TIMEOUT_SECONDS = 0.050
 
 DEFAULT_MOONRAKER_URL = "http://192.168.0.100:7125"
 MOONRAKER_TIMEOUT_SECONDS = 30.0
 
-DEFAULT_AXES = ("X",)
+DEFAULT_AXES = ("X", "Y")
 DEFAULT_FREQ_START_HZ = 1.0
 DEFAULT_FREQ_END_HZ = 100.0
 DEFAULT_FREQ_STEP_HZ = 1.0
+DEFAULT_COMMANDED_ACCEL_AMPLITUDE_MM_S2 = 70.0
 
-ACCEL_PER_HZ = 70.0
 MAX_ACCEL_MM_S2 = 7500.0
 MAX_VELOCITY_MM_S = 500.0
-MAX_AMPLITUDE_MM = 2.0
+MAX_DISPLACEMENT_AMPLITUDE_MM = 2.0
+MOTION_LIMIT_HEADROOM = 0.98
 
 TEST_CYCLES = 8.0
 MIN_DURATION_SECONDS = 2.0
@@ -61,15 +62,14 @@ SAFE_Z_MM = 20.0
 CENTER_X_MM = 110.0
 CENTER_Y_MM = 110.0
 
+AXIS_SENSOR_MAP = {
+    "X": {"trinkey_chip": "toolhead", "accel_column": "ax_raw"},
+    "Y": {"trinkey_chip": "base", "accel_column": "ay_raw"},
+}
+
 CSV_HEADER = [
     "row_type",
     "pc_monotonic_s",
-    "axis",
-    "frequency_hz",
-    "amplitude_mm",
-    "target_accel_mm_s2",
-    "duration_s",
-    "ramp_time_s",
     "event",
     "trinkey_chip",
     "sample",
@@ -85,17 +85,20 @@ CSV_HEADER = [
 class SweepPoint:
     axis: str
     frequency_hz: float
-    amplitude_mm: float
-    target_accel_mm_s2: float
+    displacement_amplitude_mm: float
+    commanded_accel_amplitude_mm_s2: float
+    velocity_amplitude_mm_s: float
     duration_s: float
     ramp_time_s: float
+    sensor_chip: str
+    sensor_column: str
 
 
 @dataclass
 class PointResult:
-    point: SweepPoint
+    axis: str
+    frequency_hz: float
     csv_path: str
-    command: str
     started_monotonic_s: float | None = None
     completed_monotonic_s: float | None = None
     moonraker_response: object | None = None
@@ -129,15 +132,19 @@ def clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
-def target_accel_for_frequency(frequency_hz: float) -> float:
-    return min(ACCEL_PER_HZ * frequency_hz, MAX_ACCEL_MM_S2)
-
-
-def amplitude_for_frequency(frequency_hz: float, target_accel_mm_s2: float) -> float:
+def displacement_amplitude_for_frequency(
+    frequency_hz: float,
+    commanded_accel_amplitude_mm_s2: float,
+) -> float:
     omega = 2.0 * math.pi * frequency_hz
-    accel_limited_amplitude = target_accel_mm_s2 / (omega * omega)
-    velocity_limited_amplitude = MAX_VELOCITY_MM_S / omega
-    return min(MAX_AMPLITUDE_MM, accel_limited_amplitude, velocity_limited_amplitude)
+    return commanded_accel_amplitude_mm_s2 / (omega * omega)
+
+
+def velocity_amplitude_for_frequency(
+    frequency_hz: float,
+    displacement_amplitude_mm: float,
+) -> float:
+    return 2.0 * math.pi * frequency_hz * displacement_amplitude_mm
 
 
 def duration_for_frequency(frequency_hz: float) -> float:
@@ -152,18 +159,34 @@ def ramp_time_for_frequency(duration_s: float, frequency_hz: float) -> float:
     return min(duration_s * 0.25, RAMP_CYCLES / frequency_hz)
 
 
-def build_sweep_point(axis: str, frequency_hz: float) -> SweepPoint:
-    target_accel = target_accel_for_frequency(frequency_hz)
-    amplitude = amplitude_for_frequency(frequency_hz, target_accel)
+def build_sweep_point(
+    axis: str,
+    frequency_hz: float,
+    commanded_accel_amplitude_mm_s2: float,
+) -> SweepPoint:
+    if frequency_hz <= 0.0:
+        raise ValueError("Frequency must be positive")
+    if commanded_accel_amplitude_mm_s2 <= 0.0:
+        raise ValueError("Acceleration amplitude must be positive")
+
+    axis = axis.upper()
+    displacement_amplitude = displacement_amplitude_for_frequency(
+        frequency_hz, commanded_accel_amplitude_mm_s2)
+    velocity_amplitude = velocity_amplitude_for_frequency(
+        frequency_hz, displacement_amplitude)
     duration = duration_for_frequency(frequency_hz)
     ramp_time = ramp_time_for_frequency(duration, frequency_hz)
+    sensor = AXIS_SENSOR_MAP[axis]
     return SweepPoint(
-        axis=axis.upper(),
+        axis=axis,
         frequency_hz=frequency_hz,
-        amplitude_mm=amplitude,
-        target_accel_mm_s2=target_accel,
+        displacement_amplitude_mm=displacement_amplitude,
+        commanded_accel_amplitude_mm_s2=commanded_accel_amplitude_mm_s2,
+        velocity_amplitude_mm_s=velocity_amplitude,
         duration_s=duration,
         ramp_time_s=ramp_time,
+        sensor_chip=sensor["trinkey_chip"],
+        sensor_column=sensor["accel_column"],
     )
 
 
@@ -172,7 +195,7 @@ def build_vibration_command(point: SweepPoint) -> str:
         "RUN_VIBRATION_TEST "
         f"AXIS={point.axis} "
         f"FREQUENCY={point.frequency_hz:.6f} "
-        f"AMPLITUDE={point.amplitude_mm:.6f} "
+        f"AMPLITUDE={point.displacement_amplitude_mm:.6f} "
         f"DURATION={point.duration_s:.6f} "
         f"RAMP_CYCLES={RAMP_CYCLES:.6f} "
         f"SEGMENTS_PER_CYCLE={SEGMENTS_PER_CYCLE} "
@@ -209,16 +232,10 @@ def send_gcode_script(moonraker_url: str, gcode_script: str) -> object:
     return response.json()
 
 
-def empty_row(point: SweepPoint, row_type: str) -> dict[str, object]:
+def empty_row(row_type: str) -> dict[str, object]:
     return {
         "row_type": row_type,
         "pc_monotonic_s": monotonic_string(),
-        "axis": point.axis,
-        "frequency_hz": f"{point.frequency_hz:.6f}",
-        "amplitude_mm": f"{point.amplitude_mm:.9f}",
-        "target_accel_mm_s2": f"{point.target_accel_mm_s2:.6f}",
-        "duration_s": f"{point.duration_s:.6f}",
-        "ramp_time_s": f"{point.ramp_time_s:.6f}",
         "event": "",
         "trinkey_chip": "",
         "sample": "",
@@ -231,7 +248,7 @@ def empty_row(point: SweepPoint, row_type: str) -> dict[str, object]:
 
 
 def write_event(writer: csv.DictWriter, point: SweepPoint, event: str) -> None:
-    row = empty_row(point, "event")
+    row = empty_row("event")
     row["event"] = event
     writer.writerow(row)
 
@@ -257,13 +274,13 @@ def parse_trinkey_sample(line: str) -> tuple[str, int, int, int, int, int] | Non
 def write_serial_line(writer: csv.DictWriter, point: SweepPoint, line: str) -> None:
     parsed = parse_trinkey_sample(line)
     if parsed is None:
-        row = empty_row(point, "raw")
+        row = empty_row("raw")
         row["raw_line"] = line
         writer.writerow(row)
         return
 
     chip, sample, t_us, ax_raw, ay_raw, az_raw = parsed
-    row = empty_row(point, "sample")
+    row = empty_row("sample")
     row["trinkey_chip"] = chip
     row["sample"] = sample
     row["t_us"] = t_us
@@ -315,7 +332,11 @@ def run_sweep_point(
     filename = f"{point.axis.lower()}_{frequency_label(point.frequency_hz)}.csv"
     csv_path = run_dir / filename
     command = build_vibration_command(point)
-    result = PointResult(point=point, csv_path=str(csv_path), command=command)
+    result = PointResult(
+        axis=point.axis,
+        frequency_hz=point.frequency_hz,
+        csv_path=str(csv_path),
+    )
 
     with csv_path.open("w", newline="", encoding="utf-8") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=CSV_HEADER)
@@ -353,24 +374,49 @@ def parse_axes(raw_axes: list[str] | None) -> list[str]:
     for raw_axis in raw_axes:
         for axis in raw_axis.split(","):
             axis = axis.strip().upper()
-            if axis not in ("X", "Y", "Z"):
-                raise ValueError(f"Invalid axis: {axis}")
+            if axis not in AXIS_SENSOR_MAP:
+                raise ValueError("Only X and Y sweeps are supported")
             axes.append(axis)
     return axes
 
 
+def validate_sweep_points(points: list[SweepPoint]) -> None:
+    errors: list[str] = []
+    for point in points:
+        if point.displacement_amplitude_mm > MAX_DISPLACEMENT_AMPLITUDE_MM:
+            errors.append(
+                f"{point.axis} {point.frequency_hz:g} Hz requires "
+                f"{point.displacement_amplitude_mm:.3f} mm displacement "
+                f"amplitude; limit is {MAX_DISPLACEMENT_AMPLITUDE_MM:.3f} mm")
+        if point.velocity_amplitude_mm_s > MAX_VELOCITY_MM_S * MOTION_LIMIT_HEADROOM:
+            errors.append(
+                f"{point.axis} {point.frequency_hz:g} Hz requires "
+                f"{point.velocity_amplitude_mm_s:.3f} mm/s velocity "
+                f"amplitude; limit is {MAX_VELOCITY_MM_S:.3f} mm/s")
+        if (point.commanded_accel_amplitude_mm_s2 >
+                MAX_ACCEL_MM_S2 * MOTION_LIMIT_HEADROOM):
+            errors.append(
+                f"{point.axis} {point.frequency_hz:g} Hz requests "
+                f"{point.commanded_accel_amplitude_mm_s2:.3f} mm/s^2 "
+                f"acceleration amplitude; limit is {MAX_ACCEL_MM_S2:.3f} mm/s^2")
+    if errors:
+        raise ValueError("Invalid sweep plan:\n  " + "\n  ".join(errors))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run RUN_VIBRATION_TEST sweeps and log Trinkey CSV data."
+        description="Run X/Y fixed-acceleration FRF sweeps and log Trinkey data."
     )
     parser.add_argument("--serial-port", default=DEFAULT_SERIAL_PORT)
-    parser.add_argument("--serial-baudrate", type=int, default=DEFAULT_SERIAL_BAUDRATE)
     parser.add_argument("--moonraker-url", default=DEFAULT_MOONRAKER_URL)
     parser.add_argument("--axis", action="append",
-                        help="Axis to sweep. Repeat or use comma separated values.")
+                        help="Axis to sweep: X or Y. Repeat or use comma separated values.")
     parser.add_argument("--freq-start", type=float, default=DEFAULT_FREQ_START_HZ)
     parser.add_argument("--freq-end", type=float, default=DEFAULT_FREQ_END_HZ)
     parser.add_argument("--freq-step", type=float, default=DEFAULT_FREQ_STEP_HZ)
+    parser.add_argument("--accel-amplitude", type=float,
+                        default=DEFAULT_COMMANDED_ACCEL_AMPLITUDE_MM_S2,
+                        help="Commanded acceleration amplitude in mm/s^2.")
     parser.add_argument("--skip-setup", action="store_true",
                         help="Do not move to the configured center point first.")
     parser.add_argument("--dry-run", action="store_true",
@@ -389,17 +435,17 @@ def build_metadata(
         "run_id": run_id,
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "run_dir": str(run_dir),
+        "experiment": "xy_fixed_accel_frf_sweep",
+        "printer": "Creality Ender 3 V3",
         "serial_port": args.serial_port,
-        "serial_baudrate": args.serial_baudrate,
+        "serial_baudrate": SERIAL_BAUDRATE,
         "moonraker_url": args.moonraker_url,
         "axes": axes,
         "frequency_start_hz": args.freq_start,
         "frequency_end_hz": args.freq_end,
         "frequency_step_hz": args.freq_step,
-        "accel_per_hz": ACCEL_PER_HZ,
-        "max_accel_mm_s2": MAX_ACCEL_MM_S2,
-        "max_velocity_mm_s": MAX_VELOCITY_MM_S,
-        "max_amplitude_mm": MAX_AMPLITUDE_MM,
+        "commanded_accel_amplitude_mm_s2": args.accel_amplitude,
+        "max_displacement_amplitude_mm": MAX_DISPLACEMENT_AMPLITUDE_MM,
         "test_cycles": TEST_CYCLES,
         "min_duration_seconds": MIN_DURATION_SECONDS,
         "max_duration_seconds": MAX_DURATION_SECONDS,
@@ -409,11 +455,32 @@ def build_metadata(
         "segments_per_cycle": SEGMENTS_PER_CYCLE,
         "max_segment_rate": MAX_SEGMENT_RATE,
         "chunk_time_seconds": CHUNK_TIME_SECONDS,
+        "axis_sensor_map": AXIS_SENSOR_MAP,
+        "input_displacement_equation": "x_cmd(t)=A*sin(2*pi*f*t)",
+        "input_acceleration_equation": "a_cmd(t)=-(2*pi*f)^2*A*sin(2*pi*f*t)",
+        "timebase": (
+            "Trinkey t_us is the sample timebase. Event rows use PC monotonic "
+            "time and bracket the Moonraker request, not exact physical start."
+        ),
         "setup_gcode": None if args.skip_setup else build_setup_command(),
-        "points": [asdict(point) for point in points],
+        "points": [point_metadata(point) for point in points],
         "results": [],
         "error": None,
         "completed_utc": None,
+    }
+
+
+def point_metadata(point: SweepPoint) -> dict[str, object]:
+    return {
+        "axis": point.axis,
+        "frequency_hz": point.frequency_hz,
+        "displacement_amplitude_mm": point.displacement_amplitude_mm,
+        "velocity_amplitude_mm_s": point.velocity_amplitude_mm_s,
+        "duration_s": point.duration_s,
+        "ramp_time_s": point.ramp_time_s,
+        "sensor_chip": point.sensor_chip,
+        "sensor_column": point.sensor_column,
+        "csv_file": f"{point.axis.lower()}_{frequency_label(point.frequency_hz)}.csv",
     }
 
 
@@ -425,13 +492,16 @@ def run() -> None:
     args = parse_args()
     axes = parse_axes(args.axis)
     frequencies = list(frequency_range(args.freq_start, args.freq_end, args.freq_step))
+    if not frequencies:
+        raise ValueError("Frequency range produced no sweep points")
     points = [
-        build_sweep_point(axis, frequency)
+        build_sweep_point(axis, frequency, args.accel_amplitude)
         for axis in axes
         for frequency in frequencies
     ]
+    validate_sweep_points(points)
 
-    run_id = f"{utc_stamp()}_vibration_sweep"
+    run_id = f"{utc_stamp()}_xy_frf_sweep"
     run_dir = OUTPUT_ROOT / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     metadata_path = run_dir / "metadata.json"
@@ -448,7 +518,7 @@ def run() -> None:
     try:
         with serial.Serial(
             args.serial_port,
-            args.serial_baudrate,
+            SERIAL_BAUDRATE,
             timeout=SERIAL_TIMEOUT_SECONDS,
         ) as trinkey, ThreadPoolExecutor(max_workers=1) as executor:
             trinkey.reset_input_buffer()
@@ -461,7 +531,8 @@ def run() -> None:
                 print(
                     f"[{index}/{len(points)}] {point.axis} "
                     f"{point.frequency_hz:.3f} Hz, "
-                    f"A={point.amplitude_mm:.6f} mm, "
+                    f"A={point.displacement_amplitude_mm:.6f} mm, "
+                    f"accel={point.commanded_accel_amplitude_mm_s2:.1f} mm/s^2, "
                     f"duration={point.duration_s:.3f} s"
                 )
                 result = run_sweep_point(
