@@ -10,6 +10,10 @@
 #include "neopixel.h"
 #include "bno055.h"
 
+#define I2C_BAUDRATE_HZ  (400 * 1000)
+#define SAMPLE_RATE_HZ   400
+#define SAMPLE_PERIOD_US (1000000 / SAMPLE_RATE_HZ)
+
 void init_imu_chip(const bno055_t *imu, neopixel_t *led, const char *name) {
     uint8_t chip_id = 0;
 
@@ -48,13 +52,14 @@ int main(void) {
         TRINKEY_I2C_PORT,
         TRINKEY_I2C_SDA_PIN,
         TRINKEY_I2C_SCL_PIN,
-        100 * 1000
+        I2C_BAUDRATE_HZ
     );
 
     printf(
-        "I2C initialized: SDA GPIO%d, SCL GPIO%d\n",
+        "I2C initialized: SDA GPIO%d, SCL GPIO%d, %lu Hz\n",
         TRINKEY_I2C_SDA_PIN,
-        TRINKEY_I2C_SCL_PIN
+        TRINKEY_I2C_SCL_PIN,
+        (unsigned long)I2C_BAUDRATE_HZ
     );
 
     neopixel_set_rgb(&led, 40, 40, 0); // yellow = scanning
@@ -62,8 +67,18 @@ int main(void) {
 
     bno055_t imu_base;
     bno055_t imu_toolhead;
-    bno055_init_struct(&imu_base, TRINKEY_I2C_PORT, BNO055_ADDR_DEFAULT);
-    bno055_init_struct(&imu_toolhead, TRINKEY_I2C_PORT, BNO055_ADDR_ALT);
+    bno055_init_struct(
+        &imu_base,
+        TRINKEY_I2C_PORT,
+        BNO055_ADDR_DEFAULT,
+        BASE_AXIS_REMAP_IDENTITY
+    );
+    bno055_init_struct(
+        &imu_toolhead,
+        TRINKEY_I2C_PORT,
+        BNO055_ADDR_ALT,
+        TOOLHEAD_AXIS_REMAP_IDENTITY
+    );
 
     const char *base_chip_id = "base";
     const char *toolhead_chip_id = "toolhead";
@@ -75,6 +90,9 @@ int main(void) {
     neopixel_set_rgb(&led, 0, 40, 0); // green = running
 
     uint32_t sample = 0;
+    uint32_t next_sample_us = time_us_32();
+
+    printf("Sample rate target: %u Hz per IMU\n", SAMPLE_RATE_HZ);
     printf("chip_id,csv,t_us,ax_raw,ay_raw,az_raw\n");
 
     while (true) {
@@ -105,6 +123,13 @@ int main(void) {
                 );
         }
 
-        sleep_ms(10);
+        next_sample_us += SAMPLE_PERIOD_US;
+        const int32_t sleep_time_us = (int32_t)(next_sample_us - time_us_32());
+
+        if (sleep_time_us > 0) {
+            sleep_us((uint32_t)sleep_time_us);
+        } else {
+            next_sample_us = time_us_32();
+        }
     }
 }

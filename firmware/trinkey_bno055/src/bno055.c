@@ -35,9 +35,20 @@
 
 #define BNO055_ACC_PWR_NORMAL   (0x00 << 5)
 
-void bno055_init_struct(bno055_t *dev, i2c_inst_t *i2c, uint8_t addr) {
+const bno055_axis_remap_t TOOLHEAD_AXIS_REMAP_IDENTITY = {
+    .src = {BNO055_AXIS_X, BNO055_AXIS_Z, BNO055_AXIS_Y},
+    .sign = {1, -1, -1},
+};
+
+const bno055_axis_remap_t BASE_AXIS_REMAP_IDENTITY = {
+    .src = {BNO055_AXIS_X, BNO055_AXIS_Y, BNO055_AXIS_Z},
+    .sign = {-1, 1, 1},
+};
+
+void bno055_init_struct(bno055_t *dev, i2c_inst_t *i2c, uint8_t addr, bno055_axis_remap_t axis_remap) {
     dev->i2c = i2c;
     dev->addr = addr;
+    dev->accel_remap = axis_remap;
 }
 
 static bool bno055_write_reg(const bno055_t *dev, uint8_t reg, uint8_t value) {
@@ -157,6 +168,37 @@ static bool bno055_configure_accel(const bno055_t *dev) {
     return true;
 }
 
+static int16_t bno055_apply_axis_sign(int16_t value, int8_t sign) {
+    if (sign >= 0) {
+        return value;
+    }
+
+    if (value == INT16_MIN) {
+        return INT16_MAX;
+    }
+
+    return (int16_t)-value;
+}
+
+static void bno055_accel_remap(const bno055_t *dev, bno055_accel_raw_t *accel) {
+    const bno055_accel_raw_t in = *accel;
+    const int16_t values[BNO055_AXIS_COUNT] = {in.x, in.y, in.z};
+    const bno055_axis_remap_t *remap = &dev->accel_remap;
+
+    accel->x = bno055_apply_axis_sign(
+        values[remap->src[BNO055_AXIS_X]],
+        remap->sign[BNO055_AXIS_X]
+    );
+    accel->y = bno055_apply_axis_sign(
+        values[remap->src[BNO055_AXIS_Y]],
+        remap->sign[BNO055_AXIS_Y]
+    );
+    accel->z = bno055_apply_axis_sign(
+        values[remap->src[BNO055_AXIS_Z]],
+        remap->sign[BNO055_AXIS_Z]
+    );
+}
+
 bool bno055_begin_acconly(const bno055_t *dev) {
     if (!bno055_wait_for_chip(dev)) {
         return false;
@@ -207,5 +249,6 @@ bool bno055_read_accel_raw(const bno055_t *dev, bno055_accel_raw_t *accel) {
     accel->y = (int16_t)((buf[3] << 8) | buf[2]);
     accel->z = (int16_t)((buf[5] << 8) | buf[4]);
 
+    bno055_accel_remap(dev, accel);
     return true;
 }
