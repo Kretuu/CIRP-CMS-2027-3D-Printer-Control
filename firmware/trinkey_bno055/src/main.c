@@ -9,10 +9,9 @@
 #include "i2c_utils.h"
 #include "neopixel.h"
 #include "bno055.h"
+#include "trinkey_protocol.h"
 
 #define I2C_BAUDRATE_HZ  (400 * 1000)
-#define SAMPLE_RATE_HZ   400
-#define SAMPLE_PERIOD_US (1000000 / SAMPLE_RATE_HZ)
 
 void init_imu_chip(const bno055_t *imu, neopixel_t *led, const char *name) {
     uint8_t chip_id = 0;
@@ -80,56 +79,21 @@ int main(void) {
         TOOLHEAD_AXIS_REMAP
     );
 
-    const char *base_chip_id = "base";
-    const char *toolhead_chip_id = "toolhead";
-
-    init_imu_chip(&imu_base, &led, base_chip_id);
-    init_imu_chip(&imu_toolhead, &led, toolhead_chip_id);
+    init_imu_chip(&imu_base, &led, "base");
+    init_imu_chip(&imu_toolhead, &led, "toolhead");
 
     printf("BNO055 chips init complete\n");
     neopixel_set_rgb(&led, 0, 40, 0); // green = running
 
-    uint32_t sample = 0;
-    uint32_t next_sample_us = time_us_32();
-
-    printf("Sample rate target: %u Hz per IMU\n", SAMPLE_RATE_HZ);
-    printf("chip_id,sample,t_us,ax_raw,ay_raw,az_raw\n");
+    trinkey_protocol_state_t protocol_state;
+    trinkey_protocol_init(&protocol_state);
+    trinkey_protocol_print_ready();
 
     while (true) {
-        bno055_accel_raw_t accel;
-        const uint32_t current_sample = sample++;
-
-        if (bno055_read_accel_raw(&imu_base, &accel)) {
-            printf(
-                "%s,%lu,%llu,%d,%d,%d\n",
-                base_chip_id,
-                current_sample,
-                (unsigned long long)time_us_64(),
-                accel.x,
-                accel.y,
-                accel.z
-                );
-        }
-
-        if (bno055_read_accel_raw(&imu_toolhead, &accel)) {
-            printf(
-                "%s,%lu,%llu,%d,%d,%d\n",
-                toolhead_chip_id,
-                current_sample,
-                (unsigned long long)time_us_64(),
-                accel.x,
-                accel.y,
-                accel.z
-                );
-        }
-
-        next_sample_us += SAMPLE_PERIOD_US;
-        const int32_t sleep_time_us = (int32_t)(next_sample_us - time_us_32());
-
-        if (sleep_time_us > 0) {
-            sleep_us((uint32_t)sleep_time_us);
-        } else {
-            next_sample_us = time_us_32();
-        }
+        trinkey_protocol_loop_once(
+            &protocol_state,
+            &imu_base,
+            &imu_toolhead
+        );
     }
 }
