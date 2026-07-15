@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.13)
 set(PICO_SDK_PATH ${CMAKE_CURRENT_LIST_DIR}/external/pico-sdk)
 set(PICO_BOARD adafruit_trinkey_qt2040 CACHE STRING "Pico board")
 
+set(ARM_GNU_TOOLCHAIN_CASK_PATH "/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi")
+if(NOT PICO_TOOLCHAIN_PATH
+        AND EXISTS "${ARM_GNU_TOOLCHAIN_CASK_PATH}/bin/arm-none-eabi-gcc")
+    set(PICO_TOOLCHAIN_PATH "${ARM_GNU_TOOLCHAIN_CASK_PATH}"
+            CACHE PATH "Path to the Arm GNU Toolchain used by the Pico SDK")
+endif()
+
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
 project(meng-dissertation-code C CXX ASM)
