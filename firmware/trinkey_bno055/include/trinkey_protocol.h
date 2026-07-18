@@ -11,9 +11,6 @@
 #define TRINKEY_RUN_ID_BUFFER_SIZE 64
 
 typedef struct {
-    bool streaming;
-    uint32_t sample;
-    uint32_t next_sample_us;
     char run_id[TRINKEY_RUN_ID_BUFFER_SIZE];
     char command_buffer[TRINKEY_COMMAND_BUFFER_SIZE];
     size_t command_length;
@@ -39,19 +36,7 @@ void trinkey_protocol_print_ready(void);
 void trinkey_protocol_poll_commands(trinkey_protocol_state_t *state);
 
 /**
- * Emit one sample from each accelerometer if the sample period has elapsed.
- *
- * @param state Mutable protocol state allocated by the caller.
- * @param imu_base Bed/base accelerometer.
- * @param imu_toolhead Toolhead accelerometer.
- */
-void trinkey_protocol_stream_samples_if_due(
-        trinkey_protocol_state_t *state,
-        const bno055_t *imu_base,
-        const bno055_t *imu_toolhead);
-
-/**
- * Run one iteration of command polling and optional sample streaming.
+ * Run one iteration of command polling and optional buffered capture.
  *
  * @param state Mutable protocol state allocated by the caller.
  * @param imu_base Bed/base accelerometer.

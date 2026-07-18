@@ -6,39 +6,63 @@
 
 #include "pico/stdlib.h"
 
-#define SAMPLE_RATE_HZ   400
-#define SAMPLE_PERIOD_US (1000000 / SAMPLE_RATE_HZ)
+#include "trinkey_capture.h"
 
 /**
- * Start a new streaming run and reset the per-run sample counter.
+ * Copy one comma-delimited field into a fixed buffer.
+ *
+ * @param dest Destination buffer.
+ * @param dest_size Destination buffer size in bytes.
+ * @param start Start of the field.
+ * @param end Pointer to comma or string terminator.
+ */
+static void copy_field(
+        char *dest,
+        size_t dest_size,
+        const char *start,
+        const char *end) {
+    size_t len = (size_t)(end - start);
+    if (len >= dest_size) {
+        len = dest_size - 1;
+    }
+    memcpy(dest, start, len);
+    dest[len] = '\0';
+}
+
+/**
+ * Start a new RAM-buffered capture run.
  *
  * @param state Mutable protocol state allocated by the caller.
  * @param run_id Short identifier supplied by the Klipper host.
+ * @param mode Which accelerometer or accelerometers to capture.
  */
-static void start_streaming(
+static void start_capture(
         trinkey_protocol_state_t *state,
-        const char *run_id) {
-    state->streaming = true;
-    state->sample = 0;
-    state->next_sample_us = time_us_32();
-
+        const char *run_id,
+        trinkey_capture_mode_t mode) {
     strncpy(state->run_id, run_id, TRINKEY_RUN_ID_BUFFER_SIZE - 1);
     state->run_id[TRINKEY_RUN_ID_BUFFER_SIZE - 1] = '\0';
+    trinkey_capture_start(mode);
 
-    printf("ACK_START,%s,%llu\n",
+    printf("ACK_START,%s,%s,%llu\n",
            state->run_id,
+           trinkey_capture_mode_name(mode),
            (unsigned long long)time_us_64());
     stdio_flush();
 }
 
 /**
- * Stop sample streaming while keeping the command interface alive.
- *
- * @param state Mutable protocol state allocated by the caller.
+ * Stop RAM-buffered capture while keeping the buffer available for dumping.
  */
-static void stop_streaming(trinkey_protocol_state_t *state) {
-    state->streaming = false;
-    printf("ACK_STOP,%llu\n", (unsigned long long)time_us_64());
+static void stop_capture(void) {
+    trinkey_capture_stop();
+    const trinkey_capture_status_t status = trinkey_capture_status();
+    printf("ACK_STOP,%llu,%lu,%lu,%lu,%lu\n",
+           (unsigned long long)time_us_64(),
+           (unsigned long)status.stored_count,
+           (unsigned long)status.sample_count,
+           (unsigned long)status.dropped_count,
+           (unsigned long)status.overrun_count);
     stdio_flush();
 }
 
@@ -55,9 +79,52 @@ static void reply_sync(uint32_t sequence) {
 }
 
 /**
+ * Handle a START command with optional run id and capture mode fields.
+ *
+ * Supported forms are START, START,<run_id>, and START,<run_id>,<mode>.
+ * Mode may be base, toolhead, or both.
+ *
+ * @param state Mutable protocol state allocated by the caller.
+ * @param line Null-terminated command line.
+ */
+static void handle_start_command(
+        trinkey_protocol_state_t *state,
+        const char *line) {
+    char run_id[TRINKEY_RUN_ID_BUFFER_SIZE] = "";
+    char mode_text[16] = "both";
+    trinkey_capture_mode_t mode = TRINKEY_CAPTURE_BOTH;
+
+    if (line[5] == ',') {
+        const char *run_start = line + 6;
+        const char *run_end = strchr(run_start, ',');
+        if (run_end == NULL) {
+            run_end = run_start + strlen(run_start);
+        }
+        copy_field(run_id, sizeof(run_id), run_start, run_end);
+
+        if (*run_end == ',') {
+            const char *mode_start = run_end + 1;
+            const char *mode_end = mode_start + strlen(mode_start);
+            copy_field(mode_text, sizeof(mode_text), mode_start, mode_end);
+        }
+    }
+
+    if (!trinkey_capture_mode_from_string(mode_text, &mode)) {
+        printf("ERR,BAD_CAPTURE_MODE,%llu,%s\n",
+               (unsigned long long)time_us_64(),
+               mode_text);
+        stdio_flush();
+        return;
+    }
+
+    start_capture(state, run_id, mode);
+}
+
+/**
  * Execute one complete command line received from USB serial.
  *
- * Supported commands are START,<run_id>, STOP, and SYNC,<sequence>.
+ * Supported commands are START,<run_id>,<mode>, STOP, DUMP, and
+ * SYNC,<sequence>.
  *
  * @param state Mutable protocol state allocated by the caller.
  * @param line Null-terminated command line without the newline character.
@@ -66,16 +133,17 @@ static void handle_command_line(
         trinkey_protocol_state_t *state,
         const char *line) {
     if (strcmp(line, "START") == 0 || strncmp(line, "START,", 6) == 0) {
-        const char *run_id = "";
-        if (line[5] == ',') {
-            run_id = line + 6;
-        }
-        start_streaming(state, run_id);
+        handle_start_command(state, line);
         return;
     }
 
     if (strcmp(line, "STOP") == 0) {
-        stop_streaming(state);
+        stop_capture();
+        return;
+    }
+
+    if (strcmp(line, "DUMP") == 0) {
+        trinkey_capture_dump_csv();
         return;
     }
 
@@ -91,49 +159,20 @@ static void handle_command_line(
     stdio_flush();
 }
 
-/**
- * Read one BNO055 and emit a tagged accelerometer sample row.
- *
- * @param imu BNO055 device to read.
- * @param chip_id Logical sensor name, for example base or toolhead.
- * @param sample Shared sample counter value for this sampling instant.
- */
-static void write_accel_sample(
-        const bno055_t *imu,
-        const char *chip_id,
-        uint32_t sample) {
-    bno055_accel_raw_t accel;
-    if (!bno055_read_accel_raw(imu, &accel)) {
-        printf("ERR,READ_ACCEL,%s,%lu,%llu\n",
-               chip_id,
-               (unsigned long)sample,
-               (unsigned long long)time_us_64());
-        return;
-    }
-
-    printf(
-        "A,%s,%lu,%llu,%d,%d,%d\n",
-        chip_id,
-        (unsigned long)sample,
-        (unsigned long long)time_us_64(),
-        accel.x,
-        accel.y,
-        accel.z
-    );
-}
-
 void trinkey_protocol_init(trinkey_protocol_state_t *state) {
-    state->streaming = false;
-    state->sample = 0;
-    state->next_sample_us = time_us_32();
     state->run_id[0] = '\0';
     state->command_buffer[0] = '\0';
     state->command_length = 0;
+    trinkey_capture_init();
 }
 
 void trinkey_protocol_print_ready(void) {
-    printf("Sample rate target: %u Hz per IMU\n", SAMPLE_RATE_HZ);
-    printf("Protocol: START,<run_id> STOP SYNC,<sequence>\n");
+    printf("Sample rate target: %u Hz per selected IMU\n",
+           TRINKEY_CAPTURE_SAMPLE_RATE_HZ);
+    printf("Capture capacity: %u sample instants\n",
+           TRINKEY_CAPTURE_CAPACITY);
+    printf("Protocol: START,<run_id>,<base|toolhead|both> STOP DUMP "
+           "SYNC,<sequence>\n");
     printf("Sample row: A,chip_id,sample,t_us,ax_raw,ay_raw,az_raw\n");
     printf("READY,%llu\n", (unsigned long long)time_us_64());
     stdio_flush();
@@ -166,38 +205,15 @@ void trinkey_protocol_poll_commands(trinkey_protocol_state_t *state) {
     }
 }
 
-void trinkey_protocol_stream_samples_if_due(
-        trinkey_protocol_state_t *state,
-        const bno055_t *imu_base,
-        const bno055_t *imu_toolhead) {
-    const int32_t time_to_sample =
-        (int32_t)(state->next_sample_us - time_us_32());
-    if (time_to_sample > 0) {
-        return;
-    }
-
-    const uint32_t current_sample = state->sample++;
-    write_accel_sample(imu_base, "base", current_sample);
-    if (state->streaming) {
-        write_accel_sample(imu_toolhead, "toolhead", current_sample);
-    }
-    trinkey_protocol_poll_commands(state);
-    stdio_flush();
-
-    state->next_sample_us += SAMPLE_PERIOD_US;
-    if ((int32_t)(state->next_sample_us - time_us_32()) < -SAMPLE_PERIOD_US) {
-        state->next_sample_us = time_us_32();
-    }
-}
-
 void trinkey_protocol_loop_once(
         trinkey_protocol_state_t *state,
         const bno055_t *imu_base,
         const bno055_t *imu_toolhead) {
     trinkey_protocol_poll_commands(state);
-    if (state->streaming) {
-        trinkey_protocol_stream_samples_if_due(state, imu_base, imu_toolhead);
-        sleep_us(100);
+    trinkey_capture_sample_if_due(imu_base, imu_toolhead);
+
+    if (trinkey_capture_status().active) {
+        sleep_us(50);
     } else {
         sleep_ms(1);
     }

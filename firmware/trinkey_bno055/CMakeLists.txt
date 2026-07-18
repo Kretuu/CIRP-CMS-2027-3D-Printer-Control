@@ -3,6 +3,7 @@ add_executable(trinkey_bno055
         src/bno055.c
         src/i2c_utils.c
         src/neopixel.c
+        src/trinkey_capture.c
         src/trinkey_protocol.c
 )
 
