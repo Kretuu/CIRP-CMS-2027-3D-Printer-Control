@@ -178,10 +178,11 @@ void trinkey_protocol_stream_samples_if_due(
 
     const uint32_t current_sample = state->sample++;
     write_accel_sample(imu_base, "base", current_sample);
-    trinkey_protocol_poll_commands(state);
     if (state->streaming) {
         write_accel_sample(imu_toolhead, "toolhead", current_sample);
     }
+    trinkey_protocol_poll_commands(state);
+    stdio_flush();
 
     state->next_sample_us += SAMPLE_PERIOD_US;
     if ((int32_t)(state->next_sample_us - time_us_32()) < -SAMPLE_PERIOD_US) {
