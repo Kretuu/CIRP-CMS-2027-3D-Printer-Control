@@ -16,7 +16,6 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
 
 try:
     import requests
@@ -31,15 +30,13 @@ except ModuleNotFoundError as exc:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_ROOT = REPO_ROOT / "data" / "raw"
 
-DEFAULT_MOONRAKER_URL = "http://192.168.0.2:7125"
+MOONRAKER_URL = "http://192.168.0.2:7125"
 MOONRAKER_TIMEOUT_SECONDS = 120.0
 
-DEFAULT_AXES = ("X", "Y")
-DEFAULT_FREQ_START_HZ = 1.0
-DEFAULT_FREQ_END_HZ = 100.0
-DEFAULT_FREQ_STEP_HZ = 1.0
-DEFAULT_COMMANDED_ACCEL_AMPLITUDE_MM_S2 = 3000.0
-DEFAULT_SYNC_COUNT = 20
+AXES = ("X", "Y")
+MIN_FREQUENCY_HZ = 1
+MAX_FREQUENCY_HZ = 100
+SYNC_COUNT = 20
 
 MAX_ACCEL_MM_S2 = 7500.0
 MAX_VELOCITY_MM_S = 500.0
@@ -48,8 +45,6 @@ MOTION_LIMIT_HEADROOM = 0.98
 
 TEST_CYCLES = 8.0
 MIN_DURATION_SECONDS = 2.0
-MAX_DURATION_SECONDS = 8.0
-RAMP_CYCLES = 2.0
 
 SEGMENTS_PER_CYCLE = 32
 MAX_SEGMENT_RATE = 6000.0
@@ -95,22 +90,7 @@ def utc_stamp() -> str:
 
 
 def frequency_label(frequency_hz: float) -> str:
-    if abs(frequency_hz - round(frequency_hz)) < 0.000001:
-        return f"{int(round(frequency_hz)):03d}Hz"
-    return f"{frequency_hz:07.3f}Hz".replace(".", "p")
-
-
-def frequency_range(start_hz: float, end_hz: float, step_hz: float) -> Iterable[float]:
-    if step_hz <= 0.0:
-        raise ValueError("Frequency step must be positive")
-    freq = start_hz
-    while freq <= end_hz + step_hz * 0.001:
-        yield round(freq, 6)
-        freq += step_hz
-
-
-def clamp(value: float, low: float, high: float) -> float:
-    return max(low, min(high, value))
+    return f"{int(frequency_hz):03d}Hz"
 
 
 def displacement_amplitude_for_frequency(
@@ -129,15 +109,12 @@ def velocity_amplitude_for_frequency(
 
 
 def duration_for_frequency(frequency_hz: float) -> float:
-    return clamp(
-        TEST_CYCLES / frequency_hz,
-        MIN_DURATION_SECONDS,
-        MAX_DURATION_SECONDS,
-    )
+    return max(MIN_DURATION_SECONDS, TEST_CYCLES / frequency_hz)
 
 
-def ramp_time_for_frequency(duration_s: float, frequency_hz: float) -> float:
-    return min(duration_s * 0.25, RAMP_CYCLES / frequency_hz)
+def ramp_time_for_frequency(frequency_hz: float) -> float:
+    # Use a two-period ramp at every excitation frequency.
+    return 2.0 / frequency_hz
 
 
 def build_sweep_point(
@@ -156,7 +133,7 @@ def build_sweep_point(
     velocity_amplitude = velocity_amplitude_for_frequency(
         frequency_hz, displacement_amplitude)
     duration = duration_for_frequency(frequency_hz)
-    ramp_time = ramp_time_for_frequency(duration, frequency_hz)
+    ramp_time = ramp_time_for_frequency(frequency_hz)
     sensor = AXIS_SENSOR_MAP[axis]
     return SweepPoint(
         axis=axis,
@@ -189,37 +166,20 @@ def build_remote_run_id(local_run_id: str, point: SweepPoint) -> str:
 def build_vibration_command(
     point: SweepPoint,
     remote_run_id: str,
-    trinkey_port: str | None,
-    remote_log_dir: str | None,
-    sync_count: int,
 ) -> str:
-    parts = [
+    return " ".join([
         "RUN_VIBRATION_TEST",
         f"AXIS={point.axis}",
         f"FREQUENCY={point.frequency_hz:.6f}",
         f"AMPLITUDE={point.displacement_amplitude_mm:.6f}",
         f"DURATION={point.duration_s:.6f}",
-        f"RAMP_CYCLES={RAMP_CYCLES:.6f}",
-        f"SEGMENTS_PER_CYCLE={SEGMENTS_PER_CYCLE}",
-        f"MAX_SEGMENT_RATE={MAX_SEGMENT_RATE:.3f}",
-        f"CHUNK_TIME={CHUNK_TIME_SECONDS:.6f}",
-        f"MAX_VELOCITY={MAX_VELOCITY_MM_S:.3f}",
-        f"MAX_ACCEL={MAX_ACCEL_MM_S2:.3f}",
-        "INPUT_SHAPING=0",
-        "WAIT=1",
-        "TRINKEY=1",
+        f"RAMP_TIME={point.ramp_time_s:.17g}",
         f"RUN_ID={remote_run_id}",
-        f"SYNC_COUNT={sync_count}",
-    ]
-    if trinkey_port:
-        parts.append(f"TRINKEY_PORT={trinkey_port}")
-    if remote_log_dir:
-        parts.append(f"LOG_DIR={remote_log_dir}")
-    return " ".join(parts)
+    ])
 
 
-def send_gcode_script(moonraker_url: str, gcode_script: str) -> object:
-    url = f"{moonraker_url.rstrip('/')}/printer/gcode/script"
+def send_gcode_script(gcode_script: str) -> object:
+    url = f"{MOONRAKER_URL}/printer/gcode/script"
     response = requests.post(
         url,
         json={"script": gcode_script},
@@ -232,16 +192,11 @@ def send_gcode_script(moonraker_url: str, gcode_script: str) -> object:
 
 
 def run_sweep_point(
-    moonraker_url: str,
     local_run_id: str,
     point: SweepPoint,
-    trinkey_port: str | None,
-    remote_log_dir: str | None,
-    sync_count: int,
 ) -> PointResult:
     remote_run_id = build_remote_run_id(local_run_id, point)
-    command = build_vibration_command(
-        point, remote_run_id, trinkey_port, remote_log_dir, sync_count)
+    command = build_vibration_command(point, remote_run_id)
     result = PointResult(
         axis=point.axis,
         frequency_hz=point.frequency_hz,
@@ -249,26 +204,13 @@ def run_sweep_point(
     )
     result.started_monotonic_s = time.monotonic()
     try:
-        result.moonraker_response = send_gcode_script(moonraker_url, command)
+        result.moonraker_response = send_gcode_script(command)
     except Exception as exc:
         result.completed_monotonic_s = time.monotonic()
         result.error = repr(exc)
         raise
     result.completed_monotonic_s = time.monotonic()
     return result
-
-
-def parse_axes(raw_axes: list[str] | None) -> list[str]:
-    if not raw_axes:
-        return list(DEFAULT_AXES)
-    axes: list[str] = []
-    for raw_axis in raw_axes:
-        for axis in raw_axis.split(","):
-            axis = axis.strip().upper()
-            if axis not in AXIS_SENSOR_MAP:
-                raise ValueError("Only X and Y sweeps are supported")
-            axes.append(axis)
-    return axes
 
 
 def validate_sweep_points(points: list[SweepPoint]) -> None:
@@ -298,26 +240,10 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run X/Y FRF sweeps using Klipper-side Trinkey logging."
     )
-    parser.add_argument("--moonraker-url", default=DEFAULT_MOONRAKER_URL)
-    parser.add_argument("--trinkey-port", default=None,
-                        help="Trinkey USB serial path on the Klipper host.")
-    parser.add_argument("--remote-log-dir", default=None,
-                        help="Log directory on the Klipper host. If omitted, "
-                             "[vibration_test] trinkey_log_dir is used.")
-    parser.add_argument("--sync-count", type=int, default=DEFAULT_SYNC_COUNT,
-                        help="Number of pre and post sync requests per point.")
-    parser.add_argument("--axis", action="append",
-                        help="Axis to sweep: X or Y. Repeat or use comma separated values.")
-    parser.add_argument("--freq-start", type=float, default=DEFAULT_FREQ_START_HZ)
-    parser.add_argument("--freq-end", type=float, default=DEFAULT_FREQ_END_HZ)
-    parser.add_argument("--freq-step", type=float, default=DEFAULT_FREQ_STEP_HZ)
-    parser.add_argument("--accel-amplitude", type=float,
-                        default=DEFAULT_COMMANDED_ACCEL_AMPLITUDE_MM_S2,
+    parser.add_argument("--freq-start", type=int, default=MIN_FREQUENCY_HZ)
+    parser.add_argument("--freq-end", type=int, default=MAX_FREQUENCY_HZ)
+    parser.add_argument("--accel-amplitude", type=float, required=True,
                         help="Commanded acceleration amplitude in mm/s^2.")
-    parser.add_argument("--run-id", default=None,
-                        help="Local run id prefix. Defaults to a UTC timestamp.")
-    parser.add_argument("--skip-setup", action="store_true",
-                        help="Do not move to the configured center point first.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Write metadata and print commands without sending them.")
     return parser.parse_args()
@@ -341,7 +267,6 @@ def build_metadata(
     local_run_id: str,
     run_dir: Path,
     args: argparse.Namespace,
-    axes: list[str],
     points: list[SweepPoint],
 ) -> dict[str, object]:
     return {
@@ -350,20 +275,16 @@ def build_metadata(
         "run_dir": str(run_dir),
         "experiment": "xy_fixed_accel_frf_sweep_klipper_logged",
         "printer": "Creality Ender 3 V3",
-        "moonraker_url": args.moonraker_url,
-        "trinkey_port": args.trinkey_port,
-        "remote_log_dir": args.remote_log_dir,
-        "sync_count": args.sync_count,
-        "axes": axes,
+        "moonraker_url": MOONRAKER_URL,
+        "sync_count": SYNC_COUNT,
+        "axes": list(AXES),
         "frequency_start_hz": args.freq_start,
         "frequency_end_hz": args.freq_end,
-        "frequency_step_hz": args.freq_step,
+        "frequency_step_hz": 1,
         "commanded_accel_amplitude_mm_s2": args.accel_amplitude,
         "max_displacement_amplitude_mm": MAX_DISPLACEMENT_AMPLITUDE_MM,
         "test_cycles": TEST_CYCLES,
         "min_duration_seconds": MIN_DURATION_SECONDS,
-        "max_duration_seconds": MAX_DURATION_SECONDS,
-        "ramp_cycles": RAMP_CYCLES,
         "segments_per_cycle": SEGMENTS_PER_CYCLE,
         "max_segment_rate": MAX_SEGMENT_RATE,
         "chunk_time_seconds": CHUNK_TIME_SECONDS,
@@ -373,7 +294,7 @@ def build_metadata(
             "are logged by Klipper in Trinkey t_us, with sync.csv used to map "
             "Trinkey t_us to Klipper print_time."
         ),
-        "setup_gcode": None if args.skip_setup else build_setup_command(),
+        "setup_gcode": build_setup_command(),
         "points": [point_metadata(point, local_run_id) for point in points],
         "results": [],
         "error": None,
@@ -387,49 +308,41 @@ def write_metadata(path: Path, metadata: dict[str, object]) -> None:
 
 def run() -> None:
     args = parse_args()
-    if args.sync_count < 0:
-        raise ValueError("SYNC_COUNT must be non-negative")
+    if not (MIN_FREQUENCY_HZ <= args.freq_start <= args.freq_end
+            <= MAX_FREQUENCY_HZ):
+        raise ValueError("Frequency range must satisfy 1 <= start <= end <= 100")
 
-    axes = parse_axes(args.axis)
-    frequencies = list(frequency_range(args.freq_start, args.freq_end, args.freq_step))
-    if not frequencies:
-        raise ValueError("Frequency range produced no sweep points")
+    frequencies = range(args.freq_start, args.freq_end + 1)
     points = [
         build_sweep_point(axis, frequency, args.accel_amplitude)
-        for axis in axes
+        for axis in AXES
         for frequency in frequencies
     ]
     validate_sweep_points(points)
 
-    local_run_id = args.run_id or f"{utc_stamp()}_klipper_xy_frf_sweep"
+    local_run_id = f"{utc_stamp()}_klipper_xy_frf_sweep"
     run_dir = OUTPUT_ROOT / local_run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     metadata_path = run_dir / "metadata.json"
-    metadata = build_metadata(local_run_id, run_dir, args, axes, points)
+    metadata = build_metadata(local_run_id, run_dir, args, points)
     write_metadata(metadata_path, metadata)
 
     print(f"Local metadata directory: {run_dir}")
     print(f"Sweep points: {len(points)}")
-    if args.remote_log_dir:
-        print(f"Remote Klipper log directory: {args.remote_log_dir}")
-    else:
-        print("Remote Klipper log directory: [vibration_test] trinkey_log_dir")
+    print("Remote Klipper log directory: [vibration_test] trinkey_log_dir")
 
     try:
-        if not args.skip_setup:
-            setup = build_setup_command()
-            if args.dry_run:
-                print("\n# setup")
-                print(setup)
-            else:
-                print("Moving printer to sweep center")
-                send_gcode_script(args.moonraker_url, setup)
+        setup = build_setup_command()
+        if args.dry_run:
+            print("\n# setup")
+            print(setup)
+        else:
+            print("Moving printer to sweep center")
+            send_gcode_script(setup)
 
         for index, point in enumerate(points, start=1):
             remote_run_id = build_remote_run_id(local_run_id, point)
-            command = build_vibration_command(
-                point, remote_run_id, args.trinkey_port, args.remote_log_dir,
-                args.sync_count)
+            command = build_vibration_command(point, remote_run_id)
             print(
                 f"[{index}/{len(points)}] {point.axis} "
                 f"{point.frequency_hz:.3f} Hz, "
@@ -441,12 +354,8 @@ def run() -> None:
                 print(command)
                 continue
             result = run_sweep_point(
-                args.moonraker_url,
                 local_run_id,
                 point,
-                args.trinkey_port,
-                args.remote_log_dir,
-                args.sync_count,
             )
             metadata["results"].append(asdict(result))
             write_metadata(metadata_path, metadata)

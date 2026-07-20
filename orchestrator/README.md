@@ -1,109 +1,80 @@
-# Orchestrator
+# FRF Sweep Orchestrator
 
-This folder contains PC-side experiment runners for the Trinkey QT2040 BNO055
-firmware and the Klipper vibration-test extra.
+`run_klipper_vibration_sweep.py` runs the fixed experimental FRF protocol used
+for the dissertation. The local computer sends commands through Moonraker;
+Klipper generates the motion, communicates with the Trinkey and writes the
+time-critical input, output and synchronisation data on the printer host.
 
-`run_experiment.py` opens the Trinkey USB serial port, logs each received line with a PC monotonic timestamp, sends a selected G-code file to Moonraker, and writes metadata JSON beside the CSV log.
+## Setup
 
-`run_klipper_vibration_sweep.py` is the current FRF sweep runner. It sends
-`RUN_VIBRATION_TEST` commands through Moonraker while Klipper opens the Trinkey
-USB serial port and writes the input, output, sync, event, and metadata files on
-the printer host.
-
-`run_vibration_sweep.py` is the older local-serial sweep runner. It expects the
-Trinkey to stream continuously to the computer running the orchestrator, so it
-is mainly useful for older data or for debugging that older workflow.
-
-## Python Setup
-
-Create and activate a virtual environment from the repository root:
+Create the Python environment from the repository root:
 
 ```sh
 python3 -m venv orchestrator/.venv
 source orchestrator/.venv/bin/activate
-```
-
-Install the Python dependencies:
-
-```sh
 python -m pip install -r orchestrator/requirements.txt
 ```
 
-Check the Moonraker URL. Pass `--moonraker-url` if Moonraker runs somewhere other than the script default.
-
-## Single G-Code Experiment
-
-This is the first-pass experiment runner. It still assumes that the Trinkey is
-connected to the computer running the orchestrator.
-
-Check the local serial port. On macOS the Trinkey usually appears as
-`/dev/tty.usbmodem...`; pass it with `--serial-port` if it differs from the
-default.
-
-Choose the G-code file. Bare `GCODE_FILE` filenames are loaded from `trajectories/gcode/`. Generated trajectories can be selected with a relative path from `trajectories/`, for example `GCODE_FILE = "generated/stationary_10s.gcode"`.
-
-Run the experiment:
-
-```sh
-python orchestrator/run_experiment.py
-```
-
-Logs are written to `data/raw/`, which is ignored by Git except for its `.gitkeep` placeholder.
-
-## Klipper-Logged Vibration Sweep
-
-This is the preferred workflow for the current Trinkey firmware. The local
-computer only sends Moonraker commands. Klipper performs the motion, talks to the
-Trinkey over USB, and writes all time-critical data on the printer host.
-
-Recommended Klipper config:
+Configure the Klipper extension:
 
 ```ini
 [vibration_test]
-trinkey: true
 trinkey_port: /dev/serial/by-id/<trinkey-usb-id>
 trinkey_log_dir: ~/printer_data/logs/vibration_tests
-trinkey_sync_count: 20
 ```
 
-The Klipper Python environment also needs `pyserial`, because the extra opens
-the Trinkey serial device directly.
+The Klipper Python environment must contain `pyserial`.
 
-Run a short dry plan first:
+## Running a Sweep
+
+The acceleration amplitude is required and is specified in mm/s². For example,
+the 1.5 m/s² experiment is:
 
 ```sh
-python orchestrator/run_klipper_vibration_sweep.py --dry-run --freq-start 1 --freq-end 3
+python orchestrator/run_klipper_vibration_sweep.py --accel-amplitude 1500
 ```
 
-Run the default X/Y 1-100 Hz sweep at 70 mm/s^2 commanded acceleration
-amplitude:
+The fixed protocol tests X followed by Y at every integer frequency from 1 to
+100 Hz. The start and end frequencies may be restricted for testing:
 
 ```sh
-python orchestrator/run_klipper_vibration_sweep.py
+python orchestrator/run_klipper_vibration_sweep.py \
+  --accel-amplitude 1500 --freq-start 1 --freq-end 3
 ```
 
-If `trinkey_port` is not configured in Klipper, pass the Trinkey device path on
-the Klipper host:
+Use `--dry-run` to create the local plan and print the commands without moving
+the printer:
 
 ```sh
-python orchestrator/run_klipper_vibration_sweep.py --trinkey-port /dev/ttyACM0
+python orchestrator/run_klipper_vibration_sweep.py \
+  --accel-amplitude 1500 --freq-start 1 --freq-end 3 --dry-run
 ```
 
-Run only one axis, or choose a different input acceleration amplitude:
+The experiment uses the following fixed settings:
 
-```sh
-python orchestrator/run_klipper_vibration_sweep.py --axis X --accel-amplitude 100
-```
+- X and Y axes, in that order;
+- integer frequency increments;
+- eight requested periods with a minimum duration of 2 s;
+- a two-period quintic ramp at each end;
+- 32 constant-acceleration segments per period;
+- 20 clock-synchronisation requests before and after the motion;
+- 0.25 s Klipper motion-queue chunks;
+- input shaping disabled during the test;
+- a setup position of X=110 mm, Y=110 mm and Z=20 mm.
 
-The local runner creates only orchestration metadata:
+The Moonraker address is `http://192.168.0.2:7125`. The script validates the
+planned displacement, velocity and acceleration before sending any motion.
+Klipper independently checks homing, travel, kinematic and motion limits.
+
+## Logged Data
+
+The local orchestrator writes its plan and completion status to:
 
 ```text
-data/raw/<timestamp>_klipper_xy_frf_sweep/
-  metadata.json
+data/raw/<timestamp>_klipper_xy_frf_sweep/metadata.json
 ```
 
-The local `metadata.json` lists every sweep point and its `remote_run_id`. The
-actual measurement files are written on the Klipper host, normally under:
+Klipper normally writes one directory per frequency point under:
 
 ```text
 ~/printer_data/logs/vibration_tests/<remote_run_id>/
@@ -114,66 +85,48 @@ actual measurement files are written on the Klipper host, normally under:
   events.csv
 ```
 
-The files have separate purposes:
+- `samples.csv` contains Trinkey accelerometer samples and Trinkey timestamps.
+- `sync.csv` contains the timestamp pairs used to map Trinkey time to Klipper
+  print time.
+- `input.csv` contains the exact motion segments queued by Klipper.
+- `events.csv` records the acquisition and motion sequence.
+- `metadata.json` records the parameters and limits used for the point.
 
-- `samples.csv` contains Trinkey accelerometer samples using Trinkey `t_us`.
-- `sync.csv` contains timestamp pairs used to map Trinkey `t_us` to Klipper
-  `print_time`.
-- `input.csv` contains the commanded motion segments in Klipper `print_time`.
-- `events.csv` contains coarse run markers such as sync start, motion queued,
-  and motion wait complete.
-- `metadata.json` contains the command parameters for that frequency point.
+For X motion, analysis uses `toolhead/ax_raw`. For Y motion, it uses
+`base/ay_raw`.
 
-For the Ender 3 V3 two-accelerometer layout, use `toolhead/ax_raw` for X motion
-and `base/ay_raw` for Y motion. This matches the printer mechanics: the
-toolhead moves in X and the bed moves in Y.
+## Excitation
 
-The commanded sinusoid is:
-
-```text
-x_cmd(t) = A * sin(2*pi*f*t)
-a_cmd(t) = -(2*pi*f)^2 * A * sin(2*pi*f*t)
-```
-
-The sweep holds commanded acceleration amplitude constant. Therefore the
-commanded displacement amplitude is lower at higher frequency:
+For frequency \(f\) and requested acceleration amplitude \(a^\star\), the
+displacement amplitude is
 
 ```text
-A = commanded_accel_amplitude / (2*pi*frequency_hz)^2
+A = a_star / (2*pi*f)^2
 ```
 
-The runner rejects a sweep point if the requested fixed acceleration would need
-more than 2 mm displacement amplitude or exceed the configured motion limits.
-Lower the acceleration amplitude or raise the start frequency if this happens.
+The duration and ramp duration are
 
-## Downloading Klipper Logs
-
-Yes, the vibration data can be downloaded through Moonraker if
-`trinkey_log_dir` is inside Moonraker's `logs` root. The default path
-`~/printer_data/logs/vibration_tests` is chosen for that reason.
-
-Check the registered Moonraker roots:
-
-```sh
-curl http://<printer-host>:7125/server/files/roots
+```text
+T   = max(2, 8/f)
+T_r = 2/f
 ```
 
-List the vibration log directory:
+Klipper applies the quintic envelope to the displacement sinusoid and logs the
+piecewise-constant-acceleration approximation actually executed.
+
+## Downloading Logs
+
+When `trinkey_log_dir` is inside Moonraker's `logs` root, files can be listed
+and downloaded through Moonraker:
 
 ```sh
 curl "http://<printer-host>:7125/server/files/directory?path=logs/vibration_tests"
-```
 
-Download one file:
-
-```sh
 curl -o samples.csv \
   "http://<printer-host>:7125/server/files/logs/vibration_tests/<remote_run_id>/samples.csv"
 ```
 
-For downloading a complete run, create a ZIP archive from the remote log
-directories and then download that archive. Moonraker's `logs` root is normally
-read-only, so write the ZIP file to a writable root such as `config`:
+A complete run can be archived to a writable Moonraker root and downloaded:
 
 ```sh
 curl -X POST http://<printer-host>:7125/server/files/zip \
@@ -190,66 +143,3 @@ curl -X POST http://<printer-host>:7125/server/files/zip \
 curl -o vibration_logs.zip \
   "http://<printer-host>:7125/server/files/config/vibration_logs.zip"
 ```
-
-The current Klipper-logged orchestrator records the `remote_run_id` values but
-does not yet download the files automatically. A later update can add a
-Moonraker download step using the same ZIP endpoint.
-
-## Legacy Local-Serial Vibration Sweep
-
-This older runner also assumes that the Trinkey is connected to the computer
-running the orchestrator.
-
-Run a short dry plan first:
-
-```sh
-python orchestrator/run_vibration_sweep.py --dry-run --freq-start 1 --freq-end 3
-```
-
-Run the default X/Y 1-100 Hz sweep at 70 mm/s^2 commanded acceleration
-amplitude:
-
-```sh
-python orchestrator/run_vibration_sweep.py
-```
-
-Run only one axis, or choose a different input acceleration amplitude:
-
-```sh
-python orchestrator/run_vibration_sweep.py --axis X --accel-amplitude 100
-```
-
-The sweep runner creates:
-
-```text
-data/raw/<timestamp>_xy_frf_sweep/
-  metadata.json
-  x_001Hz.csv
-  x_002Hz.csv
-  ...
-```
-
-Each frequency CSV contains `event`, `sample`, and `raw` rows. Use `sample` rows for acceleration data. Event rows mark `pre_roll_start`, `moonraker_send`, `moonraker_return`, `post_roll_start`, and `file_complete`.
-
-For the Ender 3 V3 two-accelerometer layout, the sweep metadata includes
-`axis_sensor_map`. Use `toolhead/ax_raw` for X motion, `base/ay_raw` for Y
-motion.
-
-The commanded sinusoid is reconstructed from metadata:
-
-```text
-x_cmd(t) = A * sin(2*pi*f*t)
-a_cmd(t) = -(2*pi*f)^2 * A * sin(2*pi*f*t)
-```
-
-The sweep holds commanded acceleration amplitude constant. Therefore the
-commanded displacement amplitude is lower at higher frequency:
-
-```text
-A = commanded_accel_amplitude / (2*pi*frequency_hz)^2
-```
-
-The runner rejects a sweep point if the requested fixed acceleration would
-need more than 2 mm displacement amplitude or exceed the configured motion
-limits. Lower the acceleration amplitude or raise the start frequency if this
-happens.
