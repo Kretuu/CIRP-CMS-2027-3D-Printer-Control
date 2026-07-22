@@ -20,10 +20,11 @@ figureHandle = figure("Name", sprintf("%s %.3g Hz sweep point", ...
 hold on;
 grid on;
 box on;
-measuredPlot = plot(point.time_s, point.accel_mm_s2, ".", "MarkerSize", 8, ...
+measuredPlot = plot(point.time_s, point.accel_mm_s2, ".", "MarkerSize", 10, ...
     "DisplayName", "measured output samples");
 inputPlot = plot(point.input_segment_time_s, point.input_segment_accel_mm_s2, ".", ...
-    "MarkerSize", 7, "DisplayName", "logged input segments");
+    "MarkerSize", 10, "DisplayName", "logged input segments");
+fontsize(figureHandle, 14, "points");
 drawTimingRegions(point);
 drawTimingLines(point);
 xlabel("Time from Klipper motion start [s]");
@@ -88,7 +89,7 @@ labels = ["ramp-up", "settling guard", "fitted response", ...
 
 yLimits = ylim;
 yRange = diff(yLimits);
-labelY = yLimits(2) - 0.025 * yRange;
+labelOffsets = [0.025, 0.085, 0.025, 0.085, 0.025] * yRange;
 minimumLabelWidth = 0.075 * point.duration_s;
 regionHandles = gobjects(5, 1);
 
@@ -103,10 +104,11 @@ for regionIndex = 1:5
         "HandleVisibility", "off");
 
     if regionEnd - regionStart >= minimumLabelWidth
+        labelY = yLimits(2) - labelOffsets(regionIndex);
         text((regionStart + regionEnd) / 2.0, labelY, labels(regionIndex), ...
             "HorizontalAlignment", "center", ...
             "VerticalAlignment", "top", ...
-            "FontSize", 9, "FontWeight", "bold", ...
+            "FontSize", 14, "FontWeight", "bold", ...
             "Color", [0.25, 0.25, 0.25], ...
             "Clipping", "on", "HandleVisibility", "off");
     end
@@ -122,9 +124,9 @@ function drawTimingLines(point)
 %DRAWTIMINGLINES Mark the motion start and the samples used for fitting.
 
 xline(point.motion_start_s, "r-", "motion start", ...
-    "LabelVerticalAlignment", "bottom");
+    "LabelVerticalAlignment", "bottom", "FontSize", 14, "LineWidth", 2.0);
 xline(point.steady_start_s, "k--", "fit start", ...
-    "LabelVerticalAlignment", "bottom");
+    "LabelVerticalAlignment", "bottom", "FontSize", 14, "LineWidth", 2.0);
 xline(point.steady_end_s, "k--", "fit end", ...
-    "LabelVerticalAlignment", "bottom");
+    "LabelVerticalAlignment", "bottom", "FontSize", 14, "LineWidth", 2.0);
 end

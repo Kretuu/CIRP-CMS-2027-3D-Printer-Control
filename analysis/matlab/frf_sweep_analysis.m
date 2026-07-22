@@ -98,7 +98,7 @@ end
 function plotFrfs(results, models)
 %PLOTFRFS Plot every retained acceleration sweep in a four-panel layout.
 
-figure("Name", "Measured and identified FRFs");
+figureHandle = figure("Name", "Measured and identified FRFs");
 layout = tiledlayout(2, 2, "TileSpacing", "compact", "Padding", "compact");
 colours = lines(numel(results));
 
@@ -130,6 +130,7 @@ frequencyLimits = [min(minimumFrequencies), max(maximumFrequencies)];
 set([xMagnitudeAxes, yMagnitudeAxes, xPhaseAxes, yPhaseAxes], ...
     "XLim", frequencyLimits);
 title(layout, "Measured and identified frequency-response functions");
+fontsize(figureHandle, 14, "points");
 end
 
 
@@ -144,14 +145,14 @@ for resultIndex = 1:numel(results)
     rows = axisResult.used_for_frf;
     magnitudeDb = 20.0 * log10(abs(axisResult.frf(rows)));
     semilogx(axisHandle, axisResult.frequency_hz(rows), magnitudeDb, "-", ...
-        "Color", colours(resultIndex, :), "LineWidth", 1.4, ...
+        "Color", colours(resultIndex, :), "LineWidth", 2.0, ...
         "DisplayName", sprintf("%.1f m/s^2", ...
         results(resultIndex).commanded_accel_amplitude_m_s2));
 end
 
 [modelFrequencyHz, modelFrf] = evaluateModel(model);
 semilogx(axisHandle, modelFrequencyHz, 20.0 * log10(abs(modelFrf)), "k--", ...
-    "LineWidth", 1.8, "DisplayName", "Identified model (3.0 m/s^2)");
+    "LineWidth", 2.0, "DisplayName", "Identified model (3.0 m/s^2)");
 end
 
 
@@ -175,7 +176,7 @@ for resultIndex = 1:numel(results)
     end
 
     semilogx(axisHandle, axisResult.frequency_hz(rows), phaseDeg, "-", ...
-        "Color", colours(resultIndex, :), "LineWidth", 1.4, ...
+        "Color", colours(resultIndex, :), "LineWidth", 2.0, ...
         "HandleVisibility", "off");
 end
 
@@ -184,7 +185,7 @@ modelPhaseDeg = unwrap(angle(modelFrf)) * 180.0 / pi;
 modelPhaseDeg = modelPhaseDeg + 360.0 ...
     * round((referencePhaseDeg - modelPhaseDeg(1)) / 360.0);
 semilogx(axisHandle, modelFrequencyHz, modelPhaseDeg, "k--", ...
-    "LineWidth", 1.8, "HandleVisibility", "off");
+    "LineWidth", 2.0, "HandleVisibility", "off");
 end
 
 
