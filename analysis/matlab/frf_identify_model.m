@@ -51,4 +51,6 @@ model.relative_rms_error = norm(measuredFrf - fittedFrf) / norm(measuredFrf);
 if any(real(model.poles) >= 0.0)
     error("INVFREQS produced an unstable %s-axis model.", axisResult.axis);
 end
+
+model.controller = frf_controller_model(model);
 end

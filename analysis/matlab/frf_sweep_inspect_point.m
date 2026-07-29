@@ -80,9 +80,11 @@ if any(diff(boundaries) <= 0)
     error("Timing regions are not strictly ordered for the selected point.");
 end
 
-rampColour = [0.95, 0.65, 0.35];
-guardColour = [0.95, 0.85, 0.35];
-fitColour = [0.55, 0.80, 0.55];
+% Match colours by region type while maximising contrast between adjacent
+% regions when the figure is reduced for the dissertation.
+rampColour = [0.00, 0.45, 0.70];  % blue
+guardColour = [1.00, 0.65, 0.00]; % gold
+fitColour = [0.55, 0.15, 0.65];   % purple
 colours = [rampColour; guardColour; fitColour; guardColour; rampColour];
 labels = ["ramp-up", "settling guard", "fitted response", ...
     "end guard", "ramp-down"];
@@ -100,7 +102,8 @@ for regionIndex = 1:5
         [regionStart, regionEnd, regionEnd, regionStart], ...
         [yLimits(1), yLimits(1), yLimits(2), yLimits(2)], ...
         colours(regionIndex, :), ...
-        "FaceAlpha", 0.14, "EdgeColor", "none", ...
+        "FaceAlpha", 0.17, "EdgeColor", [0.35, 0.35, 0.35], ...
+        "EdgeAlpha", 0.55, "LineWidth", 0.6, ...
         "HandleVisibility", "off");
 
     if regionEnd - regionStart >= minimumLabelWidth

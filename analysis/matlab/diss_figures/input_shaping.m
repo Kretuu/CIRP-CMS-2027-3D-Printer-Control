@@ -44,48 +44,63 @@ yTotal = y1 + y2;
 
 % Normalise for a clearer conceptual plot
 scale = max(abs([y1, y2]));
-%y1 = y1/scale;
-%y2 = y2/scale;
-%yTotal = yTotal/scale;
+y1 = y1/scale;
+y2 = y2/scale;
+yTotal = yTotal/scale;
 
-figure('Units', 'centimeters', 'Position', [2 2 15 11]);
+figure('Units', 'centimeters', 'Position', [2 2 16 15], ...
+    'Color', 'w', 'Renderer', 'painters', 'ToolBar', 'none');
 
-tiledlayout(2, 1, ...
+tiledlayout(3, 1, ...
     'TileSpacing', 'compact', ...
-    'Padding', 'compact');
+    'Padding', 'loose');
+
+% Input-shaper impulses
+axImpulse = nexttile;
+stem([t1, t2], [A1, A2], 'filled', 'LineWidth', 1.5);
+grid on;
+xlim([-0.02*t(end), t(end)]);
+ylim([0, 1.2*max([A1, A2])]);
+xticklabels([]);
+ylabel({'Impulse weight', '[-]'});
+text(t1, A1, '  A_1', 'VerticalAlignment', 'bottom');
+text(t2, A2, '  A_2', 'VerticalAlignment', 'bottom');
 
 % Individual responses
-nexttile;
+axIndividual = nexttile;
 plot(t, y1, 'LineWidth', 2);
 hold on;
 plot(t, y2, '--', 'LineWidth', 2);
-xline(t2, ':', 'Second impulse', ...
-    'LabelOrientation', 'horizontal', ...
-    'LabelVerticalAlignment', 'top', 'LineWidth', 2);
+xline(t2, ':', 'LineWidth', 2);
 yline(0);
 grid on;
+xlim([-0.02*t(end), t(end)]);
+xticklabels([]);
 
-ylabel('Vibration');
+ylabel({'Normalised response', '[-]'});
 legend('Response to first impulse', ...
        'Response to second impulse', ...
        'Location', 'northeast');
 
 % Combined response
-nexttile;
+axCombined = nexttile;
 plot(t, yTotal, 'LineWidth', 2);
 hold on;
-xline(t2, ':', 'Second impulse', ...
-    'LabelOrientation', 'horizontal', ...
-    'LabelVerticalAlignment', 'top', 'LineWidth', 2);
+xline(t2, ':', 'LineWidth', 2);
 yline(0);
 grid on;
+xlim([-0.02*t(end), t(end)]);
 
 xlabel('Time [s]');
-ylabel('Combined response');
+ylabel({'Combined response', '[-]'});
 
 combinedYLim = ylim;
 combinedYPad = 0.08*diff(combinedYLim);
 ylim(combinedYLim + combinedYPad*[-1 1]);
+
+for ax = [axImpulse, axIndividual, axCombined]
+    ax.Toolbar.Visible = 'off';
+end
 
 fontsize(gcf, 14, 'points');
 
@@ -93,3 +108,7 @@ fontsize(gcf, 14, 'points');
 exportgraphics(gcf, ...
     'input-shaping-cancellation.pdf', ...
     'ContentType', 'vector');
+exportgraphics(gcf, ...
+    'input-shaping-cancellation.png', ...
+    'Resolution', 300);
+close(gcf);

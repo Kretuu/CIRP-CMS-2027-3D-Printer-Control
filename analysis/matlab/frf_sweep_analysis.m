@@ -88,10 +88,24 @@ end
 
 
 function printModelSummary(model)
-%PRINTMODELSUMMARY Print the selected order and complex fitting error.
+%PRINTMODELSUMMARY Print fit quality and the Klipper-ready discrete model.
 
 fprintf("  %s: order %d/%d, relative RMS error %.3f\n", model.axis, ...
     model.numerator_order, model.denominator_order, model.relative_rms_error);
+printCoefficientList("model_" + lower(model.axis) + "_numerator", ...
+    model.controller.numerator);
+printCoefficientList("model_" + lower(model.axis) + "_denominator", ...
+    model.controller.denominator);
+end
+
+
+function printCoefficientList(name, coefficients)
+%PRINTCOEFFICIENTLIST Print one coefficient vector in Klipper config syntax.
+
+fprintf("    %s: ", name);
+fprintf("%.16g", coefficients(1));
+fprintf(", %.16g", coefficients(2:end));
+fprintf("\n");
 end
 
 
