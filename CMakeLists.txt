@@ -34,4 +34,18 @@ if(EXISTS "${KLIPPER_ROOT}/Makefile")
     add_custom_target(klipper_ide_files SOURCES ${KLIPPER_IDE_FILES})
     source_group(TREE "${KLIPPER_ROOT}" PREFIX "external/klipper" FILES ${KLIPPER_IDE_FILES})
     set_target_properties(klipper_ide_files PROPERTIES FOLDER "external")
+
+    # Give CLion a real compilation context for Klipper's host-side C helpers.
+    # This target is excluded from normal builds and is not linked to Trinkey.
+    file(GLOB KLIPPER_CHELPER_SOURCES
+            CONFIGURE_DEPENDS
+            "${KLIPPER_ROOT}/klippy/chelper/*.c")
+    add_library(klipper_chelper_ide OBJECT EXCLUDE_FROM_ALL
+            ${KLIPPER_CHELPER_SOURCES})
+    target_include_directories(klipper_chelper_ide PRIVATE
+            "${KLIPPER_ROOT}/klippy/chelper")
+    set_target_properties(klipper_chelper_ide PROPERTIES
+            C_STANDARD 11
+            C_EXTENSIONS ON
+            FOLDER "external")
 endif()
