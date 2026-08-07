@@ -48,7 +48,9 @@ primary MCU, print time is directly related to the MCU clock:
 
 where \(c\) is the MCU clock value in ticks, \(f_{\mathrm{mcu}}\) is the MCU
 clock frequency, and \(p\) is Klipper print time in seconds. Therefore, print
-time can be interpreted as the MCU clock expressed in seconds.
+time can be interpreted as the MCU clock expressed in seconds. Klipper's code
+overview documents this host/MCU clock model and the conversion between MCU
+clock values and print time~\cite{klippercodeoverview}.
 
 When a vibration test is executed, each input motion segment has a known print
 time. If the first segment starts at print time \(p_0\), and a generated segment
@@ -114,8 +116,10 @@ synchronisation approaches~\cite{elson2002rbs}.
 \section{Synchronisation Measurements}
 
 To estimate \(\alpha\) and \(\beta\), the Klipper host sends repeated
-synchronisation requests to the Trinkey during the experiment. For one
-synchronisation request:
+synchronisation requests to the Trinkey. The vibration-test logger takes 20
+observations before and 20 after each excitation. Continuous streaming instead
+maintains a rolling window of at most 64 observations and normally requests one
+new observation per second. For one synchronisation request:
 
 \begin{enumerate}
     \item The Klipper host records its monotonic time before sending the request:
@@ -140,12 +144,13 @@ The round-trip time is
     r_i = h_{1,i} - h_{0,i}.
 \end{equation}
 
-The midpoint approximation assumes that the communication delay is approximately
-symmetric. This is not perfectly true for USB serial communication, but repeated
-measurements allow high-latency outliers to be rejected. This follows the same
-general principle as two-way clock synchronisation methods such as Cristian's
-algorithm and the Network Time Protocol, where round-trip delay is used to
-estimate and qualify the clock offset measurement~\cite{cristian1989probabilistic,mills2010ntp}.
+The midpoint approximation assumes that the outward and return communication
+delays are approximately symmetric. This is not perfectly true for USB serial
+communication, but repeated measurements allow observations with additional
+queueing delay to be rejected. This follows the general principle of two-way
+clock synchronisation methods such as Cristian's algorithm and the Network Time
+Protocol (NTP), where round-trip delay is used to estimate and qualify a clock
+offset observation~\cite{cristian1989probabilistic,mills2010ntp}.
 
 The host monotonic time \(h_i\) is then converted to Klipper print time using
 Klipper's clock synchronisation estimate:
@@ -164,8 +169,8 @@ Each synchronisation request therefore gives one calibration pair:
 
 The parameters \(\alpha\) and \(\beta\) are estimated by fitting the model in
 Equation~\eqref{eq:clock_model} to all accepted synchronisation pairs. This is
-an ordinary linear least-squares problem with an intercept term
-\cite{montgomery2012linear}. The measurements can be written in matrix form as
+an ordinary linear least-squares (OLS) problem with an intercept
+term~\cite{montgomery2012linear}. The measurements can be written in matrix form as
 
 \begin{equation}
     p = X\theta + e,
@@ -217,10 +222,10 @@ The closed-form normal-equation solution is
 \end{equation}
 
 provided that \(X^T X\) is non-singular. In implementation, the inverse should
-not be formed explicitly. MATLAB's backslash operator or a QR/SVD least-squares
-solver should be used instead, for example \(\hat{\theta} = X \backslash p\).
-This is numerically more stable and matches the usual implementation of least
-squares in system identification scripts.
+not be formed explicitly. The implementation uses MATLAB's backslash operator,
+\(\hat{\theta} = X \backslash p\), which returns a least-squares solution for an
+overdetermined rectangular system~\cite{mathworksmldivide}. This avoids explicitly
+forming the normal-equation inverse.
 
 After these parameters have been estimated, every accelerometer sample can be
 mapped to Klipper print time:
@@ -238,44 +243,59 @@ request. Such delayed requests should not be used directly, because they reduce
 the accuracy of the clock fit. The round-trip time \(r_i\) is used as a quality
 measure.
 
-A simple rejection rule is
+The selected rejection rule is
 
 \begin{equation}
     r_i \leq r_{\min} + r_{\mathrm{tol}},
 \end{equation}
 
-where \(r_{\min}\) is the minimum observed round-trip time and
-\(r_{\mathrm{tol}}\) is a chosen tolerance, for example
-\(\SI{1}{ms}\). Synchronisation pairs with larger round-trip time are rejected.
-
-An alternative is to use weighted least squares. In that case, lower-latency
-measurements receive a larger weight:
+where \(r_{\min}\) is the minimum round-trip time in the current set of
+observations and the tolerance is fixed to
 
 \begin{equation}
-    w_i = \frac{1}{r_i^2}.
+    r_{\mathrm{tol}} = \SI{1}{ms}.
 \end{equation}
 
-This can also be written in matrix form by defining a diagonal weighting matrix
+The OLS fit uses only the accepted index set
 
 \begin{equation}
-    W =
-    \begin{bmatrix}
-        w_1 & 0 & \cdots & 0 \\
-        0 & w_2 & \cdots & 0 \\
-        \vdots & \vdots & \ddots & \vdots \\
-        0 & 0 & \cdots & w_N
-    \end{bmatrix}.
+    \mathcal{A} = \{i : r_i \leq r_{\min} + \SI{1}{ms}\}.
 \end{equation}
 
-The weighted least-squares estimate is then
+Giving preference to low-delay observations is consistent with established
+clock-filter practice: for example, the NTPv4 clock filter orders observations
+by increasing round-trip delay before selecting the synchronization
+sample~\cite[Sec.~10]{mills2010ntp}. However, NTP does not prescribe the
+\(\SI{1}{ms}\) margin used here. That value is an experiment-specific engineering
+threshold for this USB link and must therefore be reported as part of the method,
+along with the number of observations retained. It should be revalidated if the
+host, USB connection, firmware, or sampling workload changes.
 
-\begin{equation}
-    \hat{\theta} = (X^T W X)^{-1}X^T W p.
-\end{equation}
+\section{Implemented Estimator}
 
-For this experiment, the simpler rejection method is usually easier to explain
-and verify. Weighted fitting can be added if the observed round-trip times vary
-significantly.
+The same rejection rule and unweighted OLS model are used by the online and
+offline implementations:
+
+\begin{itemize}
+    \item The live mapper is implemented in
+    \path{external/klipper/klippy/extras/trinkey_accel.py}. It keeps at most 64
+    observations. During start-up it estimates only the offset. It enables the
+    affine OLS fit after at least eight accepted observations span at least
+    \SI{5}{s}. A fitted clock rate outside the sanity interval
+    \(0.995 \leq \alpha \leq 1.005\) is rejected in favour of the offset-only
+    estimate.
+    \item Vibration-test analysis is implemented in
+    \path{analysis/matlab/frf_align_signals.m}. It verifies that all 40 expected
+    observations are present, applies the same \(r_{\min}+\SI{1}{ms}\) filter,
+    requires at least three accepted observations including at least one before
+    and one after the excitation, and then performs the affine OLS fit.
+\end{itemize}
+
+The online start-up guard is not a different clock model. It prevents a poorly
+conditioned slope estimate when the accepted timestamps cover too little elapsed
+time. The offline data already span the complete experiment, so that guard is not
+needed there. The retained count, minimum RTT, RTT limit, tolerance, slope, and
+offset are exposed or stored as diagnostics so the fitted mapping can be audited.
 
 \section{Alignment of Input and Output Signals}
 
@@ -348,16 +368,18 @@ main steps are:
     \item Log each accelerometer sample with its Trinkey timestamp.
     \item Collect synchronisation pairs between Trinkey time and Klipper print
     time.
-    \item Reject high-latency synchronisation pairs using the measured
-    round-trip time.
-    \item Fit the affine model \(p = \alpha q + \beta\).
+    \item Retain pairs satisfying
+    \(r_i \leq r_{\min}+\SI{1}{ms}\).
+    \item Fit the affine model \(p = \alpha q + \beta\) by unweighted OLS using
+    only the retained pairs.
     \item Convert all accelerometer samples to Klipper print time.
     \item Use the common time base for FRF estimation.
 \end{enumerate}
 
 This approach follows the same principle as Klipper's built-in accelerometer
 handling: sample timestamps are not based on when data arrives at the host, but
-on a local sensor clock that is later translated to Klipper's motion time base.
+on a local sensor clock that is later translated to Klipper's motion time
+base~\cite{klipperapiserver}.
 
 \begin{thebibliography}{9}
 
@@ -384,6 +406,23 @@ and Implementation}, pp.~147--163, 2002.
 D.~C. Montgomery, E.~A. Peck, and G.~G. Vining,
 \newblock \emph{Introduction to Linear Regression Analysis},
 \newblock 5th~ed. Wiley, 2012.
+\newblock ISBN: \href{https://catalogimages.wiley.com/images/db/pdf/9780470542811.excerpt.pdf}{978-0-470-54281-1}.
+
+\bibitem{mathworksmldivide}
+MathWorks,
+\newblock ``\texttt{mldivide}: Solve systems of linear equations
+\(A x = B\) for \(x\),'' MATLAB documentation.
+\newblock \url{https://www.mathworks.com/help/matlab/ref/double.mldivide.html}.
+
+\bibitem{klippercodeoverview}
+Klipper Project,
+\newblock ``Code overview: Time,'' Klipper documentation.
+\newblock \url{https://www.klipper3d.org/Code_Overview.html}.
+
+\bibitem{klipperapiserver}
+Klipper Project,
+\newblock ``API server: \texttt{adxl345/dump\_adxl345},'' Klipper documentation.
+\newblock \url{https://www.klipper3d.org/API_Server.html}.
 
 \end{thebibliography}
 

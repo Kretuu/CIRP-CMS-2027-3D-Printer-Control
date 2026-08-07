@@ -3,6 +3,7 @@ function aligned = frf_align_signals(pointDir, metadata)
 
 RAW_TO_MM_S2 = 10.0;         % BNO055: 1 LSB = 0.01 m/s^2 = 10 mm/s^2.
 EXPECTED_SYNC_SAMPLES = 40;
+SYNC_RTT_TOLERANCE_S = 1e-3; % Experiment-specific USB RTT margin.
 
 axisName = upper(string(metadata.axis));
 [sensorChip, sensorColumn] = sensorForAxis(axisName);
@@ -11,7 +12,8 @@ samples = readtable(fullfile(pointDir, "samples.csv"), "TextType", "string");
 sync = readtable(fullfile(pointDir, "sync.csv"), "TextType", "string");
 input = readtable(fullfile(pointDir, "input.csv"), "TextType", "string");
 
-clockModel = fitClockModel(sync, EXPECTED_SYNC_SAMPLES);
+clockModel = fitClockModel(sync, EXPECTED_SYNC_SAMPLES, ...
+    SYNC_RTT_TOLERANCE_S);
 [samplePrintTime, outputAccel] = readOutputSamples(samples, clockModel, ...
     sensorChip, sensorColumn, RAW_TO_MM_S2);
 inputAccel = sampleInputAcceleration(input, samplePrintTime);
@@ -24,28 +26,54 @@ aligned.output_accel_mm_s2 = outputAccel;
 aligned.input_accel_mm_s2 = inputAccel;
 aligned.input_segment_time_s = double(input.relative_t_s);
 aligned.input_segment_accel_mm_s2 = double(input.accel_mm_s2);
+aligned.clock_model = clockModel;
 end
 
 
-function clock = fitClockModel(sync, expectedSyncSamples)
+function clock = fitClockModel(sync, expectedSyncSamples, rttTolerance)
 %FITCLOCKMODEL Estimate print_time = theta0 + theta1 * Trinkey time.
 
 trinkeyTime = double(sync.trinkey_t_us) * 1e-6;
 printTime = double(sync.print_time_mid_s);
-valid = isfinite(trinkeyTime) & isfinite(printTime);
+rtt = double(sync.rtt_s);
+phase = string(sync.phase);
+valid = isfinite(trinkeyTime) & isfinite(printTime) & isfinite(rtt);
 trinkeyTime = trinkeyTime(valid);
 printTime = printTime(valid);
+rtt = rtt(valid);
+phase = phase(valid);
 
 if numel(trinkeyTime) ~= expectedSyncSamples
     error("Expected %d valid sync samples, found %d.", ...
         expectedSyncSamples, numel(trinkeyTime));
 end
 
+rttMinimum = min(rtt);
+rttLimit = rttMinimum + rttTolerance;
+accepted = rtt <= rttLimit;
+if nnz(accepted) < 3
+    error("RTT filter retained only %d sync samples; at least 3 are required.", ...
+        nnz(accepted));
+end
+if ~any(phase == "pre") || ~any(phase == "post")
+    error("Synchronization data must contain both pre and post samples.");
+end
+if ~any(phase(accepted) == "pre") || ~any(phase(accepted) == "post")
+    error("RTT filter must retain at least one pre and one post sample.");
+end
+
+trinkeyTime = trinkeyTime(accepted);
+printTime = printTime(accepted);
 theta = [ones(size(trinkeyTime)), trinkeyTime] \ printTime;
 
 clock = struct();
 clock.theta0_print_time_s = theta(1);
 clock.theta1_print_s_per_trinkey_s = theta(2);
+clock.sync_samples_total = numel(accepted);
+clock.sync_samples_accepted = nnz(accepted);
+clock.rtt_minimum_s = rttMinimum;
+clock.rtt_limit_s = rttLimit;
+clock.rtt_tolerance_s = rttTolerance;
 end
 
 
