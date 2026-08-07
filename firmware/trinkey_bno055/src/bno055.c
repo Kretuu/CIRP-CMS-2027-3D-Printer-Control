@@ -45,7 +45,11 @@ const bno055_axis_remap_t BASE_AXIS_REMAP = {
     .sign = {-1, 1, 1},
 };
 
-void bno055_init_struct(bno055_t *dev, i2c_inst_t *i2c, uint8_t addr, bno055_axis_remap_t axis_remap) {
+void bno055_init_struct(
+        bno055_t *dev,
+        i2c_inst_t *i2c,
+        uint8_t addr,
+        bno055_axis_remap_t axis_remap) {
     dev->i2c = i2c;
     dev->addr = addr;
     dev->accel_remap = axis_remap;
@@ -142,10 +146,30 @@ static bool bno055_wait_for_chip(const bno055_t *dev) {
     return false;
 }
 
-static bool bno055_configure_accel(const bno055_t *dev) {
+static bool bno055_bandwidth_bits(uint32_t bandwidth_hz, uint8_t *bits) {
+    switch (bandwidth_hz) {
+    case 8: *bits = BNO055_ACC_BW_7_81HZ; return true;
+    case 16: *bits = BNO055_ACC_BW_15_63HZ; return true;
+    case 31: *bits = BNO055_ACC_BW_31_25HZ; return true;
+    case 63: *bits = BNO055_ACC_BW_62_5HZ; return true;
+    case 125: *bits = BNO055_ACC_BW_125HZ; return true;
+    case 250: *bits = BNO055_ACC_BW_250HZ; return true;
+    case 500: *bits = BNO055_ACC_BW_500HZ; return true;
+    case 1000: *bits = BNO055_ACC_BW_1000HZ; return true;
+    default: return false;
+    }
+}
+
+static bool bno055_configure_accel(
+        const bno055_t *dev,
+        uint32_t bandwidth_hz) {
+    uint8_t bandwidth_bits;
+    if (!bno055_bandwidth_bits(bandwidth_hz, &bandwidth_bits)) {
+        return false;
+    }
     uint8_t acc_config =
         BNO055_ACC_RANGE_4G |
-        BNO055_ACC_BW_1000HZ |
+        bandwidth_bits |
         BNO055_ACC_PWR_NORMAL;
 
     // Accelerometer config is on page 1.
@@ -226,7 +250,8 @@ bool bno055_begin_acconly(const bno055_t *dev) {
     }
     sleep_ms(10);
 
-    if (!bno055_configure_accel(dev)) {
+    if (!bno055_configure_accel(
+            dev, BNO055_DEFAULT_ACCEL_BANDWIDTH_HZ)) {
         return false;
     }
 
@@ -235,6 +260,30 @@ bool bno055_begin_acconly(const bno055_t *dev) {
     }
     sleep_ms(25);
 
+    return true;
+}
+
+bool bno055_set_accel_bandwidth(
+        const bno055_t *dev,
+        uint32_t bandwidth_hz) {
+    uint8_t unused_bits;
+    if (!bno055_bandwidth_bits(bandwidth_hz, &unused_bits)) {
+        return false;
+    }
+    if (!bno055_write_reg(dev, BNO055_PAGE_ID_REG, 0x00)) {
+        return false;
+    }
+    if (!bno055_write_reg(dev, BNO055_OPR_MODE_REG, BNO055_MODE_CONFIG)) {
+        return false;
+    }
+    sleep_ms(25);
+    if (!bno055_configure_accel(dev, bandwidth_hz)) {
+        return false;
+    }
+    if (!bno055_write_reg(dev, BNO055_OPR_MODE_REG, BNO055_MODE_ACCONLY)) {
+        return false;
+    }
+    sleep_ms(25);
     return true;
 }
 

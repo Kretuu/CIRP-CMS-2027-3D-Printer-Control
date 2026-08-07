@@ -25,6 +25,14 @@ trinkey_log_dir: ~/printer_data/logs/vibration_tests
 
 The Klipper Python environment must contain `pyserial`.
 
+The current firmware uses a 250 Hz BNO055 accelerometer bandwidth with 500 Hz
+buffered acquisition. `RUN_VIBRATION_TEST` reads only the moving-axis sensor
+(toolhead for X and base/bed for Y), and this configuration supports the sweep
+through 100 Hz without placing the target frequency at the filter boundary. If
+the continuous `[trinkey_accel]` Motan logger is configured, stop its client
+before running a sweep because buffered-v1 and streaming-v2 deliberately use
+exclusive firmware modes and share one USB serial port.
+
 ## Running a Sweep
 
 The acceleration amplitude is required and is specified in mm/s². For example,

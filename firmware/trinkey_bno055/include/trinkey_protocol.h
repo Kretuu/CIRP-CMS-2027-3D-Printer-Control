@@ -14,6 +14,9 @@ typedef struct {
     char run_id[TRINKEY_RUN_ID_BUFFER_SIZE];
     char command_buffer[TRINKEY_COMMAND_BUFFER_SIZE];
     size_t command_length;
+    const bno055_t *imu_base;
+    const bno055_t *imu_toolhead;
+    uint32_t accel_bandwidth_hz;
 } trinkey_protocol_state_t;
 
 /**
@@ -21,7 +24,10 @@ typedef struct {
  *
  * @param state Mutable protocol state allocated by the caller.
  */
-void trinkey_protocol_init(trinkey_protocol_state_t *state);
+void trinkey_protocol_init(
+        trinkey_protocol_state_t *state,
+        const bno055_t *imu_base,
+        const bno055_t *imu_toolhead);
 
 /**
  * Print the protocol banner and READY row after hardware initialisation.

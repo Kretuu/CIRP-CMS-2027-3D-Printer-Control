@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/picotool-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/external/klipper" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/external/pico-sdk" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/external/pico-sdk/lib/btstack" vcs="Git" />

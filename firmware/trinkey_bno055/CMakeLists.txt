@@ -3,7 +3,9 @@ add_executable(trinkey_bno055
         src/bno055.c
         src/i2c_utils.c
         src/neopixel.c
+        src/trinkey_acquisition.c
         src/trinkey_capture.c
+        src/trinkey_stream.c
         src/trinkey_protocol.c
 )
 
@@ -19,6 +21,7 @@ target_link_libraries(trinkey_bno055
         pico_stdlib
         hardware_i2c
         hardware_pio
+        pico_multicore
 )
 
 # Buffered dumps may take seconds to drain on the Klipper host. The Pico SDK's

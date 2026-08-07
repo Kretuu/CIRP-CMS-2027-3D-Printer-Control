@@ -86,7 +86,7 @@ int main(void) {
     neopixel_set_rgb(&led, 0, 40, 0); // green = running
 
     trinkey_protocol_state_t protocol_state;
-    trinkey_protocol_init(&protocol_state);
+    trinkey_protocol_init(&protocol_state, &imu_base, &imu_toolhead);
     trinkey_protocol_print_ready();
 
     while (true) {
