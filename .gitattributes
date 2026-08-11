@@ -1,0 +1,3 @@
+compose.yaml text eol=lf
+tools/klipper-c-helper/Dockerfile text eol=lf
+tools/klipper-c-helper/*.sh text eol=lf

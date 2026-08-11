@@ -1,0 +1,16 @@
+services:
+  klipper-c-helper:
+    platform: linux/amd64
+    build:
+      context: tools/klipper-c-helper
+    # Docker Desktop maps root-owned container writes back to the desktop user.
+    # Native Linux users can set LOCAL_UID and LOCAL_GID as documented.
+    user: "${LOCAL_UID:-0}:${LOCAL_GID:-0}"
+    working_dir: /workspace
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+    environment:
+      KLIPPER_ROOT: /workspace/external/klipper
+      OUTPUT_PATH: /workspace/build/klipper-c-helper/c_helper.so
