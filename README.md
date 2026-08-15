@@ -234,14 +234,31 @@ The Klipper Python environment must contain `pyserial`. Restart Klipper after
 installing the extra. The stream starts on demand when the first API client
 subscribes and stops after the final client disconnects.
 
-This repository's Motan logger automatically subscribes to both configured
-sensors:
+The stock Motan logger automatically subscribes to both configured sensors and
+all standard Motan motion/status sources:
 
 ```sh
 python3 external/klipper/scripts/motan/data_logger.py \
   ~/printer_data/comms/klippy.sock \
   ~/printer_data/logs/motan/trinkey_run
 ```
+
+For the high-density 35 Hz G-code experiments, use the independent lightweight
+copy instead:
+
+```sh
+python3 external/klipper/scripts/motan_lightweight/data_logger.py \
+  /usr/data/printer_data/comms/klippy.sock \
+  /usr/data/printer_data/logs/motan/sine_35_comp_r1
+```
+
+It logs the base and toolhead Trinkey streams, nominal toolhead acceleration
+evaluated at each genuine sensor timestamp, and a small diagnostic status
+subset. It does not export the full high-density toolhead or extruder TrapQ,
+step queues, ADXL/angle streams, or unrelated status objects. The stock
+`scripts/motan` directory is retained unchanged. If either required sensor is
+silent for five seconds, the lightweight process warns but remains connected;
+validate sample continuity and the loss counters after the run.
 
 The exact Klipper socket path depends on the printer installation. Motan writes
 `trinkey_run.json.gz` and `trinkey_run.index.gz`. Each acceleration row retains:
@@ -251,6 +268,9 @@ The exact Klipper socket path depends on the printer installation. Motan writes
 - firmware sample sequence;
 - raw BNO055 axes;
 - scaled axes in mm/s²;
+- the relevant nominal TrapQ acceleration (`command_x` for toolhead and
+  `command_y` for base), evaluated at that row's mapped print time;
+- a command-reference validity flag;
 - validity flags and stream diagnostics.
 
 While Motan is connected, run `TRINKEY_ACCEL_STATUS` in the Fluidd console to
@@ -260,18 +280,19 @@ the logger before starting printer motion; initial device configuration and
 clock synchronization briefly block the Klipper reactor, whereas steady-state
 sync exchanges are asynchronous.
 
-Motan datasets include `trinkey_accel(base,x)` and
-`trinkey_accel(toolhead,y)`, with `_raw`, `device_time_us`, `sequence`, and
-`flags` selections also available. MATLAB may use the mapped print time or
-repeat the linear clock fit from the preserved device timestamps and sync
-diagnostics.
+The main comparison datasets are `trinkey_accel(toolhead,x)` against
+`trinkey_accel(toolhead,command_x)`, and `trinkey_accel(base,y)` against
+`trinkey_accel(base,command_y)`. The `_raw`, `device_time_us`, `sequence`,
+`flags`, and `reference_valid` selections are also available. MATLAB may use
+the mapped print time or repeat the linear clock fit from the preserved device
+timestamps and sync diagnostics.
 
 The continuous streamer and `RUN_VIBRATION_TEST` both own the same USB serial
 port and are therefore intentionally mutually exclusive for now. Stop the Motan
-logger before starting a buffered vibration sweep. A later hybrid-controller
-integration should use `start_internal_client(sensor)` instead of opening the
-serial port itself. The API helper supports multiple subscribers, so Motan and a
-hybrid controller may consume the same sensor data concurrently. The first
+logger before starting a buffered vibration sweep. A later hybrid controller
+should consume measurements through an internal Klipper path, never through
+the non-real-time Motan socket. Its 1 kHz prediction/reference path remains
+separate from this sampled evaluation stream. The first
 subscriber starts one physical acquisition stream and it remains active until
 the final subscriber disconnects.
 
