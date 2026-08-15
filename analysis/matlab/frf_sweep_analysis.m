@@ -5,15 +5,16 @@ function [results, models] = frf_sweep_analysis(runDirs)
 %
 %   addpath("analysis/matlab");
 %   runDirs = [
-%       "data/raw/2026-07-20_1_5ms"
-%       "data/raw/2026-07-20_2ms"
-%       "data/raw/2026-07-20_2_5ms"
-%       "data/raw/2026-07-20_3ms"
+%       "data/raw/2026-08-11_1_5ms"
+%       "data/raw/2026-08-11_2ms"
+%       "data/raw/2026-08-11_2_5ms"
+%       "data/raw/2026-08-11_3ms"
 %   ];
 %   [results, models] = frf_sweep_analysis(runDirs);
 %
 % Each curve stops where its commanded peak-to-peak displacement falls below
-% one configured microstep on the corresponding printer axis.
+% one configured microstep or reaches an experimentally observed non-reacting
+% frequency recorded in the sweep's analysis_metadata.json sidecar.
 
 MODEL_ACCELERATION_M_S2 = 3.0;
 
@@ -54,16 +55,18 @@ end
 
 
 function rows = usableRows(axisResult)
-%USABLEROWS Select finite FRFs above the theoretical step-resolution limit.
+%USABLEROWS Apply theoretical resolution and experimental reaction limits.
 
-rows = axisResult.within_step_resolution & isfinite(axisResult.frf);
+rows = axisResult.within_step_resolution ...
+    & axisResult.frequency_hz < axisResult.first_nonreacting_frequency_hz ...
+    & isfinite(axisResult.frf);
 end
 
 
 function printSummary(results, models)
-%PRINTSUMMARY Report the theory-derived frequency range for every sweep.
+%PRINTSUMMARY Report the selected frequency range for every sweep.
 
-fprintf("\nFRF ranges from configured step resolution\n");
+fprintf("\nFRF ranges after resolution and experimental cut-offs\n");
 for resultIndex = 1:numel(results)
     fprintf("\n%.1f m/s^2\n", ...
         results(resultIndex).commanded_accel_amplitude_m_s2);
