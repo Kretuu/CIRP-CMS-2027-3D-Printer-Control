@@ -56,6 +56,13 @@ static trinkey_stream_state_t stream;
 static const bno055_t *stream_imu_base;
 static const bno055_t *stream_imu_toolhead;
 
+/* All output runs synchronously on core 0. Keep its large workspaces in
+ * static storage instead of nesting them on the RP2040's 2 KiB stack. */
+static trinkey_stream_batch_t output_batch;
+static uint8_t output_payload[STREAM_RAW_FRAME_CAPACITY];
+static uint8_t output_raw[STREAM_RAW_FRAME_CAPACITY];
+static uint8_t output_encoded[STREAM_ENCODED_FRAME_CAPACITY];
+
 static void snapshot_batch_counters(trinkey_stream_batch_t *batch) {
     batch->sample_rate_hz = stream.sample_rate_hz;
     batch->sensor_mask = trinkey_acquisition_sensor_mask(stream.mode);
@@ -248,19 +255,19 @@ static size_t cobs_encode(
 }
 
 static void send_frame(uint8_t type, const uint8_t *payload, size_t length) {
-    uint8_t raw[STREAM_RAW_FRAME_CAPACITY];
-    uint8_t encoded[STREAM_ENCODED_FRAME_CAPACITY];
     size_t pos = 0;
-    put_u32(raw, &pos, STREAM_FRAME_MAGIC);
-    put_u8(raw, &pos, type);
-    put_u16(raw, &pos, (uint16_t)length);
-    memcpy(raw + pos, payload, length);
+    put_u32(output_raw, &pos, STREAM_FRAME_MAGIC);
+    put_u8(output_raw, &pos, type);
+    put_u16(output_raw, &pos, (uint16_t)length);
+    memcpy(output_raw + pos, payload, length);
     pos += length;
-    put_u32(raw, &pos, crc32_ieee(raw, pos));
+    put_u32(output_raw, &pos, crc32_ieee(output_raw, pos));
 
-    size_t encoded_length = cobs_encode(raw, pos, encoded);
-    encoded[encoded_length++] = 0;
-    stdio_put_string((const char *)encoded, (int)encoded_length, false, false);
+    size_t encoded_length = cobs_encode(
+        output_raw, pos, output_encoded);
+    output_encoded[encoded_length++] = 0;
+    stdio_put_string(
+        (const char *)output_encoded, (int)encoded_length, false, false);
 }
 
 static size_t serialize_status_payload(uint8_t *payload) {
@@ -281,34 +288,33 @@ static size_t serialize_status_payload(uint8_t *payload) {
 }
 
 static void send_data_batch(const trinkey_stream_batch_t *batch) {
-    uint8_t payload[STREAM_RAW_FRAME_CAPACITY];
     size_t pos = 0;
-    put_u32(payload, &pos, batch->packet_sequence);
-    put_u16(payload, &pos, (uint16_t)batch->sample_rate_hz);
-    put_u8(payload, &pos, batch->sensor_mask);
-    put_u8(payload, &pos, batch->sample_count);
-    put_u32(payload, &pos, batch->total_sample_count);
-    put_u32(payload, &pos, batch->dropped_count);
-    put_u32(payload, &pos, batch->transport_dropped_count);
-    put_u32(payload, &pos, batch->overrun_count);
-    put_u32(payload, &pos, batch->max_loop_us);
-    put_u32(payload, &pos, batch->max_base_read_us);
-    put_u32(payload, &pos, batch->max_toolhead_read_us);
+    put_u32(output_payload, &pos, batch->packet_sequence);
+    put_u16(output_payload, &pos, (uint16_t)batch->sample_rate_hz);
+    put_u8(output_payload, &pos, batch->sensor_mask);
+    put_u8(output_payload, &pos, batch->sample_count);
+    put_u32(output_payload, &pos, batch->total_sample_count);
+    put_u32(output_payload, &pos, batch->dropped_count);
+    put_u32(output_payload, &pos, batch->transport_dropped_count);
+    put_u32(output_payload, &pos, batch->overrun_count);
+    put_u32(output_payload, &pos, batch->max_loop_us);
+    put_u32(output_payload, &pos, batch->max_base_read_us);
+    put_u32(output_payload, &pos, batch->max_toolhead_read_us);
 
     for (uint8_t i = 0; i < batch->sample_count; i++) {
         const trinkey_acquisition_sample_t *sample = &batch->samples[i];
-        put_u32(payload, &pos, sample->sequence);
-        put_u64(payload, &pos, sample->base_t_us);
-        put_i16(payload, &pos, sample->base_x);
-        put_i16(payload, &pos, sample->base_y);
-        put_i16(payload, &pos, sample->base_z);
-        put_u64(payload, &pos, sample->toolhead_t_us);
-        put_i16(payload, &pos, sample->toolhead_x);
-        put_i16(payload, &pos, sample->toolhead_y);
-        put_i16(payload, &pos, sample->toolhead_z);
-        put_u8(payload, &pos, sample->flags);
+        put_u32(output_payload, &pos, sample->sequence);
+        put_u64(output_payload, &pos, sample->base_t_us);
+        put_i16(output_payload, &pos, sample->base_x);
+        put_i16(output_payload, &pos, sample->base_y);
+        put_i16(output_payload, &pos, sample->base_z);
+        put_u64(output_payload, &pos, sample->toolhead_t_us);
+        put_i16(output_payload, &pos, sample->toolhead_x);
+        put_i16(output_payload, &pos, sample->toolhead_y);
+        put_i16(output_payload, &pos, sample->toolhead_z);
+        put_u8(output_payload, &pos, sample->flags);
     }
-    send_frame(STREAM_FRAME_DATA, payload, pos);
+    send_frame(STREAM_FRAME_DATA, output_payload, pos);
 }
 
 void trinkey_stream_init(
@@ -363,9 +369,8 @@ void trinkey_stream_stop(void) {
     while (stream.worker_busy && time_us_64() < deadline) {
         sleep_us(50);
     }
-    trinkey_stream_batch_t batch;
-    while (pop_batch(&batch)) {
-        send_data_batch(&batch);
+    while (pop_batch(&output_batch)) {
+        send_data_batch(&output_batch);
     }
     uint8_t payload[48];
     const size_t length = serialize_status_payload(payload);
@@ -396,9 +401,8 @@ trinkey_stream_status_t trinkey_stream_status(void) {
 }
 
 void trinkey_stream_service_output(void) {
-    trinkey_stream_batch_t batch;
-    if (pop_batch(&batch)) {
-        send_data_batch(&batch);
+    if (pop_batch(&output_batch)) {
+        send_data_batch(&output_batch);
     }
 }
 

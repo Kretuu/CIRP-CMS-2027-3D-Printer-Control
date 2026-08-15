@@ -81,6 +81,12 @@ static void stop_capture(void) {
     stdio_flush();
 }
 
+static void acknowledge_stream_stop(void) {
+    printf("ACK_STREAM_STOP,%llu\n",
+           (unsigned long long)time_us_64());
+    stdio_flush();
+}
+
 /**
  * Reply to a host clock synchronisation request.
  *
@@ -222,6 +228,7 @@ static void handle_command_line(
     if (trinkey_stream_is_started()) {
         if (strcmp(line, "STREAM_STOP") == 0) {
             trinkey_stream_stop();
+            acknowledge_stream_stop();
             return;
         }
         if (strncmp(line, "STREAM_SYNC,", 12) == 0) {
@@ -247,9 +254,7 @@ static void handle_command_line(
     }
 
     if (strcmp(line, "STREAM_STOP") == 0) {
-        printf("ERR,NOT_STREAMING,%llu\n",
-               (unsigned long long)time_us_64());
-        stdio_flush();
+        acknowledge_stream_stop();
         return;
     }
 
