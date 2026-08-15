@@ -1,0 +1,7 @@
+{
+  "first_nonreacting_frequency_hz": {
+    "y": 90
+  },
+  "selection_rule": "Exclude the first non-reacting frequency and every higher frequency.",
+  "source": "Experimental observation recorded in reaction.txt; no X-axis cut-off was observed within the sweep."
+}

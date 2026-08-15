@@ -1,0 +1,8 @@
+{
+  "first_nonreacting_frequency_hz": {
+    "x": 100,
+    "y": 82
+  },
+  "selection_rule": "Exclude the first non-reacting frequency and every higher frequency.",
+  "source": "Experimental observation recorded in reaction.txt."
+}
