@@ -3,7 +3,7 @@
 This directory contains the printable sinusoidal parts used for the final compensator evaluation.
 
 - `gcode/` contains manually maintained legacy/reference G-code; it is not generated or part of the final print comparison.
-- `generated/` contains the four sine-print G-code files produced by `generate_gcodes.py`.
+- `generated/` contains the four Part-A print files and their four elevated dry-run counterparts produced by `generate_gcodes.py`.
 
 Regenerate the sine-print evaluation files from the repository root:
 
@@ -11,25 +11,44 @@ Regenerate the sine-print evaluation files from the repository root:
 python trajectories/generate_gcodes.py
 ```
 
-## Printable sinusoidal benchmarks
+## Printable Part-A reconstruction
 
-The `sine_*` files are self-contained printable PLA benchmarks inspired by Figure 6 of Chou, Duan, and Okwudire. They print a 60 mm long, nominally 3.4 mm wide, 4 mm high two-wall part. One wall is straight and the other has a 0.5 mm spatial wavelength and 0.12 mm X amplitude. The sinusoidal wall is traversed with constant Y-axis velocity at either 10 Hz or 35 Hz.
+The `sine_*` files reconstruct Part A from Figures 6 and 7 of Chou, Duan, and Okwudire, ["A Physics-Guided Data-Driven Feedforward Tracking Controller for Systems With Unmodeled Dynamics—Applied to 3D Printing"](https://doi.org/10.1109/ACCESS.2023.3244194), IEEE Access, 2023.
 
-For each frequency there is an uncompensated file and a filtered-B-spline file. Both are generated from the same motion and extrusion payload; only the `SET_FILTERED_BSPLINE` state differs. The files home and prime with compensation disabled, select the experimental controller immediately before the part, and disable it again before parking.
+The paper explicitly reports:
+
+- a linear portion and a sinusoidal portion, with the full-resolution Figure 6 showing three passes of each;
+- a 0.5 mm spatial wavelength;
+- 10 Hz and 35 Hz excitation, obtained from `frequency = Y speed / wavelength`;
+- width `a` measured at 10 locations using a vernier caliper, followed by its mean and standard deviation;
+- X tracking-error RMS derived from accelerometer measurements through a 5 Hz Luenberger position observer.
+
+The paper and its arXiv source do **not** provide G-code or numerical amplitude, line width, specimen length, layer count, temperatures, extrusion settings, or an explicit start marker. The generator therefore labels the remaining values as a reconstruction, not as directly reported parameters. The selected 0.5 mm amplitude and six 0.4 mm-pitch paths yield the approximately 3.4 mm outside envelope shown in Figure 6. Following the connectivity visible in the original figure, each layer is one continuous inner-to-outer path: inner straight, inner sine, middle straight, middle sine, outer straight, then outer sine. The exposed outer sinusoidal edge is therefore deposited last; the figure itself does not prove travel direction. The transitions at alternating ends are extruded, as in the continuous path drawn in Figure 6(a); measurements must exclude these end connectors.
+
+The specimen is **50 mm** long, giving 100 complete wavelengths per pass. Length is not specified by the paper; 50 mm is used here to make the specimen easier to handle and measure. It does not change the wavelength, excitation frequency, or width metric. The reconstruction uses two 0.2 mm layers (0.4 mm total height) because the paper does not report a layer count. This limits cumulative Z stacking error while leaving enough material to remove and measure. Every layer repeats the same continuous inner-to-outer path. PLA cooling is enabled after the separate prime line and before the densely spaced benchmark paths begin.
+
+All 10 Hz and 35 Hz files use the same 0.5 mm amplitude and the same spatial/extrusion payload. Only their feed rates differ, so the 10 Hz and 35 Hz physical comparisons test the same geometry. For each frequency, the uncompensated and `filtered_bspline` files are motion-for-motion identical; only `SET_FILTERED_BSPLINE` differs. In this experiment, `filtered_bspline` is the paper's **standard FBF** condition. No hybrid-FBF file is generated yet.
 
 The files deliberately use:
 
+- three inner-to-outer straight/sinusoid pairs per layer;
 - 24 chords per wavelength;
-- `max_accel = max_accel_to_decel = 8000 mm/s^2` during the part;
-- `square_corner_velocity = 5 mm/s`;
+- `max_accel = max_accel_to_decel = 32000 mm/s^2` during the part;
+- `square_corner_velocity = 20 mm/s` during the part;
 - 220 C nozzle and 60 C bed temperatures for PLA;
-- 0.45 mm line width, 0.2 mm layers, and 1.75 mm filament.
+- 0.4 mm path pitch/line width, two 0.2 mm layers, and 1.75 mm filament.
 
-Do not configure Klipper `[input_shaper]` for these tests. Verify the actual planned trajectory using `motion_report/dump_trapq` before collecting final results, and compare the central part of the sinusoidal wall so that the real end-cap corner transients are excluded.
+At 35 Hz, the reconstructed 0.5 mm-amplitude command requires approximately 24,181 mm/s² peak continuous X acceleration and 111.3 mm/s peak path speed. Its 24-chord approximation needs additional junction/tangential acceleration headroom, so the generator selects 32,000 mm/s². This is four times the stock Ender-3 V3 KE 8,000 mm/s² acceleration specification. Treat the 35 Hz dry run as mandatory: inspect the actual `motion_report/dump_trapq` timing, listen for lost steps, and confirm position before attempting extrusion. If the printer cannot execute it faithfully, reducing amplitude creates a hardware-adapted experiment and must be reported as such; do not silently retain the `35 Hz` label after planner slow-down.
+
+Do not configure Klipper `[input_shaper]` for these tests. Compare only steady, central portions of the longitudinal passes and exclude their turnaround endpoints. The G-code restores the local 8,000 mm/s² acceleration and 5 mm/s square-corner velocity before parking.
 
 ## Dry pass without extrusion
 
-Make a temporary copy of the required `sine_*` file and modify the copy; keep the generated evaluation file unchanged. To run the same XY path and timing without heating or moving filament:
+The generator creates a dry-run counterpart for every print file. They preserve the printable files' XYZ paths and feed rates, remove extrusion, disable the heaters and fans, and apply a 5 mm Z offset. Regenerate them whenever the benchmark geometry changes.
+
+The automatic files should normally be used. The manual conversion below documents their construction and can be used to audit them.
+
+To run the same XY path and timing without heating or moving filament:
 
 1. Comment out the four heating commands near the beginning:
 
