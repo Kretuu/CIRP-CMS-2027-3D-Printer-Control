@@ -32,6 +32,16 @@ OUTPUT_ROOT = REPO_ROOT / "data" / "raw"
 
 MOONRAKER_URL = "http://192.168.0.2:7125"
 MOONRAKER_TIMEOUT_SECONDS = 120.0
+DEFAULT_POINT_RETRIES = 2
+POINT_RETRY_DELAY_SECONDS = 2.0
+
+RETRYABLE_ACQUISITION_ERRORS = (
+    "Incomplete Trinkey dump",
+    "buffer_dropped=",
+    "sampling_overruns=",
+    "missing=",
+    "duplicates=",
+)
 
 AXES = ("X", "Y")
 MIN_FREQUENCY_HZ = 1
@@ -79,10 +89,12 @@ class PointResult:
     axis: str
     frequency_hz: float
     remote_run_id: str
+    attempt: int
     started_monotonic_s: float | None = None
     completed_monotonic_s: float | None = None
     moonraker_response: object | None = None
     error: str | None = None
+    retryable: bool = False
 
 
 def utc_stamp() -> str:
@@ -159,8 +171,18 @@ def build_setup_command() -> str:
     )
 
 
-def build_remote_run_id(local_run_id: str, point: SweepPoint) -> str:
-    return f"{local_run_id}_{point.axis.lower()}_{frequency_label(point.frequency_hz)}"
+def build_remote_run_id(
+    local_run_id: str,
+    point: SweepPoint,
+    attempt: int = 1,
+) -> str:
+    run_id = (
+        f"{local_run_id}_{point.axis.lower()}_"
+        f"{frequency_label(point.frequency_hz)}"
+    )
+    if attempt > 1:
+        run_id += f"_retry{attempt - 1:02d}"
+    return run_id
 
 
 def build_vibration_command(
@@ -191,24 +213,43 @@ def send_gcode_script(gcode_script: str) -> object:
     return response.json()
 
 
+def exception_detail(exc: Exception) -> str:
+    """Include the Moonraker response body in a recorded request failure."""
+    parts = [repr(exc)]
+    response = getattr(exc, "response", None)
+    if response is not None:
+        body = response.text.strip()
+        if body:
+            parts.append(body)
+    return "\n".join(parts)
+
+
+def is_retryable_acquisition_error(detail: str) -> bool:
+    """Return whether a failed point should be repeated automatically."""
+    return any(marker in detail for marker in RETRYABLE_ACQUISITION_ERRORS)
+
+
 def run_sweep_point(
     local_run_id: str,
     point: SweepPoint,
+    attempt: int,
 ) -> PointResult:
-    remote_run_id = build_remote_run_id(local_run_id, point)
+    remote_run_id = build_remote_run_id(local_run_id, point, attempt)
     command = build_vibration_command(point, remote_run_id)
     result = PointResult(
         axis=point.axis,
         frequency_hz=point.frequency_hz,
         remote_run_id=remote_run_id,
+        attempt=attempt,
     )
     result.started_monotonic_s = time.monotonic()
     try:
         result.moonraker_response = send_gcode_script(command)
     except Exception as exc:
         result.completed_monotonic_s = time.monotonic()
-        result.error = repr(exc)
-        raise
+        result.error = exception_detail(exc)
+        result.retryable = is_retryable_acquisition_error(result.error)
+        return result
     result.completed_monotonic_s = time.monotonic()
     return result
 
@@ -244,6 +285,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--freq-end", type=int, default=MAX_FREQUENCY_HZ)
     parser.add_argument("--accel-amplitude", type=float, required=True,
                         help="Commanded acceleration amplitude in mm/s^2.")
+    parser.add_argument(
+        "--point-retries", type=int, default=DEFAULT_POINT_RETRIES,
+        help=(
+            "Retries after a point fails Trinkey acquisition validation "
+            f"(default: {DEFAULT_POINT_RETRIES})."
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true",
                         help="Write metadata and print commands without sending them.")
     return parser.parse_args()
@@ -288,6 +336,8 @@ def build_metadata(
         "segments_per_cycle": SEGMENTS_PER_CYCLE,
         "max_segment_rate": MAX_SEGMENT_RATE,
         "chunk_time_seconds": CHUNK_TIME_SECONDS,
+        "point_retries": args.point_retries,
+        "point_retry_delay_seconds": POINT_RETRY_DELAY_SECONDS,
         "axis_sensor_map": AXIS_SENSOR_MAP,
         "timebase": (
             "Input segments are logged by Klipper in print_time. Trinkey samples "
@@ -311,6 +361,8 @@ def run() -> None:
     if not (MIN_FREQUENCY_HZ <= args.freq_start <= args.freq_end
             <= MAX_FREQUENCY_HZ):
         raise ValueError("Frequency range must satisfy 1 <= start <= end <= 100")
+    if args.point_retries < 0:
+        raise ValueError("Point retries must be zero or greater")
 
     frequencies = range(args.freq_start, args.freq_end + 1)
     points = [
@@ -341,24 +393,57 @@ def run() -> None:
             send_gcode_script(setup)
 
         for index, point in enumerate(points, start=1):
-            remote_run_id = build_remote_run_id(local_run_id, point)
-            command = build_vibration_command(point, remote_run_id)
-            print(
-                f"[{index}/{len(points)}] {point.axis} "
-                f"{point.frequency_hz:.3f} Hz, "
-                f"A={point.displacement_amplitude_mm:.6f} mm, "
-                f"accel={point.commanded_accel_amplitude_mm_s2:.1f} mm/s^2, "
-                f"remote_run_id={remote_run_id}"
-            )
             if args.dry_run:
+                remote_run_id = build_remote_run_id(local_run_id, point)
+                command = build_vibration_command(point, remote_run_id)
+                print(
+                    f"[{index}/{len(points)}] {point.axis} "
+                    f"{point.frequency_hz:.3f} Hz, "
+                    f"A={point.displacement_amplitude_mm:.6f} mm, "
+                    f"accel={point.commanded_accel_amplitude_mm_s2:.1f} "
+                    f"mm/s^2, remote_run_id={remote_run_id}"
+                )
                 print(command)
                 continue
-            result = run_sweep_point(
-                local_run_id,
-                point,
-            )
-            metadata["results"].append(asdict(result))
-            write_metadata(metadata_path, metadata)
+
+            max_attempts = args.point_retries + 1
+            for attempt in range(1, max_attempts + 1):
+                remote_run_id = build_remote_run_id(
+                    local_run_id, point, attempt)
+                print(
+                    f"[{index}/{len(points)}] {point.axis} "
+                    f"{point.frequency_hz:.3f} Hz, "
+                    f"A={point.displacement_amplitude_mm:.6f} mm, "
+                    f"accel={point.commanded_accel_amplitude_mm_s2:.1f} "
+                    f"mm/s^2, attempt={attempt}/{max_attempts}, "
+                    f"remote_run_id={remote_run_id}"
+                )
+                result = run_sweep_point(local_run_id, point, attempt)
+                metadata["results"].append(asdict(result))
+                write_metadata(metadata_path, metadata)
+
+                if result.error is None:
+                    metadata["points"][index - 1]["remote_run_id"] = (
+                        result.remote_run_id
+                    )
+                    write_metadata(metadata_path, metadata)
+                    break
+                if not result.retryable:
+                    raise RuntimeError(
+                        f"Non-retryable vibration point failure: "
+                        f"{result.error}"
+                    )
+                if attempt == max_attempts:
+                    raise RuntimeError(
+                        f"Vibration point failed acquisition validation "
+                        f"after {max_attempts} attempts: {result.error}"
+                    )
+
+                print(
+                    "Trinkey acquisition validation failed; retrying point "
+                    f"after {POINT_RETRY_DELAY_SECONDS:.1f} s"
+                )
+                time.sleep(POINT_RETRY_DELAY_SECONDS)
     except KeyboardInterrupt:
         metadata["error"] = "Interrupted by user"
         raise

@@ -42,6 +42,13 @@ the 1.5 m/s² experiment is:
 python orchestrator/run_klipper_vibration_sweep.py --accel-amplitude 1500
 ```
 
+Each frequency/axis point is retried up to two times by default when the
+Trinkey dump reports an overrun, dropped sample, missing sample, or duplicate.
+Retry attempts use distinct remote run directories, and the local sweep
+metadata points analysis at the successful attempt.  Change the retry count
+with `--point-retries`; use `--point-retries 0` to disable retries.  Motion,
+configuration, connection, and request-timeout failures still stop the sweep.
+
 The fixed protocol tests X followed by Y at every integer frequency from 1 to
 100 Hz. The start and end frequencies may be restricted for testing:
 
