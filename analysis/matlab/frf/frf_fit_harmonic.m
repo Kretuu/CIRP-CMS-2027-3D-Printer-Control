@@ -1,5 +1,6 @@
 function [amplitude, phase] = frf_fit_harmonic(t, y, omega)
 %FRF_FIT_HARMONIC Fit y = b*sin(omega*t) + c*cos(omega*t) + d.
+% Internal helper for the FRF-identification workflow.
 %
 % The equivalent cosine form has amplitude A = sqrt(b^2 + c^2) and
 % phase phi = atan2(-b, c).

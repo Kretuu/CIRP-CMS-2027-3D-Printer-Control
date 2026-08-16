@@ -249,7 +249,7 @@ copy instead:
 ```sh
 python3 external/klipper/scripts/motan_lightweight/data_logger.py \
   /usr/data/printer_data/comms/klippy.sock \
-  /usr/data/printer_data/logs/motan/sine_35_comp_r1
+  /usr/data/printer_data/logs/motan/sine35_comp_r1
 ```
 
 It logs the base and toolhead Trinkey streams, nominal toolhead acceleration
@@ -286,6 +286,11 @@ The main comparison datasets are `trinkey_accel(toolhead,x)` against
 `flags`, and `reference_valid` selections are also available. MATLAB may use
 the mapped print time or repeat the linear clock fit from the preserved device
 timestamps and sync diagnostics.
+
+The sine-print MATLAB analysis and its metric definitions are documented in
+[`analysis/matlab/sine_tracking/README.md`](analysis/matlab/sine_tracking/README.md).
+It reads lightweight logs directly, reviews the newest run for each condition,
+and writes pass-level tables, summaries, and comparison figures.
 
 The continuous streamer and `RUN_VIBRATION_TEST` both own the same USB serial
 port and are therefore intentionally mutually exclusive for now. Stop the Motan

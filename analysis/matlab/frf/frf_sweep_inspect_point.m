@@ -3,7 +3,7 @@ function inspect = frf_sweep_inspect_point(runDir, axisName, frequencyHz)
 %
 % Example:
 %
-%   addpath("analysis/matlab");
+%   addpath("analysis/matlab/frf");
 %   inspect = frf_sweep_inspect_point("data/raw/2026-07-16_2ms", "X", 30);
 
 if nargin ~= 3

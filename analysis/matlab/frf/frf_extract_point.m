@@ -1,5 +1,6 @@
 function point = frf_extract_point(pointDir, includeTimeSeries)
 %FRF_EXTRACT_POINT Estimate one FRF value from one frequency test.
+% Internal helper for the FRF-identification workflow.
 
 metadata = jsondecode(fileread(fullfile(pointDir, "metadata.json")));
 axisName = upper(string(metadata.axis));

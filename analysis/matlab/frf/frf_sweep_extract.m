@@ -1,5 +1,6 @@
 function results = frf_sweep_extract(runDir, includeTimeSeries)
 %FRF_SWEEP_EXTRACT Estimate X/Y FRF samples from one vibration sweep.
+% Internal helper for the FRF-identification workflow.
 
 if nargin < 2
     includeTimeSeries = false;

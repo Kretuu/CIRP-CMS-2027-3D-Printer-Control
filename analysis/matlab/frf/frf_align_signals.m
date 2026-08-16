@@ -1,5 +1,6 @@
 function aligned = frf_align_signals(pointDir, metadata)
 %FRF_ALIGN_SIGNALS Put commanded input and measured output on one time axis.
+% Internal helper for the FRF-identification workflow.
 
 RAW_TO_MM_S2 = 10.0;         % BNO055: 1 LSB = 0.01 m/s^2 = 10 mm/s^2.
 EXPECTED_SYNC_SAMPLES = 40;

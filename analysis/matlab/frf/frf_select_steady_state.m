@@ -1,5 +1,6 @@
 function steady = frf_select_steady_state(aligned, metadata)
 %FRF_SELECT_STEADY_STATE Select samples after the ramp and one-cycle guard.
+% Internal helper for the FRF-identification workflow.
 
 STEADY_MARGIN_CYCLES = 1.0;
 MIN_FIT_SAMPLES = 20;

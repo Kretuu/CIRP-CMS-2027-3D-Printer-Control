@@ -4,6 +4,7 @@ clc;
 
 t = linspace(0, 1, 500);
 nBasis = 7;
+scriptDirectory = fileparts(mfilename('fullpath'));
 
 %% Show how B-splines change with degree
 
@@ -29,6 +30,9 @@ end
 title(layout, 'B-spline basis functions');
 
 fontsize(gcf, 14, 'points');
+exportgraphics(gcf, ...
+    fullfile(scriptDirectory, 'bspline-functions.png'), ...
+    'Resolution', 300);
 
 
 %% Construct a command from cubic B-splines
@@ -80,6 +84,9 @@ legend( ...
 title(layout, 'B-spline command construction');
 
 fontsize(gcf, 14, 'points');
+exportgraphics(gcf, ...
+    fullfile(scriptDirectory, 'bsplines-sum.png'), ...
+    'Resolution', 300);
 
 
 %% Local functions

@@ -1,5 +1,6 @@
 function model = frf_identify_model(axisResult)
 %FRF_IDENTIFY_MODEL Fit a continuous-time model using INVFREQS.
+% Internal helper for the FRF-identification workflow.
 %
 % The model orders follow the printer models used by Duan et al.: fifth-order
 % numerator and sixth-order denominator for X, and sixth-order numerator and

@@ -3,7 +3,7 @@ function [results, models] = frf_sweep_analysis(runDirs)
 %
 % Run from the repository root:
 %
-%   addpath("analysis/matlab");
+%   addpath("analysis/matlab/frf");
 %   runDirs = [
 %       "data/raw/2026-08-11_1_5ms"
 %       "data/raw/2026-08-11_2ms"

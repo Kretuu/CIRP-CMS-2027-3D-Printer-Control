@@ -1,5 +1,6 @@
 function controllerModel = frf_controller_model(model)
 %FRF_CONTROLLER_MODEL Convert an identified FRF model for Klipper use.
+% Internal helper for the FRF-identification workflow.
 %
 % The measured acceleration FRF describes the axis dynamics over the tested
 % frequency range, but a commanded stationary position must produce the same
