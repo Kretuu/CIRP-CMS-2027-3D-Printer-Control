@@ -1,0 +1,126 @@
+# Sine-print tracking analysis package
+
+This analysis compares the no-compensation and standard filtered-B-spline
+(FBF) prints at the nominal 10 Hz and 35 Hz conditions. It reads the combined
+base/toolhead stream produced by `scripts/motan_lightweight`, checks capture
+integrity, finds the six sinusoidal passes automatically, and analyzes the
+central 80% of each pass.
+
+`sine_tracking_analysis.m` is the public entry point.
+`motan_lightweight_load.m` is its format-specific loader and may also be called
+directly when inspecting one raw lightweight capture.
+
+## Run it
+
+Place captures in `data/motan` using these names, where the largest run number
+is the newest:
+
+```text
+sine10_uncomp_rN.json.gz
+sine10_comp_rN.json.gz
+sine35_uncomp_rN.json.gz
+sine35_comp_rN.json.gz
+```
+
+The `.index.gz` files should still be preserved with the experiment, although
+the MATLAB loader reads the `.json.gz` stream directly. From the repository
+root, run:
+
+```matlab
+addpath("analysis/matlab/sine_tracking");
+report = sine_tracking_analysis();
+```
+
+Or from a shell with MATLAB installed:
+
+```sh
+matlab -batch 'addpath("analysis/matlab/sine_tracking"); sine_tracking_analysis();'
+```
+
+Results are written to `data/processed/sine_tracking`:
+
+- `sine_tracking_capture_review.csv` records run selection, rejected captures,
+  missing samples, logger diagnostics, and whether a selected run is clean;
+- `sine_tracking_pass_metrics.csv` contains one row per evaluated sine pass;
+- `sine_tracking_summary.csv` contains the six-pass mean and standard
+  deviation for each condition; and
+- two figures show the acceleration-error histories and the per-pass
+  acceleration NRMSE comparison.
+
+When a new clean 35 Hz uncompensated capture is added, give it the next run
+number and rerun the same command. The analyzer will select it automatically.
+
+## What is used as the reference
+
+The lightweight logger samples Klipper's nominal TrapQ acceleration only at
+the genuine accelerometer timestamps. The G-code approximates every spatial
+sine cycle with 24 straight chords, so its TrapQ acceleration is a sparse
+junction pulse train. It is useful for locating each pass and determining the
+executed fundamental frequency and phase, but its sampled peak is not the
+continuous desired acceleration amplitude.
+
+The analysis reconstructs the desired acceleration from the known 0.5 mm
+G-code position amplitude:
+
+```text
+a_reference(t) = A * omega^2 * cos(omega*t + phase_command)
+A = 0.5 mm
+```
+
+The command fundamental is fitted by ordinary least squares to obtain the
+executed phase. Phase uses the same equivalent cosine-form convention as the
+FRF workflow. The measured acceleration is not reduced to a fitted sinusoid;
+the full measured signal within each selected steady interval is compared with
+the reconstructed reference. Tracking error uses the dissertation convention,
+desired minus measured. The current sensor mounting makes the toolhead BNO055
+X axis opposite to printer X, so `analysisConfiguration()` applies
+`toolhead_x_sign = -1`. Recheck that setting if the accelerometer is remounted.
+
+The script searches near the nominal file frequency rather than assuming that
+Klipper executed it exactly. This matters for the current 35 Hz files, whose
+captured motion is approximately 33.1 Hz because of motion planning.
+
+## Metrics and interpretation
+
+The script deliberately reports only two tracking metrics:
+
+- RMS acceleration error, which includes the target-frequency mismatch and
+  other measured vibration in the retained sensor bandwidth; and
+- acceleration NRMSE, which divides RMS error by desired acceleration RMS and
+  therefore supports a relative comparison between 10 Hz and 35 Hz.
+
+For each selected sample, the calculation is
+
+```text
+acceleration_error = desired_acceleration - measured_acceleration
+RMS = sqrt(mean(acceleration_error^2))
+NRMSE = RMS / sqrt(mean(desired_acceleration^2))
+```
+
+For the dissertation, label these quantities explicitly as "measured
+acceleration tracking error." The script does not estimate position tracking
+error. The absence of an independently validated position measurement or
+observer is a limitation, and the dynamic result should be considered together
+with the printed specimen quality.
+
+Keep sensor rate, bandwidth, mounting, and processing identical between paired
+conditions. The current captures contain approximately 250 samples/s, so
+content above the 125 Hz Nyquist limit cannot be evaluated.
+
+The six passes in one capture measure within-specimen repeatability; they are
+not six independent experiments. Final claims about repeatability should use
+multiple complete prints per condition and report variation between prints.
+
+## Current capture review
+
+At the time this analysis was added:
+
+- `sine10_uncomp_r4`, `sine10_comp_r2`, and `sine35_comp_r2` are complete and
+  clean;
+- the newest `sine35_uncomp_r3` contains no evaluated sine passes because its
+  accelerometer stream stops after about 23.26 seconds; and
+- the fallback `sine35_uncomp_r2` contains all six passes, but has one stream
+  read/sequence error and one missing sample inside evaluated pass 5.
+
+The 35 Hz comparison produced from the fallback run is suitable for diagnosing
+the method, but remains provisional until `sine35_uncomp` is rerun cleanly.
