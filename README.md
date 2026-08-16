@@ -131,13 +131,13 @@ The desktop build already validates the target architecture. The Creality
 image does not normally include the `file` utility, so the first command below
 checks the ELF header with the printer's Python instead. It must report
 `ELF32 little-endian MIPS`. The second command loads the candidate and resolves
-a representative new symbol:
+both dissertation-specific helper interfaces:
 
 ```sh
 /usr/share/klippy-env/bin/python3 -c 'p="/tmp/c_helper.so.new"; h=open(p,"rb").read(20); assert h[:4] == b"\x7fELF" and h[4] == 1 and h[5] == 1 and int.from_bytes(h[18:20], "little") == 8, "not ELF32 little-endian MIPS"; print("ELF32 little-endian MIPS")'
 
 /usr/share/klippy-env/bin/python3 -c \
-  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc)'
+  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double[]);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.state_space_observer_alloc)'
 ```
 
 If both checks succeed, keep a recovery copy, stop only Klipper, and install
@@ -207,11 +207,11 @@ Restoring only an old `c_helper.so` is not a complete rollback when the helper
 sources or C declarations have also changed. Restore the matching old sources
 as well, or install the Docker-built helper produced from the current checkout.
 
-The `vibration_test.py` and `trinkey_accel.py` extensions are Python-only and
-do not themselves require a rebuilt helper. Rebuild and deploy `c_helper.so`
-when changing files in `klippy/chelper`, such as
-`kin_filtered_bspline.c`, or the C declarations/source list in its
-`__init__.py`.
+`vibration_test.py` remains Python-only. The shared observer used by
+`trinkey_accel.py` is implemented in `state_space_observer.c`, so deploy the
+matching `klippy/chelper` sources and rebuild `c_helper.so` when installing this
+version. The same rule applies to `kin_filtered_bspline.c` and changes to the C
+declarations/source list in `klippy/chelper/__init__.py`.
 
 ## Continuous Klipper and Motan logging
 
@@ -252,40 +252,46 @@ python3 external/klipper/scripts/motan_lightweight/data_logger.py \
   /usr/data/printer_data/logs/motan/sine35_comp_r1
 ```
 
-It logs the base and toolhead Trinkey streams, nominal toolhead acceleration
-evaluated at each genuine sensor timestamp, and a small diagnostic status
-subset. It does not export the full high-density toolhead or extruder TrapQ,
-step queues, ADXL/angle streams, or unrelated status objects. The stock
+It logs raw base and toolhead data, nominal TrapQ motion, final motor commands,
+the shared observer estimate, and a small diagnostic status subset. Every value
+is evaluated at a genuine sensor timestamp. It does not export the full
+high-density toolhead or extruder TrapQ, step queues, ADXL/angle streams, or
+unrelated status objects. The stock
 `scripts/motan` directory is retained unchanged. If either required sensor is
 silent for five seconds, the lightweight process warns but remains connected;
 validate sample continuity and the loss counters after the run.
 
 The exact Klipper socket path depends on the printer installation. Motan writes
-`trinkey_run.json.gz` and `trinkey_run.index.gz`. Each acceleration row retains:
+`trinkey_run.json.gz` and `trinkey_run.index.gz`. Each row retains:
 
 - mapped Klipper `print_time`;
 - original 64-bit Trinkey microsecond timestamp;
 - firmware sample sequence;
 - raw BNO055 axes;
 - scaled axes in mm/s²;
-- the relevant nominal TrapQ acceleration (`command_x` for toolhead and
-  `command_y` for base), evaluated at that row's mapped print time;
-- a command-reference validity flag;
+- nominal TrapQ position and acceleration;
+- final motor position reconstructed from generated step history and the
+  backward-difference velocity supplied to the observer;
+- estimated physical position and signed, bias-corrected acceleration;
+- observer and command-reference validity flags;
 - validity flags and stream diagnostics.
 
 While Motan is connected, run `TRINKEY_ACCEL_STATUS` in the Fluidd console to
 inspect reader health, synchronization timeouts, firmware overruns, transport
-drops, I²C read durations, host sequence errors, and clock-fit quality. Start
-the logger before starting printer motion; initial device configuration and
+drops, I²C read durations, host sequence errors, clock-fit quality, observer
+resets, and motion-history lookup errors. Start the logger before starting
+printer motion and keep the printer still for at least 0.4 seconds while the
+observer measures static accelerometer bias. Initial device configuration and
 clock synchronization briefly block the Klipper reactor, whereas steady-state
 sync exchanges are asynchronous.
 
-The main comparison datasets are `trinkey_accel(toolhead,x)` against
-`trinkey_accel(toolhead,command_x)`, and `trinkey_accel(base,y)` against
-`trinkey_accel(base,command_y)`. The `_raw`, `device_time_us`, `sequence`,
-`flags`, and `reference_valid` selections are also available. MATLAB may use
-the mapped print time or repeat the linear clock fit from the preserved device
-timestamps and sync diagnostics.
+The main position datasets are `desired_position`, `motor_position`, and
+`observed_position` for both `toolhead` (X) and `base` (Y). Acceleration,
+`_raw`, `device_time_us`, `sequence`, `flags`, `observer_valid`, and
+`reference_valid` selections are also available. The older `command_x` and
+`command_y` acceleration selectors remain readable. MATLAB may use the mapped
+print time or repeat the linear clock fit from the preserved device timestamps
+and sync diagnostics.
 
 The sine-print MATLAB analysis and its metric definitions are documented in
 [`analysis/matlab/sine_tracking/README.md`](analysis/matlab/sine_tracking/README.md).
@@ -295,9 +301,9 @@ and writes pass-level tables, summaries, and comparison figures.
 The continuous streamer and `RUN_VIBRATION_TEST` both own the same USB serial
 port and are therefore intentionally mutually exclusive for now. Stop the Motan
 logger before starting a buffered vibration sweep. A later hybrid controller
-should consume measurements through an internal Klipper path, never through
-the non-real-time Motan socket. Its 1 kHz prediction/reference path remains
-separate from this sampled evaluation stream. The first
+should use `trinkey_accel.start_observer_client()` inside Klipper, never the
+non-real-time Motan socket. The desired reference and final motor input are kept
+separate in each shared sample. The first
 subscriber starts one physical acquisition stream and it remains active until
 the final subscriber disconnects.
 

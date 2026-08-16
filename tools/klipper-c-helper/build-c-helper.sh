@@ -133,6 +133,13 @@ if [[ " ${source_names[*]} " == *" kin_filtered_bspline.c "* ]] \
     exit 1
 fi
 
+if [[ " ${source_names[*]} " == *" state_space_observer.c "* ]] \
+    && ! grep -Eq '[[:space:]]state_space_observer_alloc$' \
+        <<<"${dynamic_symbols}"; then
+    echo "Built helper is missing the state-space observer symbols" >&2
+    exit 1
+fi
+
 mv "${temporary_output}" "${output_path}"
 trap - EXIT
 chmod 0755 "${output_path}"

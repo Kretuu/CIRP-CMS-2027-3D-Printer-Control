@@ -8,6 +8,7 @@ names remain unchanged.
 | Directory | Purpose | Main entry point |
 |---|---|---|
 | [`frf/`](frf/) | Vibration-sweep alignment, FRF extraction, model identification, and point inspection | `frf_sweep_analysis` |
+| [`state_space_observer/`](state_space_observer/) | Plant-based Luenberger observer design from the identified FBF models | `state_space_observer_design` |
 | [`sine_tracking/`](sine_tracking/) | Lightweight-Motan validation and compensated/uncompensated sine-print comparison | `sine_tracking_analysis` |
 | [`diss_figures/`](diss_figures/) | Self-contained scripts and generated assets for dissertation diagrams | individual scripts |
 
@@ -20,6 +21,7 @@ explicitly:
 
 ```matlab
 addpath("analysis/matlab/frf");
+addpath("analysis/matlab/state_space_observer");
 addpath("analysis/matlab/sine_tracking");
 ```
 

@@ -77,8 +77,9 @@ X axis opposite to printer X, so `analysisConfiguration()` applies
 `toolhead_x_sign = -1`. Recheck that setting if the accelerometer is remounted.
 
 The script searches near the nominal file frequency rather than assuming that
-Klipper executed it exactly. This matters for the current 35 Hz files, whose
-captured motion is approximately 33.1 Hz because of motion planning.
+Klipper executed it exactly. This is especially important at 35 Hz, where
+motion-planning constraints can make the executed frequency differ from the
+nominal file name.
 
 ## Metrics and interpretation
 
@@ -99,9 +100,10 @@ NRMSE = RMS / sqrt(mean(desired_acceleration^2))
 
 For the dissertation, label these quantities explicitly as "measured
 acceleration tracking error." The script does not estimate position tracking
-error. The absence of an independently validated position measurement or
-observer is a limitation, and the dynamic result should be considered together
-with the printed specimen quality.
+error. New captures include the shared observer's model-assisted position
+estimate, but that estimate is not independent displacement ground truth and
+must not be presented as such. The dynamic result should therefore be
+considered together with the printed specimen quality.
 
 Keep sensor rate, bandwidth, mounting, and processing identical between paired
 conditions. The current captures contain approximately 250 samples/s, so
@@ -110,17 +112,3 @@ content above the 125 Hz Nyquist limit cannot be evaluated.
 The six passes in one capture measure within-specimen repeatability; they are
 not six independent experiments. Final claims about repeatability should use
 multiple complete prints per condition and report variation between prints.
-
-## Current capture review
-
-At the time this analysis was added:
-
-- `sine10_uncomp_r4`, `sine10_comp_r2`, and `sine35_comp_r2` are complete and
-  clean;
-- the newest `sine35_uncomp_r3` contains no evaluated sine passes because its
-  accelerometer stream stops after about 23.26 seconds; and
-- the fallback `sine35_uncomp_r2` contains all six passes, but has one stream
-  read/sequence error and one missing sample inside evaluated pass 5.
-
-The 35 Hz comparison produced from the fallback run is suitable for diagnosing
-the method, but remains provisional until `sine35_uncomp` is rerun cleanly.

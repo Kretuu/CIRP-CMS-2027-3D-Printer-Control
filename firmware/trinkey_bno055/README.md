@@ -55,8 +55,8 @@ STREAM_STATUS
 STREAM_STOP
 ```
 
-`STREAM_STOP` drains completed batches and ends with a binary stop frame. It
-does not emit an ASCII acknowledgement.
+`STREAM_STOP` drains completed batches, emits a binary stop frame, and then
+returns to text framing with `ACK_STREAM_STOP,<run_id>`.
 
 ### Binary envelope
 
@@ -103,7 +103,8 @@ Before using 1 kHz for experiments, run a sustained hardware test and verify:
 - the selected bandwidth is appropriate for the acquisition Nyquist limit.
 
 For buffered sweeps through 100 Hz, use the fixed 500 Hz acquisition with
-250 Hz bandwidth and reject runs reporting any drops or overruns. Continuous
-10 Hz and 35 Hz Motan evaluation may retain 400 Hz acquisition with 125 Hz
-bandwidth. For exploratory 1 kHz streaming, start with 250 Hz bandwidth and
-measure freshness and latency before increasing it.
+250 Hz bandwidth and reject runs reporting any drops or overruns. This remains
+practical because `RUN_VIBRATION_TEST` reads only the sensor for the moving
+axis. Continuous acquisition reads both sensors sequentially, so use 250 Hz
+acquisition with 125 Hz bandwidth. This matches the filtered-register update
+rate without exceeding the reliable throughput of the shared I2C bus.

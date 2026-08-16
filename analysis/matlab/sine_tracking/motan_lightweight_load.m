@@ -6,9 +6,9 @@ function capture = motan_lightweight_load(logPath)
 %
 % The lightweight logger stores JSON messages separated by ASCII ETX (0x03)
 % in a gzip stream.  This loader returns the genuine accelerometer rows without
-% interpolating or resampling them.  The command column is the nominal
-% toolhead TrapQ acceleration evaluated by Klipper at each physical sample
-% timestamp.
+% interpolating or resampling them.  New captures also contain desired motion,
+% final motor commands, and the shared position-observer result at each genuine
+% physical sample timestamp.
 
 logPath = string(logPath);
 if ~isscalar(logPath) || ~isfile(logPath)
@@ -176,9 +176,13 @@ common = ["time", "device_time_us", "sample_sequence", ...
     "x_raw", "y_raw", "z_raw", ...
     "x_acceleration", "y_acceleration", "z_acceleration", "flags"];
 if sensor == "base"
-    header = [common, "command_y_acceleration", "reference_valid"];
+    header = [common, "desired_y_position", "desired_y_acceleration", ...
+        "motor_y_position", "motor_y_velocity", "observed_y_position", ...
+        "observer_y_acceleration", "observer_valid", "reference_valid"];
 else
-    header = [common, "command_x_acceleration", "reference_valid"];
+    header = [common, "desired_x_position", "desired_x_acceleration", ...
+        "motor_x_position", "motor_x_velocity", "observed_x_position", ...
+        "observer_x_acceleration", "observer_valid", "reference_valid"];
 end
 end
 
@@ -196,6 +200,17 @@ if size(rows, 2) ~= numel(header)
 end
 variableNames = matlab.lang.makeValidName(cellstr(header));
 output = array2table(rows, "VariableNames", variableNames);
+
+% Preserve the field names expected by the acceleration-only sine analysis.
+% This keeps previous scripts and captures usable while the newer names make
+% the distinction between desired, motor, and observed motion explicit.
+if sensor == "toolhead" && ismember( ...
+        "desired_x_acceleration", string(output.Properties.VariableNames))
+    output.command_x_acceleration = output.desired_x_acceleration;
+elseif sensor == "base" && ismember( ...
+        "desired_y_acceleration", string(output.Properties.VariableNames))
+    output.command_y_acceleration = output.desired_y_acceleration;
+end
 end
 
 
@@ -209,7 +224,9 @@ diagnostics = struct( ...
     "frame_errors", NaN, ...
     "packet_sequence_errors", NaN, ...
     "sync_timeouts", NaN, ...
-    "read_errors", NaN);
+    "read_errors", NaN, ...
+    "observer_resets", NaN, ...
+    "motion_lookup_errors", NaN);
 end
 
 
@@ -217,7 +234,8 @@ function diagnostics = updateDiagnostics(diagnostics, parameters)
 %UPDATEDIAGNOSTICS Retain the newest cumulative stream diagnostics.
 
 fields = ["firmware", "clock", "host_queue_drops", "frame_errors", ...
-    "packet_sequence_errors", "sync_timeouts", "read_errors"];
+    "packet_sequence_errors", "sync_timeouts", "read_errors", ...
+    "observer_resets", "motion_lookup_errors"];
 for field = fields
     name = char(field);
     if isfield(parameters, name)
