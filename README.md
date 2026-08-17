@@ -137,7 +137,7 @@ both dissertation-specific helper interfaces:
 /usr/share/klippy-env/bin/python3 -c 'p="/tmp/c_helper.so.new"; h=open(p,"rb").read(20); assert h[:4] == b"\x7fELF" and h[4] == 1 and h[5] == 1 and int.from_bytes(h[18:20], "little") == 8, "not ELF32 little-endian MIPS"; print("ELF32 little-endian MIPS")'
 
 /usr/share/klippy-env/bin/python3 -c \
-  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double[]);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.state_space_observer_alloc)'
+  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); int filtered_bspline_add_observation(void *, char, double, double); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double[]);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.filtered_bspline_add_observation, lib.state_space_observer_alloc)'
 ```
 
 If both checks succeed, keep a recovery copy, stop only Klipper, and install
@@ -210,8 +210,10 @@ as well, or install the Docker-built helper produced from the current checkout.
 `vibration_test.py` remains Python-only. The shared observer used by
 `trinkey_accel.py` is implemented in `state_space_observer.c`, so deploy the
 matching `klippy/chelper` sources and rebuild `c_helper.so` when installing this
-version. The same rule applies to `kin_filtered_bspline.c` and changes to the C
-declarations/source list in `klippy/chelper/__init__.py`.
+version. The same rule applies to the filtered B-spline module set
+(`kin_filtered_bspline.c`, `filtered_bspline_core.c`,
+`filtered_bspline_hybrid.c`, and `filtered_bspline_internal.h`) and changes to
+the C declarations/source list in `klippy/chelper/__init__.py`.
 
 ## Continuous Klipper and Motan logging
 
@@ -233,6 +235,21 @@ section is required in `printer.cfg` or `moonraker.conf`.
 The Klipper Python environment must contain `pyserial`. Restart Klipper after
 installing the extra. The stream starts on demand when the first API client
 subscribes and stops after the final client disconnects.
+
+The filtered B-spline controller now provides three experiment states:
+
+```gcode
+SET_FILTERED_BSPLINE ENABLE=0
+SET_FILTERED_BSPLINE ENABLE=1 MODE=STANDARD
+SET_FILTERED_BSPLINE ENABLE=1 MODE=HYBRID
+```
+
+Hybrid mode starts an internal client of the same combined observer stream used
+by lightweight Motan. It uses standard FBF during the configured warm-up and
+then enables the learned residual correction. Deploy
+`external/klipper/klippy/extras/filtered_bspline.py`, the matching C helper and
+C declarations, `klipper_extensions/filtered_bspline.cfg`, and
+`klipper_extensions/trinkey_accel.cfg` together.
 
 The stock Motan logger automatically subscribes to both configured sensors and
 all standard Motan motion/status sources:
@@ -300,10 +317,10 @@ and writes pass-level tables, summaries, and comparison figures.
 
 The continuous streamer and `RUN_VIBRATION_TEST` both own the same USB serial
 port and are therefore intentionally mutually exclusive for now. Stop the Motan
-logger before starting a buffered vibration sweep. A later hybrid controller
-should use `trinkey_accel.start_observer_client()` inside Klipper, never the
-non-real-time Motan socket. The desired reference and final motor input are kept
-separate in each shared sample. The first
+logger and disable hybrid FBF before starting a buffered vibration sweep. The
+hybrid controller uses `trinkey_accel.start_observer_client()` inside Klipper,
+never the non-real-time Motan socket. The desired reference and final motor
+input are kept separate in each shared sample. The first
 subscriber starts one physical acquisition stream and it remains active until
 the final subscriber disconnects.
 

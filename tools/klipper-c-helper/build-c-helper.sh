@@ -126,11 +126,17 @@ if ! grep -Eq '[[:space:]]serialqueue_alloc$' <<<"${dynamic_symbols}"; then
     exit 1
 fi
 
-if [[ " ${source_names[*]} " == *" kin_filtered_bspline.c "* ]] \
-    && ! grep -Eq '[[:space:]]filtered_bspline_controller_alloc$' \
-        <<<"${dynamic_symbols}"; then
-    echo "Built helper is missing the filtered B-spline symbols" >&2
-    exit 1
+if [[ " ${source_names[*]} " == *" kin_filtered_bspline.c "* ]]; then
+    for required_symbol in \
+        filtered_bspline_controller_alloc \
+        filtered_bspline_add_observation \
+        filtered_bspline_get_hybrid_status; do
+        if ! grep -Eq "[[:space:]]${required_symbol}$" \
+            <<<"${dynamic_symbols}"; then
+            echo "Built helper is missing ${required_symbol}" >&2
+            exit 1
+        fi
+    done
 fi
 
 if [[ " ${source_names[*]} " == *" state_space_observer.c "* ]] \

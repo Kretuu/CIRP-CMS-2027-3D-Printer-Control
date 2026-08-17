@@ -10,6 +10,11 @@ central 80% of each pass.
 `motan_lightweight_load.m` is its format-specific loader and may also be called
 directly when inspecting one raw lightweight capture.
 
+The comparison script currently expects the four already collected
+uncompensated/standard-FBF conditions. Hybrid captures can already be opened
+with `motan_lightweight_load`; add them to the comparison only after real
+hybrid runs exist, so the existing analysis remains reproducible.
+
 ## Run it
 
 Place captures in `data/motan` using these names, where the largest run number
@@ -49,6 +54,26 @@ Results are written to `data/processed/sine_tracking`:
 
 When a new clean 35 Hz uncompensated capture is added, give it the next run
 number and rerun the same command. The analyzer will select it automatically.
+
+## Inspect hybrid controller status
+
+New lightweight logs retain the controller mode and flattened X/Y hybrid
+status in `capture.events`. The column order for each eight-value axis row is
+stored alongside the data, so it does not have to be remembered:
+
+```matlab
+capture = motan_lightweight_load("data/motan/sine10_hybrid_r1.json.gz");
+capture.hybrid_status_columns
+capture.events(:, ["event_time", "filtered_bspline_mode", ...
+    "hybrid_x_status", "hybrid_y_status", ...
+    "hybrid_python_observation_errors"])
+```
+
+For an accepted hybrid run, find an event where both axes have `active = 1`
+and `hybrid_solves > 0`. Measurement errors, solve fallbacks, and Python
+observation errors should be zero. The final event may be disabled because the
+G-code turns the controller off after the evaluated motion; the completed-run
+counters deliberately remain available.
 
 ## What is used as the reference
 

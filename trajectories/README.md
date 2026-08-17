@@ -3,7 +3,9 @@
 This directory contains the printable sinusoidal parts used for the final compensator evaluation.
 
 - `gcode/` contains manually maintained legacy/reference G-code; it is not generated or part of the final print comparison.
-- `generated/` contains the four Part-A print files and their four elevated dry-run counterparts produced by `generate_gcodes.py`.
+- `generated/` contains the uncompensated, standard-FBF, and hybrid-FBF Part-A
+  print files at both frequencies, together with an elevated dry-run version of
+  each file.
 
 Regenerate the sine-print evaluation files from the repository root:
 
@@ -27,7 +29,26 @@ The paper and its arXiv source do **not** provide G-code or numerical amplitude,
 
 The specimen is **50 mm** long, giving 100 complete wavelengths per pass. Length is not specified by the paper; 50 mm is used here to make the specimen easier to handle and measure. It does not change the wavelength, excitation frequency, or width metric. The reconstruction uses two 0.2 mm layers (0.4 mm total height) because the paper does not report a layer count. This limits cumulative Z stacking error while leaving enough material to remove and measure. Every layer repeats the same continuous inner-to-outer path. PLA cooling is enabled after the separate prime line and before the densely spaced benchmark paths begin.
 
-All 10 Hz and 35 Hz files use the same 0.5 mm amplitude and the same spatial/extrusion payload. Only their feed rates differ, so the 10 Hz and 35 Hz physical comparisons test the same geometry. For each frequency, the uncompensated and `filtered_bspline` files are motion-for-motion identical; only `SET_FILTERED_BSPLINE` differs. In this experiment, `filtered_bspline` is the paper's **standard FBF** condition. No hybrid-FBF file is generated yet.
+All 10 Hz and 35 Hz files use the same 0.5 mm amplitude and the same
+spatial/extrusion payload. Only their feed rates differ, so the 10 Hz and 35 Hz
+physical comparisons test the same geometry. For each frequency, the
+`uncompensated`, `filtered_bspline`, and `hybrid` files are motion-for-motion
+identical; only `SET_FILTERED_BSPLINE` differs. In this experiment,
+`filtered_bspline` is the paper's **standard FBF** condition and `hybrid` uses
+the online residual learner after its configured standard-FBF warm-up.
+
+The three commands are:
+
+```gcode
+SET_FILTERED_BSPLINE ENABLE=0
+SET_FILTERED_BSPLINE ENABLE=1 MODE=STANDARD
+SET_FILTERED_BSPLINE ENABLE=1 MODE=HYBRID
+```
+
+Hybrid mode requires `[trinkey_accel]` and valid X/Y observer output. Start the
+lightweight Motan logger before the file if the same raw and observed data are
+also required for evaluation. Motan and the hybrid controller subscribe to the
+same shared calculation; they do not run two observers.
 
 The files deliberately use:
 

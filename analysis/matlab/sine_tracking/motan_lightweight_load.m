@@ -43,9 +43,17 @@ eventTime = zeros(0, 1);
 eventFilename = strings(0, 1);
 eventState = strings(0, 1);
 eventEnabled = NaN(0, 1);
+eventMode = strings(0, 1);
+eventHybridX = NaN(0, 8);
+eventHybridY = NaN(0, 8);
+eventHybridPythonErrors = NaN(0, 1);
 currentFilename = "";
 currentState = "";
 currentEnabled = NaN;
+currentMode = "";
+currentHybridX = NaN(1, 8);
+currentHybridY = NaN(1, 8);
+currentHybridPythonErrors = NaN;
 
 for messageIndex = 1:numel(messages)
     rawMessage = messages{messageIndex};
@@ -134,10 +142,17 @@ for messageIndex = 1:numel(messages)
             changed = true;
         end
     end
-    if isfield(status, "filtered_bspline") ...
-            && isfield(status.filtered_bspline, "enabled") ...
-            && ~isempty(status.filtered_bspline.enabled)
-        currentEnabled = double(status.filtered_bspline.enabled);
+    if isfield(status, "filtered_bspline")
+        filtered = status.filtered_bspline;
+        currentEnabled = readScalar(filtered, "enabled", currentEnabled);
+        currentMode = readString(filtered, "mode", currentMode);
+        currentHybridX = readHybridAxisStatus( ...
+            filtered, "hybrid_x", currentHybridX);
+        currentHybridY = readHybridAxisStatus( ...
+            filtered, "hybrid_y", currentHybridY);
+        currentHybridPythonErrors = readScalar( ...
+            filtered, "hybrid_observation_errors", ...
+            currentHybridPythonErrors);
         changed = true;
     end
     if changed
@@ -145,6 +160,11 @@ for messageIndex = 1:numel(messages)
         eventFilename(end + 1, 1) = currentFilename; %#ok<AGROW>
         eventState(end + 1, 1) = currentState; %#ok<AGROW>
         eventEnabled(end + 1, 1) = currentEnabled; %#ok<AGROW>
+        eventMode(end + 1, 1) = currentMode; %#ok<AGROW>
+        eventHybridX(end + 1, :) = currentHybridX; %#ok<AGROW>
+        eventHybridY(end + 1, :) = currentHybridY; %#ok<AGROW>
+        eventHybridPythonErrors(end + 1, 1) = ...
+            currentHybridPythonErrors; %#ok<AGROW>
     end
 end
 
@@ -157,8 +177,15 @@ capture.path = logPath;
 capture.base = base;
 capture.toolhead = toolhead;
 capture.events = table(eventTime, eventFilename, eventState, eventEnabled, ...
+    eventMode, eventHybridX, eventHybridY, eventHybridPythonErrors, ...
     VariableNames=["event_time", "filename", "state", ...
-    "filtered_bspline_enabled"]);
+    "filtered_bspline_enabled", "filtered_bspline_mode", ...
+    "hybrid_x_status", "hybrid_y_status", ...
+    "hybrid_python_observation_errors"]);
+capture.hybrid_status_columns = [ ...
+    "training_samples", "active", "hybrid_solves", ...
+    "prediction_gap_samples", "maximum_prediction_gap_samples", ...
+    "measurement_errors", "solve_fallbacks", "weight_norm"];
 capture.diagnostics = diagnostics;
 capture.configured_rate_hz = configuredRateHz;
 capture.configured_bandwidth_hz = configuredBandwidthHz;
@@ -286,6 +313,24 @@ value = fallback;
 name = char(field);
 if isfield(container, name) && ~isempty(container.(name))
     value = string(container.(name));
+end
+end
+
+
+function values = readHybridAxisStatus(filtered, field, fallback)
+%READHYBRIDAXISSTATUS Flatten one nested filtered-B-spline status object.
+
+values = fallback;
+name = char(field);
+if ~isfield(filtered, name) || isempty(filtered.(name))
+    return;
+end
+axisStatus = filtered.(name);
+fields = ["training_samples", "active", "hybrid_solves", ...
+    "prediction_gap_samples", "maximum_prediction_gap_samples", ...
+    "measurement_errors", "solve_fallbacks", "weight_norm"];
+for index = 1:numel(fields)
+    values(index) = readScalar(axisStatus, fields(index), values(index));
 end
 end
 
