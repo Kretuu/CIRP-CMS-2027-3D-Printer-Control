@@ -56,7 +56,8 @@ STREAM_STOP
 ```
 
 `STREAM_STOP` drains completed batches, emits a binary stop frame, and then
-returns to text framing with `ACK_STREAM_STOP,<run_id>`.
+returns to text framing with `ACK_STREAM_STOP,<trinkey_t_us>`. When already
+idle, it returns the same acknowledgement without emitting a stop frame.
 
 ### Binary envelope
 
