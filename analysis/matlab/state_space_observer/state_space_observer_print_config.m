@@ -33,6 +33,9 @@ printList("observer_" + axisName + "_gu", observer.Gu);
 printList("observer_" + axisName + "_gv", observer.Gv);
 printList("observer_" + axisName + "_ga", observer.Ga);
 printList("observer_" + axisName + "_ho", observer.Ho);
+fprintf("observer_%s_hu: %.17g\n", axisName, observer.Hu);
+fprintf("observer_%s_hv: %.17g\n", axisName, observer.Hv);
+fprintf("observer_%s_ha: %.17g\n", axisName, observer.Ha);
 printList("observer_" + axisName + "_x0_per_mm", observer.x0_per_mm);
 end
 
