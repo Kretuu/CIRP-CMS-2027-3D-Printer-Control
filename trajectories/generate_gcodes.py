@@ -57,6 +57,9 @@ BENCHMARK_X_CENTER_MM = 110.0
 BENCHMARK_Y_MIN_MM = 80.0
 BENCHMARK_Y_MAX_MM = BENCHMARK_Y_MIN_MM + BENCHMARK_LENGTH_MM
 BENCHMARK_ACCEL_HEADROOM = 0.9
+HYBRID_WARMUP_SECONDS = 5.5
+HYBRID_OBSERVER_BIAS_MS = 500
+HYBRID_WORKER_SETTLE_MS = 500
 
 
 def format_signal(value: float, places: int = 6) -> str:
@@ -133,6 +136,8 @@ def benchmark_sine_wall(
     x_base: float,
     y_start: float,
     y_end: float,
+    *,
+    extrude: bool = True,
 ) -> list[str]:
     """Generate one sinusoidal pass at constant-magnitude Y-axis velocity."""
     y_distance = y_end - y_start
@@ -162,11 +167,59 @@ def benchmark_sine_wall(
         dy = y - previous_y
         distance = math.hypot(dx, dy)
         feedrate = 60.0 * distance / dt
-        extrusion = extrusion_per_mm * distance
-        lines.append(benchmark_xy_e_move(x, y, extrusion, feedrate))
+        if extrude:
+            extrusion = extrusion_per_mm * distance
+            lines.append(benchmark_xy_e_move(x, y, extrusion, feedrate))
+        else:
+            lines.append(
+                f"G1 X{format_signal(x)} Y{format_signal(y)} "
+                f"F{format_signal(feedrate, 3)}"
+            )
         previous_x = x
         previous_y = y
 
+    return lines
+
+
+def hybrid_warmup_sketch(frequency_hz: float, x_base: float) -> list[str]:
+    """Excite the hybrid learner above the bed before measured extrusion."""
+    y_velocity = frequency_hz * BENCHMARK_WAVELENGTH_MM
+    pass_seconds = BENCHMARK_LENGTH_MM / y_velocity
+    pass_count = math.ceil(HYBRID_WARMUP_SECONDS / pass_seconds)
+    motion_seconds = pass_count * pass_seconds
+    y = BENCHMARK_Y_MIN_MM
+    start_x = x_base + BENCHMARK_AMPLITUDE_MM
+    lines = [
+        "",
+        "; Hybrid RLS warm-up sketch: no extrusion, controller state retained.",
+        f"; {pass_count} sine pass(es), {motion_seconds:.3f} s of excited motion.",
+        f"G4 P{HYBRID_OBSERVER_BIAS_MS} "
+        "; acquire static accelerometer bias before moving",
+        "M400 ; do not plan warm-up motion before bias acquisition completes",
+        f"G1 X{format_signal(start_x)} Y{format_signal(y)} "
+        f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+    ]
+    for unused in range(pass_count):
+        next_y = (
+            BENCHMARK_Y_MAX_MM
+            if y == BENCHMARK_Y_MIN_MM
+            else BENCHMARK_Y_MIN_MM
+        )
+        lines.extend(
+            benchmark_sine_wall(
+                frequency_hz, x_base, y, next_y, extrude=False
+            )
+        )
+        y = next_y
+    lines.extend(
+        [
+            "M400 ; wait until all warm-up motion has physically completed",
+            f"G4 P{HYBRID_WORKER_SETTLE_MS} "
+            "; let the RLS worker consume the final observer batch",
+            "M400",
+            "WAIT_FILTERED_BSPLINE_READY TIMEOUT=2.0",
+        ]
+    )
     return lines
 
 
@@ -260,15 +313,26 @@ def generate_printable_sine_benchmark(
             f"G1 Z2 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
             f"G1 X{format_signal(first_x)} Y{format_signal(y_min)} "
             f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+            "M400 ; finish homing and priming before selecting the test mode",
+            f"SET_VELOCITY_LIMIT ACCEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+            f"ACCEL_TO_DECEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+            f"SQUARE_CORNER_VELOCITY={BENCHMARK_SQUARE_CORNER_VELOCITY_MM_S}",
+            controller_command,
+        ]
+    )
+    if controller_mode == "hybrid":
+        lines.extend(hybrid_warmup_sketch(frequency_hz, pass_pairs[0][1]))
+        lines.append(
+            f"G1 X{format_signal(first_x)} Y{format_signal(y_min)} "
+            f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}"
+        )
+    lines.extend(
+        [
             f"G1 Z{format_signal(BENCHMARK_LAYER_HEIGHT_MM)} "
             f"F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
             "G1 E0.8 F1800",
             "M106 S255 ; cool the densely spaced PLA paths",
             "M400 ; begin the measured print from an empty motion queue",
-            f"SET_VELOCITY_LIMIT ACCEL={BENCHMARK_MAX_ACCEL_MM_S2} "
-            f"ACCEL_TO_DECEL={BENCHMARK_MAX_ACCEL_MM_S2} "
-            f"SQUARE_CORNER_VELOCITY={BENCHMARK_SQUARE_CORNER_VELOCITY_MM_S}",
-            controller_command,
             "",
         ]
     )

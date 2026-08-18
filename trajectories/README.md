@@ -29,11 +29,13 @@ The paper and its arXiv source do **not** provide G-code or numerical amplitude,
 
 The specimen is **50 mm** long, giving 100 complete wavelengths per pass. Length is not specified by the paper; 50 mm is used here to make the specimen easier to handle and measure. It does not change the wavelength, excitation frequency, or width metric. The reconstruction uses two 0.2 mm layers (0.4 mm total height) because the paper does not report a layer count. This limits cumulative Z stacking error while leaving enough material to remove and measure. Every layer repeats the same continuous inner-to-outer path. PLA cooling is enabled after the separate prime line and before the densely spaced benchmark paths begin.
 
-All 10 Hz and 35 Hz files use the same 0.5 mm amplitude and the same
+All 10 Hz and 35 Hz files use the same 0.5 mm amplitude and the same measured
 spatial/extrusion payload. Only their feed rates differ, so the 10 Hz and 35 Hz
-physical comparisons test the same geometry. For each frequency, the
-`uncompensated`, `filtered_bspline`, and `hybrid` files are motion-for-motion
-identical; only `SET_FILTERED_BSPLINE` differs. In this experiment,
+physical comparisons test the same geometry. For each frequency, the measured
+portion of the `uncompensated`, `filtered_bspline`, and `hybrid` files is
+motion-for-motion identical; only `SET_FILTERED_BSPLINE` differs there. The
+hybrid files additionally perform a sacrificial, non-extruding warm-up sketch
+at Z=2 before returning to the specimen start. In this experiment,
 `filtered_bspline` is the paper's **standard FBF** condition and `hybrid` uses
 the online residual learner after its configured standard-FBF warm-up.
 
@@ -49,6 +51,18 @@ Hybrid mode requires `[trinkey_accel]` and valid X/Y observer output. Start the
 lightweight Motan logger before the file if the same raw and observed data are
 also required for evaluation. Motan and the hybrid controller subscribe to the
 same shared calculation; they do not run two observers.
+
+The hybrid preamble selects HYBRID while the toolhead is stationary at Z=2,
+waits 0.5 seconds for static accelerometer-bias acquisition, and then executes
+the same-frequency sinusoidal sketch without extrusion. The 10 Hz sketch is
+one 50 mm pass (10.000 seconds); the 35 Hz sketch is two passes (5.714 seconds).
+`M400` prevents the measured path from being planned before that motion has
+physically completed. `WAIT_FILTERED_BSPLINE_READY` then verifies that both RLS
+learners reached their configured 5.5-second training threshold; it aborts the
+print instead of silently evaluating a standard-FBF fallback if observer data
+are missing or late. Neither command resets the learned controller state. Do
+not insert `G28`, `G92`, or another `SET_FILTERED_BSPLINE` between the warm-up
+sketch and the measured print because those operations can reset that state.
 
 The files deliberately use:
 

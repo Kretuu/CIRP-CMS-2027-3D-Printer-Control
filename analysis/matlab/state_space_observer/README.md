@@ -64,10 +64,21 @@ observed_position  model-assisted physical position estimate
 ```
 
 The motor value therefore includes FBF compensation, kinematic conversion, and
-step quantisation. Motan and a future hybrid controller can consume the same
-observer batches; the observer is not calculated separately for each client.
-An internal Klipper consumer starts with `start_observer_client()` and drains
-new batches with the returned client's `pop_messages()` method.
+step quantisation. History positions for a chronological sensor batch are
+resolved with one traversal per stepper rather than one history scan per
+sample. Motan and the hybrid controller consume the same observer batches; the
+observer is not calculated separately for each client. It runs whenever the
+experiment stream has at least one consumer, independently of whether hybrid
+FBF is enabled.
+
+Hybrid residual learning is dispatched to a bounded background queue. Its C
+RLS update runs outside the reactor, one observation at a time, while access to
+the mutable FBF controller is serialized with motion preparation. When hybrid
+FBF subscribes, each completed shared observer batch is pushed directly to this
+queue; motion preparation neither polls nor transports past observations.
+Only the RLS consumer is started and stopped with hybrid mode. TrapQ access,
+prepared-batch mutation, coefficient commitment, and step generation remain on
+Klipper's reactor thread.
 
 ## Where `C` comes from
 
