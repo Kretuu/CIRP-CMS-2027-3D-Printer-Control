@@ -121,10 +121,15 @@ if [[ -z "${max_glibc_version}" \
 fi
 
 dynamic_symbols=$("${nm}" --dynamic --defined-only "${temporary_output}")
-if ! grep -Eq '[[:space:]]serialqueue_alloc$' <<<"${dynamic_symbols}"; then
-    echo "Built helper is missing the core serialqueue_alloc symbol" >&2
-    exit 1
-fi
+for required_symbol in \
+    serialqueue_alloc \
+    stepcompress_find_past_positions; do
+    if ! grep -Eq "[[:space:]]${required_symbol}$" \
+        <<<"${dynamic_symbols}"; then
+        echo "Built helper is missing ${required_symbol}" >&2
+        exit 1
+    fi
+done
 
 if [[ " ${source_names[*]} " == *" kin_filtered_bspline.c "* ]]; then
     for required_symbol in \

@@ -137,7 +137,7 @@ both dissertation-specific helper interfaces:
 /usr/share/klippy-env/bin/python3 -c 'p="/tmp/c_helper.so.new"; h=open(p,"rb").read(20); assert h[:4] == b"\x7fELF" and h[4] == 1 and h[5] == 1 and int.from_bytes(h[18:20], "little") == 8, "not ELF32 little-endian MIPS"; print("ELF32 little-endian MIPS")'
 
 /usr/share/klippy-env/bin/python3 -c \
-  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); int filtered_bspline_add_observation(void *, char, double, double); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double[]);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.filtered_bspline_add_observation, lib.state_space_observer_alloc)'
+  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); int filtered_bspline_add_observation(void *, char, double, double); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double[]); int stepcompress_find_past_positions(void *, unsigned long long[], long long[], int);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.filtered_bspline_add_observation, lib.state_space_observer_alloc, lib.stepcompress_find_past_positions)'
 ```
 
 If both checks succeed, keep a recovery copy, stop only Klipper, and install
@@ -217,20 +217,24 @@ the C declarations/source list in `klippy/chelper/__init__.py`.
 
 ## Continuous Klipper and Motan logging
 
-Copy `external/klipper/klippy/extras/trinkey_accel.py` into the matching Klipper
-installation (or use this repository's Klipper tree). Copy
-`klipper_extensions/trinkey_accel.cfg` into the printer's Klipper configuration
-directory, replace its `REPLACE_WITH_TRINKEY_USB_ID` placeholder, and add this
-line to `printer.cfg`:
+Deploy the matching `trinkey_accel.py`, `filtered_bspline.py`,
+`motion_report.py`, `stepper.py`, C-helper sources/declarations, and the
+cross-compiled `c_helper.so` from this checkout as one version. Copy
+`klipper_extensions/trinkey_accel.cfg` and
+`klipper_extensions/filtered_bspline.cfg` into the printer's Klipper
+configuration directory, replace the Trinkey serial placeholder, remove or
+comment the existing `[input_shaper]` section, and add these lines to
+`printer.cfg`:
 
 ```ini
+[include filtered_bspline.cfg]
 [include trinkey_accel.cfg]
 ```
 
-The included fragment contains the complete `[trinkey_accel]` configuration.
-Motan discovers that section through Klipper's status API and automatically
-subscribes to every sensor listed by its `sensors` option. No separate Motan
-section is required in `printer.cfg` or `moonraker.conf`.
+The included fragments contain the complete controller and Trinkey
+configuration. Lightweight Motan validates the configured sensors and opens
+one combined experiment subscription. No separate Motan section is required in
+`printer.cfg` or `moonraker.conf`.
 
 The Klipper Python environment must contain `pyserial`. Restart Klipper after
 installing the extra. The stream starts on demand when the first API client
@@ -251,17 +255,14 @@ then enables the learned residual correction. Deploy
 C declarations, `klipper_extensions/filtered_bspline.cfg`, and
 `klipper_extensions/trinkey_accel.cfg` together.
 
-The stock Motan logger automatically subscribes to both configured sensors and
-all standard Motan motion/status sources:
+The generated hybrid evaluation files enable HYBRID at Z=2, acquire the static
+accelerometer bias, and run a non-extruding sinusoidal warm-up sketch before
+the measured specimen. They then execute `WAIT_FILTERED_BSPLINE_READY`, which
+requires both residual learners to be active and aborts instead of silently
+measuring the standard-FBF fallback. Upload regenerated hybrid G-code together
+with the updated `filtered_bspline.py`; older files do not contain this guard.
 
-```sh
-python3 external/klipper/scripts/motan/data_logger.py \
-  ~/printer_data/comms/klippy.sock \
-  ~/printer_data/logs/motan/trinkey_run
-```
-
-For the high-density 35 Hz G-code experiments, use the independent lightweight
-copy instead:
+Use the lightweight logger for the high-density 35 Hz G-code experiments:
 
 ```sh
 python3 external/klipper/scripts/motan_lightweight/data_logger.py \
@@ -273,10 +274,10 @@ It logs raw base and toolhead data, nominal TrapQ motion, final motor commands,
 the shared observer estimate, and a small diagnostic status subset. Every value
 is evaluated at a genuine sensor timestamp. It does not export the full
 high-density toolhead or extruder TrapQ, step queues, ADXL/angle streams, or
-unrelated status objects. The stock
-`scripts/motan` directory is retained unchanged. If either required sensor is
-silent for five seconds, the lightweight process warns but remains connected;
-validate sample continuity and the loss counters after the run.
+unrelated status objects. The stock `scripts/motan` directory does not support
+the Trinkey stream. If either required sensor is silent for five seconds, the
+lightweight process warns but remains connected; validate sample continuity
+and the loss counters after the run.
 
 The exact Klipper socket path depends on the printer installation. Motan writes
 `trinkey_run.json.gz` and `trinkey_run.index.gz`. Each row retains:
@@ -305,10 +306,10 @@ sync exchanges are asynchronous.
 The main position datasets are `desired_position`, `motor_position`, and
 `observed_position` for both `toolhead` (X) and `base` (Y). Acceleration,
 `_raw`, `device_time_us`, `sequence`, `flags`, `observer_valid`, and
-`reference_valid` selections are also available. The older `command_x` and
-`command_y` acceleration selectors remain readable. MATLAB may use the mapped
-print time or repeat the linear clock fit from the preserved device timestamps
-and sync diagnostics.
+`reference_valid` selections are also available. The MATLAB loader retains
+`command_x` and `command_y` aliases in its result structure for the existing
+sine-analysis code. MATLAB may use the mapped print time or repeat the linear
+clock fit from the preserved device timestamps and sync diagnostics.
 
 The sine-print MATLAB analysis and its metric definitions are documented in
 [`analysis/matlab/sine_tracking/README.md`](analysis/matlab/sine_tracking/README.md).
