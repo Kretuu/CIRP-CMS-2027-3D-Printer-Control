@@ -55,9 +55,11 @@ STREAM_STATUS
 STREAM_STOP
 ```
 
-`STREAM_STOP` drains completed batches, emits a binary stop frame, and then
-returns to text framing with `ACK_STREAM_STOP,<trinkey_t_us>`. When already
-idle, it returns the same acknowledgement without emitting a stop frame.
+`STREAM_STOP` discards any completed batches, emits a binary stop frame, and
+then returns to text framing with `ACK_STREAM_STOP,<trinkey_t_us>`. Discarding
+the final few samples keeps recovery independent of USB backpressure. When
+already idle, it returns the same acknowledgement without emitting a stop
+frame.
 
 ### Binary envelope
 

@@ -369,9 +369,10 @@ void trinkey_stream_stop(void) {
     while (stream.worker_busy && time_us_64() < deadline) {
         sleep_us(50);
     }
-    while (pop_batch(&output_batch)) {
-        send_data_batch(&output_batch);
-    }
+    /* Recovery is more important than delivering the final few samples.
+     * Draining here can block STREAM_STOP behind a troubled USB connection. */
+    stream.read_index = stream.write_index;
+    __dmb();
     uint8_t payload[48];
     const size_t length = serialize_status_payload(payload);
     send_frame(STREAM_FRAME_STOP, payload, length);
