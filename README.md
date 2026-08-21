@@ -137,7 +137,7 @@ both dissertation-specific helper interfaces:
 /usr/share/klippy-env/bin/python3 -c 'p="/tmp/c_helper.so.new"; h=open(p,"rb").read(20); assert h[:4] == b"\x7fELF" and h[4] == 1 and h[5] == 1 and int.from_bytes(h[18:20], "little") == 8, "not ELF32 little-endian MIPS"; print("ELF32 little-endian MIPS")'
 
 /usr/share/klippy-env/bin/python3 -c \
-  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); int filtered_bspline_add_observation(void *, char, double, double); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double, double, double, double[]); int stepcompress_find_past_positions(void *, unsigned long long[], long long[], int);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.filtered_bspline_add_observation, lib.state_space_observer_alloc, lib.stepcompress_find_past_positions)'
+  'import cffi; f=cffi.FFI(); f.cdef("void *filtered_bspline_controller_alloc(void); void *filtered_bspline_learner_alloc(void); int filtered_bspline_apply_hybrid_snapshot(void *, char, long long, int, int, double[], double[], double[]); void *state_space_observer_alloc(int, double[], double[], double[], double[], double[], double, double, double, double[]); int stepcompress_find_past_positions(void *, unsigned long long[], long long[], int);"); lib=f.dlopen("/tmp/c_helper.so.new"); print(lib.filtered_bspline_controller_alloc, lib.filtered_bspline_learner_alloc, lib.filtered_bspline_apply_hybrid_snapshot, lib.state_space_observer_alloc, lib.stepcompress_find_past_positions)'
 ```
 
 If both checks succeed, keep a recovery copy, stop only Klipper, and install

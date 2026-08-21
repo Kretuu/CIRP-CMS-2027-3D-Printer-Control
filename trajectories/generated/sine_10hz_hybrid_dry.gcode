@@ -16,32 +16,22 @@ M83 ; relative extrusion
 M220 S100 ; disable feed-rate override
 M221 S100 ; disable extrusion override
 SET_FILTERED_BSPLINE ENABLE=0 ; home and prepare without compensation
-; DRY RUN disabled: M140 S60 ; start heating bed
-; DRY RUN disabled: M104 S150 ; reduce oozing while homing
+M104 S0 ; keep nozzle cold until parked beside the benchmark
+M140 S0 ; keep bed cold until parked beside the benchmark
 G28 ; home all axes
 SET_GCODE_OFFSET Z=5
-; DRY RUN disabled: M190 S60 ; wait for bed
-; DRY RUN disabled: M109 S220 ; wait for nozzle
-G92 E0
-; DRY RUN disabled: M107 ; fan off while priming
-
-; Prime beside the benchmark with compensation disabled.
+G92 E0 ; reset extrusion before selecting the test controller
+TEMPERATURE_WAIT SENSOR=extruder MAXIMUM=50 ; guarantee a cold hybrid warm-up
 G1 Z5 F600
-G1 X100 Y75 F6000
-G1 Z0.2 F600
-G1 X100 Y145 F600
-; DRY RUN removed: G1 E-0.8 F1800
-G1 Z2 F600
-G1 X109.3 Y80 F6000
-M400 ; finish homing and priming before selecting the test mode
+G1 X110.7 Y80 F6000
+M400 ; finish cold preparation before starting the learner
 SET_VELOCITY_LIMIT ACCEL=32000 ACCEL_TO_DECEL=32000 SQUARE_CORNER_VELOCITY=20
 SET_FILTERED_BSPLINE ENABLE=1 MODE=HYBRID
 
-; Hybrid RLS warm-up sketch: no extrusion, controller state retained.
+; Cold hybrid RLS warm-up: heaters off and no extrusion.
 ; 1 sine pass(es), 10.000 s of excited motion.
 G4 P500 ; acquire static accelerometer bias before moving
 M400 ; do not plan warm-up motion before bias acquisition completes
-G1 X110.7 Y80 F6000
 G1 X110.682963 Y80.020833 F387.542
 G1 X110.633013 Y80.041667 F779.338
 G1 X110.553553 Y80.0625 F1182.889
@@ -2442,10 +2432,24 @@ G1 X110.553553 Y129.9375 F1521.047
 G1 X110.633013 Y129.958333 F1182.889
 G1 X110.682963 Y129.979167 F779.338
 G1 X110.7 Y130 F387.542
+MARK_FILTERED_BSPLINE_LEARNING_END ; exclude later stationary samples from RLS
 M400 ; wait until all warm-up motion has physically completed
-G4 P500 ; let the RLS worker consume the final observer batch
-M400
-WAIT_FILTERED_BSPLINE_READY TIMEOUT=2.0
+FREEZE_FILTERED_BSPLINE TIMEOUT=15.0 ; evaluate with one fixed final RLS snapshot
+
+; Park outside the evaluation area before enabling either heater.
+G1 Z5 F600
+G1 X100 Y75 F6000
+; DRY RUN disabled: M140 S60 ; start heating bed
+; DRY RUN disabled: M104 S150 ; preheat nozzle below its main oozing temperature
+; DRY RUN disabled: M190 S60 ; wait for bed
+; DRY RUN disabled: M109 S220 ; reach print temperature immediately before purging
+; DRY RUN disabled: M107 ; fan off while purging
+
+; Dirty purge line removes heat-up ooze beside the benchmark.
+G1 Z0.2 F600
+G1 X100 Y145 F600
+; DRY RUN removed: G1 E-0.8 F1800
+G1 Z2 F600
 G1 X109.3 Y80 F6000
 G1 Z0.2 F600
 ; DRY RUN removed: G1 E0.8 F1800

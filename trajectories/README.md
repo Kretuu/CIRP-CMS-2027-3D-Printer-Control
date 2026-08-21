@@ -56,18 +56,20 @@ The hybrid preamble selects HYBRID while the toolhead is stationary at Z=2,
 waits 0.5 seconds for static accelerometer-bias acquisition, and then executes
 the same-frequency sinusoidal sketch without extrusion. The 10 Hz sketch is
 one 50 mm pass (10.000 seconds); the 35 Hz sketch is two passes (5.714 seconds).
-`M400` prevents the measured path from being planned before that motion has
-physically completed. `WAIT_FILTERED_BSPLINE_READY` then verifies that both RLS
-learners reached their configured 5.5-second training threshold; it aborts the
-print instead of silently evaluating a standard-FBF fallback if observer data
-are missing or late. Neither command resets the learned controller state. Do
-not insert `G28`, `G92`, or another `SET_FILTERED_BSPLINE` between the warm-up
-sketch and the measured print because those operations can reset that state.
+`MARK_FILTERED_BSPLINE_LEARNING_END` records the exact end of the queued
+warm-up motion. Delayed warm-up observations are still processed, while later
+stationary observations are excluded. After `M400`, `FREEZE_FILTERED_BSPLINE`
+drains that finite work set, verifies that both learners are active, and adopts
+their final fixed weights. It aborts the print if observer data are missing or
+late. Do not insert `G28`, `G92`, or another `SET_FILTERED_BSPLINE` between the
+warm-up sketch and the measured print because those operations reset that
+state.
 
 The files deliberately use:
 
 - three inner-to-outer straight/sinusoid pairs per layer;
-- 24 chords per wavelength;
+- 24 chords per wavelength (less than 0.0043 mm maximum chordal deviation and
+  840 `G1` commands/s at 35 Hz);
 - `max_accel = max_accel_to_decel = 32000 mm/s^2` during the part;
 - `square_corner_velocity = 20 mm/s` during the part;
 - 220 C nozzle and 60 C bed temperatures for PLA;
