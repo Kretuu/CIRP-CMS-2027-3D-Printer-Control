@@ -134,7 +134,8 @@ done
 if [[ " ${source_names[*]} " == *" kin_filtered_bspline.c "* ]]; then
     for required_symbol in \
         filtered_bspline_controller_alloc \
-        filtered_bspline_add_observation \
+        filtered_bspline_learner_alloc \
+        filtered_bspline_apply_hybrid_snapshot \
         filtered_bspline_get_hybrid_status; do
         if ! grep -Eq "[[:space:]]${required_symbol}$" \
             <<<"${dynamic_symbols}"; then
