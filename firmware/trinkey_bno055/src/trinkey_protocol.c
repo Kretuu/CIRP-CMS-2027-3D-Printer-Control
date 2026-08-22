@@ -84,7 +84,6 @@ static void stop_capture(void) {
 static void acknowledge_stream_stop(void) {
     printf("ACK_STREAM_STOP,%llu\n",
            (unsigned long long)time_us_64());
-    stdio_flush();
 }
 
 /**

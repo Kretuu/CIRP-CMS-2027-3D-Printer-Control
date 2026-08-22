@@ -1,38 +1,34 @@
-# State-space acceleration observer package
+# State-space acceleration observer
 
-This directory designs the plant-based Luenberger observers used to estimate
-completed X/Y position from commanded motion and measured acceleration. It
-uses the same continuous models as the standard filtered B-spline controller;
-it does not fit a separate second-order model.
+This package designs the fixed steady-state Kalman observers used to estimate
+X/Y position from the final motor command and the two Trinkey accelerometers.
+It uses the same identified transfer functions as filtered B-spline feedback.
 
-The implementation deliberately follows the sequence used in the ELE460
-observer-design laboratory:
+The design deliberately follows the steady-state Kalman-filter pattern from
+ELE460 laboratory Session 5 (and Lecture 15):
 
-1. convert the known plant to state-space form;
-2. form the measured-output equation;
-3. check observability;
-4. choose the observer poles;
-5. calculate `L = place(A', Ca', poles)'`;
-6. verify `eig(A - L*Ca)`; and
-7. discretise the observer for runtime use.
+```matlab
+Q = qOverR * eye(stateCount);
+R = 1;
+[M, P, Z, poles] = dlqe(Ad, eye(stateCount), Ca, Q, R);
+```
 
-`state_space_observer_design.m` is the public entry point.
-`state_space_observer_axis.m` contains the same calculation for one axis so
-the mathematical steps remain easy to read.
+There is no online covariance update and no extra Butterworth filter. MATLAB
+calculates the steady-state gain once; Klipper only evaluates fixed matrices.
 
-## Run it
+## Generate the configuration
 
-First identify the existing FBF models using the FRF package:
+Run from the repository root:
 
 ```matlab
 addpath("analysis/matlab/frf");
 addpath("analysis/matlab/state_space_observer");
 
 runDirs = [
-    "data/raw/2026-08-11_1_5ms"
-    "data/raw/2026-08-11_2ms"
-    "data/raw/2026-08-11_2_5ms"
-    "data/raw/2026-08-11_3ms"
+    "data/raw/frf_sweeps/2026-08-11_1_5ms"
+    "data/raw/frf_sweeps/2026-08-11_2ms"
+    "data/raw/frf_sweeps/2026-08-11_2_5ms"
+    "data/raw/frf_sweeps/2026-08-11_3ms"
 ];
 
 [~, models] = frf_sweep_analysis(runDirs);
@@ -40,22 +36,43 @@ observers = state_space_observer_design(models, 250);
 state_space_observer_print_config(observers);
 ```
 
-The observer bandwidth is the 5 Hz value reported by the core paper. The
-sample rate is passed explicitly because it must match the actual Trinkey
-stream. With the current two-sensor `rate: 250` configuration, use 250 Hz even
-though the FBF trajectory grid itself runs at 1 kHz. The BNO055's 125 Hz
-bandwidth setting updates its filtered acceleration registers at 250 Hz, so
-this avoids polling duplicate measurements and stays within the reliable
-throughput of the shared I2C bus.
+The X and Y `Q/R` ratios in `state_space_observer_design.m` were selected by
+replaying the 35 Hz capture. They give the acceleration measurement as much
+authority as practical without amplifying acceleration-to-position correction
+above unity. The X estimate remains more model-dependent because the fitted X
+plant is non-minimum-phase.
 
-`state_space_observer_print_config` prints only the matrices needed at runtime
-in the row-major order expected by the C helper. Copy that output into the
-`[trinkey_accel]` configuration.
+## Measurement equation
 
-At runtime, `trinkey_accel.py` reconstructs the final motor command from
-Klipper's generated step history, applies the configured acceleration sign and
-stationary bias, and calls the small C matrix update. The published stream keeps
-three signals separate:
+For the identified position model
+
+```text
+x_dot = A*x + B*u
+y     = C*x
+```
+
+differentiating position twice gives
+
+```text
+a = Ca*x + Du*u + Dv*u_dot
+Ca = C*A^2,  Du = C*A*B,  Dv = C*B.
+```
+
+`dlqe` supplies the steady-state measurement-update gain `M`:
+
+```text
+x[k|k]   = x[k|k-1] + M*(a[k] - Ca*x[k|k-1] - Du*u[k] - Dv*u_dot[k])
+x[k+1|k] = Ad*x[k|k] + Bd*u[k]
+```
+
+The exported matrices combine those two equations. Runtime stores the prior
+state `x[k|k-1]`, publishes the current posterior position, and retains the next
+prior state. `Hu`, `Hv`, and `Ha` are the three scalar feedthrough terms needed
+to publish that current posterior rather than a one-sample-old prediction.
+
+## Runtime signals
+
+The shared Trinkey stream keeps these meanings separate:
 
 ```text
 desired_position   nominal G-code/TrapQ reference
@@ -63,99 +80,19 @@ motor_position     final generated motor command
 observed_position  model-assisted physical position estimate
 ```
 
-The motor value therefore includes FBF compensation, kinematic conversion, and
-step quantisation. Motan and a future hybrid controller can consume the same
-observer batches; the observer is not calculated separately for each client.
-An internal Klipper consumer starts with `start_observer_client()` and drains
-new batches with the returned client's `pop_messages()` method.
+The motor position includes the active compensation, kinematic conversion,
+and step quantisation. Motan and hybrid FBF consume the same observer batches;
+the observer is not recalculated for each client. Hybrid RLS runs in its
+bounded worker, while motion preparation and step generation remain on the
+Klipper reactor thread.
 
-## Where `C` comes from
+The observer is invalid during the first 100 stationary samples while the
+BNO055 bias is measured. A missing sequence, non-monotonic mapped timestamp,
+implausible command-coordinate jump, or unavailable motor-command history
+resets the dynamic state but retains the bias. `observer_sample_rate` must
+equal the physical Trinkey sample rate, so changing either rate requires
+regenerating the matrices.
 
-For each axis, MATLAB performs:
-
-```matlab
-plant = ss(tf(unityDcNumerator, denominator));
-[A, B, C, D] = ssdata(plant);
-```
-
-Thus, `C` is supplied by the state-space realisation of the already identified
-transfer function. It is not guessed and it is not identified separately.
-`balreal` then changes all state coordinates consistently to improve numerical
-scaling without changing the plant's input-output transfer function.
-
-Because the fitted plant is strictly proper, `D = 0`. Differentiating its
-position output twice gives the acceleration measurement equation:
-
-```text
-Ca = C*A^2
-Du = C*A*B
-Dv = C*B
-
-a_hat = Ca*x_hat + Du*u + Dv*u_dot
-```
-
-The continuous observer is therefore:
-
-```text
-x_hat_dot = A*x_hat + B*u
-          + L*(a_measured - Ca*x_hat - Du*u - Dv*u_dot)
-
-y_hat = C*x_hat
-```
-
-## Returned matrices
-
-`observers.x` and `observers.y` contain the same plainly named fields. The
-main runtime equation is:
-
-```text
-x_hat[k+1] = Fo*x_hat[k]
-           + Gu*u[k]
-           + Gv*u_dot[k]
-           + Ga*a_measured[k]
-
-y_hat[k] = Ho*x_hat[k]
-```
-
-When sample `k` arrives, the implementation returns the estimate at that sample
-time, then stores its inputs for the transition to sample `k+1`. This ordering
-is the causal interpretation of the zero-order-hold discrete model.
-
-The matrices required later by Klipper are therefore `Fo`, `Gu`, `Gv`, `Ga`,
-and `Ho`. The structure also retains `A`, `B`, `C`, `Ca`, `Du`, `Dv`, `L`, and
-the pole/observability checks so that the implementation can be compared
-directly with the dissertation equations.
-
-`x0_per_mm` gives the equilibrium observer state for one millimetre of
-stationary commanded position. At a stationary starting position `u0`, use:
-
-```matlab
-x_hat_0 = observer.x0_per_mm * u0;
-```
-
-## Numerical scaling
-
-The ordinary `rank(obsv(A, Ca))` result is retained as
-`observability_rank`, but it can underestimate rank for these high-order
-models because the observability matrix contains powers of `A`. The design
-therefore also checks whether `minreal` can remove any unobservable state and
-verifies the poles actually achieved by `place`. The public summary reports
-this minimal observable order and the achieved pole-placement error.
-
-The balancing step is the only numerical conditioning measure added beyond
-the ELE460 lab calculation. It does not reduce the model order or change the
-transfer function.
-
-## Runtime validity rules
-
-The observer is invalid during the first 100 stationary samples (0.4 s at
-250 Hz) while sensor bias is measured. It is also invalid for the first sample
-after a missing, duplicated, or badly spaced timestamp. Dynamic state is reset
-after such a gap, but the bias is retained. The config requires
-`observer_sample_rate` to equal the physical Trinkey `rate`; changing either
-rate requires regenerating the discrete matrices.
-
-The estimate is model-assisted. It is useful for residual construction and
-tracking comparisons, but it is not independent ground-truth displacement.
-Missed motor steps and errors outside the identified model cannot be observed
-perfectly from this data path.
+This is a model-assisted estimate, not independent encoder ground truth.
+Errors outside the identified model and missed steps cannot be reconstructed
+perfectly from acceleration alone.

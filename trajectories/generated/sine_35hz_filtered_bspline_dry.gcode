@@ -16,29 +16,34 @@ M83 ; relative extrusion
 M220 S100 ; disable feed-rate override
 M221 S100 ; disable extrusion override
 SET_FILTERED_BSPLINE ENABLE=0 ; home and prepare without compensation
-; DRY RUN disabled: M140 S60 ; start heating bed
-; DRY RUN disabled: M104 S150 ; reduce oozing while homing
+M104 S0 ; keep nozzle cold until parked beside the benchmark
+M140 S0 ; keep bed cold until parked beside the benchmark
 G28 ; home all axes
 SET_GCODE_OFFSET Z=5
-; DRY RUN disabled: M190 S60 ; wait for bed
-; DRY RUN disabled: M109 S220 ; wait for nozzle
-G92 E0
-; DRY RUN disabled: M107 ; fan off while priming
+G92 E0 ; reset extrusion before selecting the test controller
 
-; Prime beside the benchmark with compensation disabled.
+; Park outside the evaluation area before enabling either heater.
 G1 Z5 F600
 G1 X100 Y75 F6000
+; DRY RUN disabled: M140 S60 ; start heating bed
+; DRY RUN disabled: M104 S150 ; preheat nozzle below its main oozing temperature
+; DRY RUN disabled: M190 S60 ; wait for bed
+; DRY RUN disabled: M109 S220 ; reach print temperature immediately before purging
+; DRY RUN disabled: M107 ; fan off while purging
+
+; Dirty purge line removes heat-up ooze beside the benchmark.
 G1 Z0.2 F600
 G1 X100 Y145 F600
 ; DRY RUN removed: G1 E-0.8 F1800
 G1 Z2 F600
 G1 X109.3 Y80 F6000
+M400 ; finish homing and purging before selecting the test mode
+SET_VELOCITY_LIMIT ACCEL=32000 ACCEL_TO_DECEL=32000 SQUARE_CORNER_VELOCITY=20
+SET_FILTERED_BSPLINE ENABLE=1 MODE=STANDARD
 G1 Z0.2 F600
 ; DRY RUN removed: G1 E0.8 F1800
 ; DRY RUN disabled: M106 S255 ; cool the densely spaced PLA paths
 M400 ; begin the measured print from an empty motion queue
-SET_VELOCITY_LIMIT ACCEL=32000 ACCEL_TO_DECEL=32000 SQUARE_CORNER_VELOCITY=20
-SET_FILTERED_BSPLINE ENABLE=1 MODE=STANDARD
 
 ; layer 1/2
 G1 X109.3 Y130 F1050

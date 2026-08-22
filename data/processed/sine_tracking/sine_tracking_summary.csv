@@ -1,0 +1,7 @@
+condition,label,nominal_frequency_hz,controller_mode,selected_capture,selected_run_number,selected_latest_capture,capture_clean,sample_rate_hz,pass_count,actual_frequency_mean_hz,actual_frequency_std_hz,overall_position_rms_error_um
+sine10_uncomp,"10 Hz, no compensation",10,uncompensated,sine10_uncomp_r6.json.gz,6,1,0,250,6,9.95490397503191,0.00404939340868765,193.576044761239
+sine10_standard,"10 Hz, standard FBF",10,standard,sine10_standard_r1.json.gz,1,1,0,249.937515621095,6,9.96108622853209,0.0192811500791529,21.7568282706375
+sine10_hybrid,"10 Hz, hybrid FBF",10,hybrid,sine10_hybrid_r3.json.gz,3,1,1,250,6,9.9609011184862,0.0189349208363363,5.23836023401374
+sine35_uncomp,"35 Hz, no compensation",35,uncompensated,sine35_uncomp_r5.json.gz,5,1,1,249.937515621095,6,33.0944718081439,0.000448243402102582,613.196902641536
+sine35_standard,"35 Hz, standard FBF",35,standard,sine35_standard_r2.json.gz,2,1,0,250,6,33.0948919434178,0.000923660093934054,81.1157993273193
+sine35_hybrid,"35 Hz, hybrid FBF",35,hybrid,sine35_hybrid_r5.json.gz,5,1,1,250,6,33.0949946068422,0.00106717126614516,24.8062971299591

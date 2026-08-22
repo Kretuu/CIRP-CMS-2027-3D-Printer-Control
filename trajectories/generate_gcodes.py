@@ -57,6 +57,12 @@ BENCHMARK_X_CENTER_MM = 110.0
 BENCHMARK_Y_MIN_MM = 80.0
 BENCHMARK_Y_MAX_MM = BENCHMARK_Y_MIN_MM + BENCHMARK_LENGTH_MM
 BENCHMARK_ACCEL_HEADROOM = 0.9
+HYBRID_WARMUP_SECONDS = 5.5
+HYBRID_OBSERVER_BIAS_MS = 500
+BENCHMARK_PURGE_X_MM = 100.0
+BENCHMARK_PURGE_Y_START_MM = 75.0
+BENCHMARK_PURGE_Y_END_MM = 145.0
+BENCHMARK_PURGE_EXTRUSION_MM = 2.4
 
 
 def format_signal(value: float, places: int = 6) -> str:
@@ -133,6 +139,8 @@ def benchmark_sine_wall(
     x_base: float,
     y_start: float,
     y_end: float,
+    *,
+    extrude: bool = True,
 ) -> list[str]:
     """Generate one sinusoidal pass at constant-magnitude Y-axis velocity."""
     y_distance = y_end - y_start
@@ -162,12 +170,86 @@ def benchmark_sine_wall(
         dy = y - previous_y
         distance = math.hypot(dx, dy)
         feedrate = 60.0 * distance / dt
-        extrusion = extrusion_per_mm * distance
-        lines.append(benchmark_xy_e_move(x, y, extrusion, feedrate))
+        if extrude:
+            extrusion = extrusion_per_mm * distance
+            lines.append(benchmark_xy_e_move(x, y, extrusion, feedrate))
+        else:
+            lines.append(
+                f"G1 X{format_signal(x)} Y{format_signal(y)} "
+                f"F{format_signal(feedrate, 3)}"
+            )
         previous_x = x
         previous_y = y
 
     return lines
+
+
+def hybrid_warmup_sketch(frequency_hz: float, x_base: float) -> list[str]:
+    """Excite and freeze the hybrid learner while both heaters are off."""
+    y_velocity = frequency_hz * BENCHMARK_WAVELENGTH_MM
+    pass_seconds = BENCHMARK_LENGTH_MM / y_velocity
+    pass_count = math.ceil(HYBRID_WARMUP_SECONDS / pass_seconds)
+    motion_seconds = pass_count * pass_seconds
+    y = BENCHMARK_Y_MIN_MM
+    lines = [
+        "",
+        "; Cold hybrid RLS warm-up: heaters off and no extrusion.",
+        f"; {pass_count} sine pass(es), {motion_seconds:.3f} s of excited motion.",
+        f"G4 P{HYBRID_OBSERVER_BIAS_MS} "
+        "; acquire static accelerometer bias before moving",
+        "M400 ; do not plan warm-up motion before bias acquisition completes",
+    ]
+    for unused in range(pass_count):
+        next_y = (
+            BENCHMARK_Y_MAX_MM
+            if y == BENCHMARK_Y_MIN_MM
+            else BENCHMARK_Y_MIN_MM
+        )
+        lines.extend(
+            benchmark_sine_wall(
+                frequency_hz, x_base, y, next_y, extrude=False
+            )
+        )
+        y = next_y
+    lines.extend(
+        [
+            "MARK_FILTERED_BSPLINE_LEARNING_END "
+            "; exclude later stationary samples from RLS",
+            "M400 ; wait until all warm-up motion has physically completed",
+            "FREEZE_FILTERED_BSPLINE TIMEOUT=15.0 "
+            "; evaluate with one fixed final RLS snapshot",
+        ]
+    )
+    return lines
+
+
+def heating_and_dirty_purge(first_x: float, y_min: float) -> list[str]:
+    """Heat while parked beside the specimen, then purge all nozzle ooze."""
+    return [
+        "",
+        "; Park outside the evaluation area before enabling either heater.",
+        f"G1 Z5 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
+        f"G1 X{format_signal(BENCHMARK_PURGE_X_MM)} "
+        f"Y{format_signal(BENCHMARK_PURGE_Y_START_MM)} "
+        f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+        f"M140 S{BENCHMARK_BED_TEMPERATURE_C} ; start heating bed",
+        "M104 S150 ; preheat nozzle below its main oozing temperature",
+        f"M190 S{BENCHMARK_BED_TEMPERATURE_C} ; wait for bed",
+        f"M109 S{BENCHMARK_NOZZLE_TEMPERATURE_C} "
+        "; reach print temperature immediately before purging",
+        "M107 ; fan off while purging",
+        "",
+        "; Dirty purge line removes heat-up ooze beside the benchmark.",
+        f"G1 Z{format_signal(BENCHMARK_LAYER_HEIGHT_MM)} "
+        f"F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
+        f"G1 X{format_signal(BENCHMARK_PURGE_X_MM)} "
+        f"Y{format_signal(BENCHMARK_PURGE_Y_END_MM)} "
+        f"E{format_signal(BENCHMARK_PURGE_EXTRUSION_MM)} F600",
+        "G1 E-0.8 F1800",
+        f"G1 Z2 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
+        f"G1 X{format_signal(first_x)} Y{format_signal(y_min)} "
+        f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+    ]
 
 
 def benchmark_header(frequency_hz: float, controller_mode: str) -> list[str]:
@@ -242,33 +324,50 @@ def generate_printable_sine_benchmark(
             "M220 S100 ; disable feed-rate override",
             "M221 S100 ; disable extrusion override",
             "SET_FILTERED_BSPLINE ENABLE=0 ; home and prepare without compensation",
-            f"M140 S{BENCHMARK_BED_TEMPERATURE_C} ; start heating bed",
-            "M104 S150 ; reduce oozing while homing",
+            "M104 S0 ; keep nozzle cold until parked beside the benchmark",
+            "M140 S0 ; keep bed cold until parked beside the benchmark",
             "G28 ; home all axes",
-            f"M190 S{BENCHMARK_BED_TEMPERATURE_C} ; wait for bed",
-            f"M109 S{BENCHMARK_NOZZLE_TEMPERATURE_C} ; wait for nozzle",
-            "G92 E0",
-            "M107 ; fan off while priming",
-            "",
-            "; Prime beside the benchmark with compensation disabled.",
-            f"G1 Z5 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
-            f"G1 X100 Y75 F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
-            f"G1 Z{format_signal(BENCHMARK_LAYER_HEIGHT_MM)} "
-            f"F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
-            "G1 X100 Y145 E2.4 F600",
-            "G1 E-0.8 F1800",
-            f"G1 Z2 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
-            f"G1 X{format_signal(first_x)} Y{format_signal(y_min)} "
-            f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+            "G92 E0 ; reset extrusion before selecting the test controller",
+        ]
+    )
+    if controller_mode == "hybrid":
+        warmup_start_x = pass_pairs[0][1] + BENCHMARK_AMPLITUDE_MM
+        lines.extend(
+            [
+                "TEMPERATURE_WAIT SENSOR=extruder MAXIMUM=50 "
+                "; guarantee a cold hybrid warm-up",
+                f"G1 Z5 F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
+                f"G1 X{format_signal(warmup_start_x)} "
+                f"Y{format_signal(y_min)} "
+                f"F{BENCHMARK_TRAVEL_SPEED_MM_S * 60:.0f}",
+                "M400 ; finish cold preparation before starting the learner",
+                f"SET_VELOCITY_LIMIT ACCEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+                f"ACCEL_TO_DECEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+                f"SQUARE_CORNER_VELOCITY="
+                f"{BENCHMARK_SQUARE_CORNER_VELOCITY_MM_S}",
+                controller_command,
+            ]
+        )
+        lines.extend(hybrid_warmup_sketch(frequency_hz, pass_pairs[0][1]))
+    lines.extend(heating_and_dirty_purge(first_x, y_min))
+    if controller_mode != "hybrid":
+        lines.extend(
+            [
+                "M400 ; finish homing and purging before selecting the test mode",
+                f"SET_VELOCITY_LIMIT ACCEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+                f"ACCEL_TO_DECEL={BENCHMARK_MAX_ACCEL_MM_S2} "
+                f"SQUARE_CORNER_VELOCITY="
+                f"{BENCHMARK_SQUARE_CORNER_VELOCITY_MM_S}",
+                controller_command,
+            ]
+        )
+    lines.extend(
+        [
             f"G1 Z{format_signal(BENCHMARK_LAYER_HEIGHT_MM)} "
             f"F{BENCHMARK_Z_SPEED_MM_S * 60:.0f}",
             "G1 E0.8 F1800",
             "M106 S255 ; cool the densely spaced PLA paths",
             "M400 ; begin the measured print from an empty motion queue",
-            f"SET_VELOCITY_LIMIT ACCEL={BENCHMARK_MAX_ACCEL_MM_S2} "
-            f"ACCEL_TO_DECEL={BENCHMARK_MAX_ACCEL_MM_S2} "
-            f"SQUARE_CORNER_VELOCITY={BENCHMARK_SQUARE_CORNER_VELOCITY_MM_S}",
-            controller_command,
             "",
         ]
     )
@@ -375,7 +474,7 @@ def generate_dry_movement_test(printable_lines: list[str]) -> list[str]:
         if line == "G1 X0 Y220 F6000":
             dry_lines.extend([line, "SET_GCODE_OFFSET Z=0"])
             continue
-        if line in ("M104 S0", "M140 S0"):
+        if line.startswith(("M104 S0", "M140 S0")):
             dry_lines.append(line)
             continue
         if line.startswith(("M104 ", "M109 ", "M140 ", "M190 ", "M106", "M107")):

@@ -24,10 +24,11 @@ target_link_libraries(trinkey_bno055
         pico_multicore
 )
 
-# Buffered dumps may take seconds to drain on the Klipper host. The Pico SDK's
-# 500 ms default silently discards USB output while the host is backpressured.
+# Permit brief host backpressure without allowing continuous-stream output to
+# block command processing past Klipper's five-second control timeout. This is
+# a no-progress timeout, not a limit on the total duration of a buffered dump.
 target_compile_definitions(trinkey_bno055 PRIVATE
-        PICO_STDIO_USB_STDOUT_TIMEOUT_US=60000000
+        PICO_STDIO_USB_STDOUT_TIMEOUT_US=2000000
 )
 
 pico_enable_stdio_usb(trinkey_bno055 1)

@@ -28,7 +28,7 @@ except ModuleNotFoundError as exc:
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_ROOT = REPO_ROOT / "data" / "raw"
+OUTPUT_ROOT = REPO_ROOT / "data" / "raw" / "frf_sweeps"
 
 MOONRAKER_URL = "http://192.168.0.2:7125"
 MOONRAKER_TIMEOUT_SECONDS = 120.0

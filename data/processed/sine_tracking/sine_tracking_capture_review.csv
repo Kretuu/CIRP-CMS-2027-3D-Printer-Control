@@ -1,0 +1,7 @@
+condition,label,capture,run_number,is_latest,selected,usable,clean,completed_print,pass_count,sample_count,capture_duration_s,sample_rate_hz,sequence_breaks,large_sample_gaps,maximum_gap_ms,invalid_references,invalid_observers,invalid_toolhead_flags,stream_diagnostic_errors,firmware_loss_count,evaluated_pass_gaps,reason
+sine10_uncomp,"10 Hz, no compensation",sine10_uncomp_r6.json.gz,6,1,1,1,0,1,6,87436,349.758157712,250,1,1,19.592,41569,104,0,2,0,0,1 sample-sequence break(s); 1 large sample gap(s); 2 host stream diagnostic error(s)
+sine10_standard,"10 Hz, standard FBF",sine10_standard_r1.json.gz,1,1,1,1,0,1,6,110040,440.250980225,249.937515621095,1,1,99.984,64154,104,0,0,0,0,1 sample-sequence break(s); 1 large sample gap(s)
+sine10_hybrid,"10 Hz, hybrid FBF",sine10_hybrid_r3.json.gz,3,1,1,1,1,1,6,109560,438.235382144,250,0,0,5.924,61025,103,0,0,0,0,
+sine35_uncomp,"35 Hz, no compensation",sine35_uncomp_r5.json.gz,5,1,1,1,1,1,6,81616,326.460695431,249.937515621095,0,0,5.876,57685,103,0,0,0,0,
+sine35_standard,"35 Hz, standard FBF",sine35_standard_r2.json.gz,2,1,1,1,0,1,6,62920,251.693280055,250,1,1,19.698,38960,104,0,2,0,0,1 sample-sequence break(s); 1 large sample gap(s); 2 host stream diagnostic error(s)
+sine35_hybrid,"35 Hz, hybrid FBF",sine35_hybrid_r5.json.gz,5,1,1,1,1,1,6,99020,396.078023419,250,0,0,5.856,73467,103,0,0,0,0,

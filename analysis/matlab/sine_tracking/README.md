@@ -1,139 +1,193 @@
-# Sine-print tracking analysis package
+# Sine-print position-tracking analysis
 
-This analysis compares the no-compensation and standard filtered-B-spline
-(FBF) prints at the nominal 10 Hz and 35 Hz conditions. It reads the combined
-base/toolhead stream produced by `scripts/motan_lightweight`, checks capture
-integrity, finds the six sinusoidal passes automatically, and analyzes the
-central 80% of each pass.
+This package compares uncompensated, standard filtered B-spline (FBF), and
+hybrid FBF prints at the nominal 10 Hz and 35 Hz conditions. It reads the
+toolhead stream produced by `scripts/motan_lightweight`, checks
+capture integrity, finds the six evaluated sinusoidal passes automatically,
+and analyzes the central 80% of each pass.
 
-`sine_tracking_analysis.m` is the public entry point.
-`motan_lightweight_load.m` is its format-specific loader and may also be called
-directly when inspecting one raw lightweight capture.
+The primary quantity follows Figure 7 and Section IV-C of the core paper:
 
-The comparison script currently expects the four already collected
-uncompensated/standard-FBF conditions. Hybrid captures can already be opened
-with `motan_lightweight_load`; add them to the comparison only after real
-hybrid runs exist, so the existing analysis remains reproducible.
+```text
+x_tracking_error = desired_x_position - observed_x_position
+```
 
-## Run it
+The paper explicitly treats its observer estimate as true position and reports
+overall RMS tracking error. This package performs the same calculation, but the
+dissertation must call it **observer-derived** or **model-assisted position
+tracking error**. It is not independent encoder ground truth.
 
-Place captures in `data/motan` using these names, where the largest run number
-is the newest:
+The package is split by responsibility:
+
+- `sine_tracking_analysis.m` is the public entry point and produces the report;
+- `sine_tracking_analyze_capture.m` performs validation, pass detection,
+  frequency estimation, and RMS calculation;
+- `sine_tracking_plot_position_error.m` creates the two presentation figures;
+  and
+- `motan_lightweight_load.m` decodes one raw Motan capture.
+
+Only `sine_tracking_analysis.m` normally needs to be called directly.
+
+## Required files
+
+Final evaluation captures are kept in `data/raw/final_evaluation`. Use these
+names, where the largest run number is the newest:
 
 ```text
 sine10_uncomp_rN.json.gz
-sine10_comp_rN.json.gz
+sine10_standard_rN.json.gz
+sine10_hybrid_rN.json.gz
 sine35_uncomp_rN.json.gz
-sine35_comp_rN.json.gz
+sine35_standard_rN.json.gz
+sine35_hybrid_rN.json.gz
 ```
 
-The `.index.gz` files should still be preserved with the experiment, although
-the MATLAB loader reads the `.json.gz` stream directly. From the repository
-root, run:
+Keep each matching `.index.gz`, Klippy log, and diagnostic text file in the
+experiment archive, although MATLAB reads the `.json.gz` file directly.
+Earlier exploratory captures are retained separately in `data/raw/motan_fresh`.
+They are not considered by the sine-tracking analysis. Raw payloads are ignored
+by Git because of their size and must be copied with the working data archive.
+
+Each row must contain at least:
+
+```text
+time
+device_time_us
+sample_sequence
+flags
+desired_x_position
+desired_x_acceleration
+observed_x_position
+observer_valid
+reference_valid
+```
+
+These columns are produced by the current
+`trinkey_accel/dump_experiment` endpoint. The loader reads the header stored in
+each capture, so column order may change without breaking the analysis.
+
+## Run it
+
+From the repository root:
 
 ```matlab
 addpath("analysis/matlab/sine_tracking");
 report = sine_tracking_analysis();
 ```
 
-Or from a shell with MATLAB installed:
+To use another directory:
 
-```sh
-matlab -batch 'addpath("analysis/matlab/sine_tracking"); sine_tracking_analysis();'
+```matlab
+report = sine_tracking_analysis( ...
+    "/path/to/final/evaluation/captures", ...
+    "data/processed/sine_tracking");
 ```
 
 Results are written to `data/processed/sine_tracking`:
 
 - `sine_tracking_capture_review.csv` records run selection, rejected captures,
-  missing samples, logger diagnostics, and whether a selected run is clean;
+  missing samples, logger diagnostics, and warnings;
 - `sine_tracking_pass_metrics.csv` contains one row per evaluated sine pass;
-- `sine_tracking_summary.csv` contains the six-pass mean and standard
-  deviation for each condition; and
-- two figures show the acceleration-error histories and the per-pass
-  acceleration NRMSE comparison.
+- `sine_tracking_summary.csv` contains condition-level position-error results;
+- `sine_tracking_position_error_10hz.{png,pdf}` overlays uncompensated,
+  standard FBF, and hybrid FBF tracking error for the 10 Hz experiment; and
+- `sine_tracking_position_error_35hz.{png,pdf}` provides the corresponding
+  comparison for the nominal 35 Hz experiment.
 
-When a new clean 35 Hz uncompensated capture is added, give it the next run
-number and rerun the same command. The analyzer will select it automatically.
+The two figures follow the core paper's Figure 7 presentation: all three
+controllers share one plot and one vertical scale at each frequency. Each
+legend entry states the controller's overall RMS tracking error, calculated
+from every retained sample across all six passes. RMS is the only headline
+scalar metric because it is also the quantitative tracking metric reported by
+the core paper.
 
-## Inspect hybrid controller status
+The exported figures use 14-point text and are produced in both PNG and vector
+PDF form:
 
-New lightweight logs retain the controller mode and flattened X/Y hybrid
-status in `capture.events`. The column order for each eight-value axis row is
-stored alongside the data, so it does not have to be remembered:
+```text
+sine_tracking_position_error_10hz.{png,pdf}
+sine_tracking_position_error_35hz.{png,pdf}
+```
+
+The analyzer tries the newest run first and falls back to an older run only if
+the newer capture is unusable. The review CSV records that decision.
+
+## Pass detection and frequency
+
+Pass boundaries are detected from nonzero nominal TrapQ X-acceleration events;
+measured acceleration is not used in the tracking metric. This event stream is
+a reliable way to distinguish the dense sine chords from positioning moves.
+Short groups are rejected by duration. If a hybrid file contains cold warm-up
+sine passes, the final six valid groups are selected as the printed evaluation
+passes.
+
+The executed frequency is fitted directly from desired position near the
+nominal filename frequency. This matters because the nominal 35 Hz trajectory
+has executed at approximately 33.1 Hz in the current experiments.
+
+Only the central 80% of each pass is evaluated. This removes entry and exit
+transients and provides equal-duration steady intervals. A capture is rejected
+if any selected interval contains an invalid reference, invalid observer row,
+invalid toolhead flag, or sample gap.
+
+## Metrics
+
+For each selected sample:
+
+```text
+e_x[k] = desired_x_position[k] - observed_x_position[k]
+```
+
+For each pass:
+
+```text
+RMS = sqrt(mean(e_x^2))
+```
+
+The pass CSV reports RMS in micrometres together with the timing, fitted
+frequency, and data-quality fields needed to audit the selected interval. The
+summary calculates one overall RMS from every retained sample across all six
+passes; this is not merely the arithmetic mean of the six pass RMS values.
+
+The console prints reductions for:
+
+- standard FBF relative to no compensation;
+- hybrid FBF relative to no compensation; and
+- hybrid FBF relative to standard FBF.
+
+A negative reduction means the candidate controller increased tracking error.
+
+## Hybrid and stream validation
+
+For hybrid-named captures, the script also requires status evidence that both
+axes became active and completed hybrid preview solves. Measurement errors,
+solve fallbacks, Python observation errors, and worker drops must be zero when
+those fields are available. A completed hybrid G-code is also important because
+the G-code aborts if its warm-up/freeze handshake fails.
+
+The loader retains only the hybrid status fields used to validate a capture.
+Inspect them with:
 
 ```matlab
-capture = motan_lightweight_load("data/motan/sine10_hybrid_r1.json.gz");
-capture.hybrid_status_columns
+capture = motan_lightweight_load( ...
+    "data/raw/final_evaluation/sine10_hybrid_r1.json.gz");
 capture.events(:, ["event_time", "filtered_bspline_mode", ...
-    "hybrid_x_status", "hybrid_y_status", ...
-    "hybrid_python_observation_errors"])
+    "hybrid_x_active", "hybrid_x_solves", ...
+    "hybrid_y_active", "hybrid_y_solves", ...
+    "hybrid_worker_drops"])
 ```
 
-For an accepted hybrid run, find an event where both axes have `active = 1`
-and `hybrid_solves > 0`. Measurement errors, solve fallbacks, and Python
-observation errors should be zero. The final event may be disabled because the
-G-code turns the controller off after the evaluated motion; the completed-run
-counters deliberately remain available.
+## Interpretation limitations
 
-## What is used as the reference
+The observer combines the identified plant model, final generated motor
+command, and measured acceleration. It is appropriate for reproducing the core
+paper's tracking-error methodology, but model mismatch can affect the reported
+position error. Use the result together with:
 
-The lightweight logger samples Klipper's nominal TrapQ acceleration only at
-the genuine accelerometer timestamps. The G-code approximates every spatial
-sine cycle with 24 straight chords, so its TrapQ acceleration is a sparse
-junction pulse train. It is useful for locating each pass and determining the
-executed fundamental frequency and phase, but its sampled peak is not the
-continuous desired acceleration amplitude.
+- raw acceleration or spectral plots as independent sensor-domain evidence;
+- physical specimen width as the manufacturing outcome; and
+- a clear statement that no direct displacement sensor was available.
 
-The analysis reconstructs the desired acceleration from the known 0.5 mm
-G-code position amplitude:
-
-```text
-a_reference(t) = A * omega^2 * cos(omega*t + phase_command)
-A = 0.5 mm
-```
-
-The command fundamental is fitted by ordinary least squares to obtain the
-executed phase. Phase uses the same equivalent cosine-form convention as the
-FRF workflow. The measured acceleration is not reduced to a fitted sinusoid;
-the full measured signal within each selected steady interval is compared with
-the reconstructed reference. Tracking error uses the dissertation convention,
-desired minus measured. The current sensor mounting makes the toolhead BNO055
-X axis opposite to printer X, so `analysisConfiguration()` applies
-`toolhead_x_sign = -1`. Recheck that setting if the accelerometer is remounted.
-
-The script searches near the nominal file frequency rather than assuming that
-Klipper executed it exactly. This is especially important at 35 Hz, where
-motion-planning constraints can make the executed frequency differ from the
-nominal file name.
-
-## Metrics and interpretation
-
-The script deliberately reports only two tracking metrics:
-
-- RMS acceleration error, which includes the target-frequency mismatch and
-  other measured vibration in the retained sensor bandwidth; and
-- acceleration NRMSE, which divides RMS error by desired acceleration RMS and
-  therefore supports a relative comparison between 10 Hz and 35 Hz.
-
-For each selected sample, the calculation is
-
-```text
-acceleration_error = desired_acceleration - measured_acceleration
-RMS = sqrt(mean(acceleration_error^2))
-NRMSE = RMS / sqrt(mean(desired_acceleration^2))
-```
-
-For the dissertation, label these quantities explicitly as "measured
-acceleration tracking error." The script does not estimate position tracking
-error. New captures include the shared observer's model-assisted position
-estimate, but that estimate is not independent displacement ground truth and
-must not be presented as such. The dynamic result should therefore be
-considered together with the printed specimen quality.
-
-Keep sensor rate, bandwidth, mounting, and processing identical between paired
-conditions. The current captures contain approximately 250 samples/s, so
-content above the 125 Hz Nyquist limit cannot be evaluated.
-
-The six passes in one capture measure within-specimen repeatability; they are
-not six independent experiments. Final claims about repeatability should use
-multiple complete prints per condition and report variation between prints.
+The six passes in one capture measure within-specimen variation. They are not
+six independent print experiments. Between-print repeatability requires
+multiple complete prints per condition.

@@ -1,0 +1,261 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.35cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue}
+\setlist{nosep}
+
+\title{Trinkey Sampling, BNO055 Timing, and Compensator Evaluation}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Recommended decision}
+
+Use a nominal paired-sensor acquisition rate of \SI{250}{Hz} with the BNO055
+accelerometer bandwidth set to \SI{125}{Hz} for the planned \SI{10}{Hz} and
+\SI{35}{Hz} print comparisons.  Retain Klipper's \SI{1}{kHz} controller grid.
+These rates form a valid multirate system: the command may be generated at
+\SI{1}{kHz} while measured acceleration arrives every \SI{4}{ms}.
+
+For the present evaluation, do not invent the three intervening acceleration
+values between sensor samples.  Compare the desired acceleration with the
+measured acceleration at the genuine, time-mapped BNO055 sample times.  This
+gives a valid \emph{acceleration-domain} tracking metric.  It does not reproduce
+the paper's position-domain RMS tracking error unless an observer or another
+position estimate is added.
+
+The two principal evaluation outputs should therefore be:
+
+\begin{enumerate}
+    \item printed-part evidence: photographs and repeated dimensional
+    measurements; and
+    \item a time-aligned acceleration-domain comparison from Motan, reported as
+    an adaptation necessitated by the available instrumentation.
+\end{enumerate}
+
+This is a defensible dissertation limitation.  It avoids claiming that
+interpolated data contain information that the sensors did not measure.
+
+\section{What the current acquisition actually measures}
+
+The streaming record contains separate timestamps for the base/bed and
+toolhead accelerometers.  The firmware reads the base sensor and then the
+toolhead sensor over I\textsuperscript{2}C.  For each sensor, the RP2040
+timestamp is recorded \emph{after} the register read succeeds.  The host then
+maps that timestamp from the Trinkey clock to Klipper print time using the
+fitted affine clock relation
+
+\begin{equation}
+    t_{\mathrm{print}} = \alpha t_{\mathrm{Trinkey}} + \beta .
+\end{equation}
+
+This design is better than assigning one shared timestamp to both sensors, and
+it removes host USB arrival time from the signal alignment.  However, the
+timestamp is not the instant at which the BNO055 internally sampled the MEMS
+element or updated its output register.  The BNO055 does not provide a
+per-sample timestamp register.  Consequently, the remaining timing uncertainty
+includes the age of the register value, the sequential read time, and the
+sensor's internal filter delay.  Exact data-ready timing would require each
+BNO055 interrupt/data-ready output to be wired to a separate RP2040 GPIO and
+timestamped at the edge.  Even then, the edge would identify data availability,
+not the exact physical centre of the filtered measurement~\cite{bno055}.
+
+Given the remaining project time, retaining the present hardware and reporting
+this uncertainty is preferable to changing the accelerometers.  The same
+sensor and timing path is used in every controller condition, so repeatable
+latency is largely common to the comparisons, although it must still be treated
+consistently when computing phase-sensitive errors.
+
+\section{Why the requested \SI{400}{Hz} stream was not \SI{400}{Hz}}
+
+The reported status at the end of the supplied run contained
+\(45{,}438\) scheduled sample indices and \(18{,}266\) missed indices.  Thus
+only
+
+\begin{equation}
+    45{,}438-18{,}266=27{,}172
+\end{equation}
+
+paired acquisitions were performed, or approximately \SI{60}{\percent} of the
+requested samples.  The approximately \SI{3.8}{ms} worst acquisition loop
+cannot meet the \SI{2.5}{ms} period required by \SI{400}{Hz}.  The absence of
+transport, host-queue, packet, and frame errors shows that the bottleneck was
+the sequential sensor acquisition rather than USB transfer or Motan.
+
+At \SI{250}{Hz}, the available period becomes \SI{4}{ms}, which is only about
+\SI{0.2}{ms} above the observed worst loop time.  Therefore \SI{250}{Hz} is a
+candidate operating point, not an assumption.  Before accepting a run, verify
+that the following counters do not increase throughout a complete print:
+
+\begin{equation}
+    \mathtt{firmware\_dropped}=
+    \mathtt{firmware\_overruns}=
+    \mathtt{firmware\_transport\_dropped}=0,
+\end{equation}
+
+and also require zero host queue drops, packet-sequence errors, frame errors,
+and read errors.  A batch size of four concerns transport only; it does not
+mean that four samples share one timestamp.
+
+The \SI{250}{Hz} stream provides 25 samples per cycle at \SI{10}{Hz} and about
+7.1 samples per cycle at \SI{35}{Hz}.  This is adequate for the intended
+fundamental-frequency comparison.  It would provide only 2.5 samples per cycle
+at \SI{100}{Hz}; Nyquist is satisfied, but the margin is weak and broadband
+results near \SI{100}{Hz} should not be presented as high-fidelity
+measurements.  The \SI{125}{Hz} BNO055 bandwidth setting also leaves limited
+anti-alias margin at a \SI{250}{Hz} acquisition rate.  For the present tests,
+frequency-selective results at \SI{10}{Hz} and \SI{35}{Hz} are more defensible
+than a full-band RMS claim extending to \SI{100}{Hz}.
+
+\section{Evaluation procedure}
+
+The generated trajectories provide matched uncompensated and filtered
+B-spline prints at \SI{10}{Hz} and \SI{35}{Hz}.  Their motion and extrusion
+payloads are identical at a given frequency; only the controller state changes.
+This supports a controlled two-by-two comparison.
+
+\subsection{Dynamic metric from Motan}
+
+The Motan toolhead TrapQ is the nominal desired trajectory.  The filtered
+B-spline wrapper modifies the stepper kinematic position without replacing
+that nominal TrapQ.  Consequently, the reference should be
+\(\mathtt{trapq(toolhead,x\_accel)}\) or
+\(\mathtt{trapq(toolhead,y\_accel)}\), and the measured output should be:
+
+\begin{itemize}
+    \item toolhead accelerometer X for X-axis motion; and
+    \item bed/base accelerometer Y for Y-axis motion.
+\end{itemize}
+
+For each genuine accelerometer timestamp \(t_k\), evaluate the corresponding
+TrapQ acceleration directly at \(t_k\).  The lightweight capture endpoint does
+this inside Klipper and stores the result beside the physical sample as
+\(\mathtt{trinkey\_accel(toolhead,command\_x)}\) or
+\(\mathtt{trinkey\_accel(base,command\_y)}\).  It therefore avoids exporting
+the complete high-density TrapQ.  This is preferable to first creating two
+independently rounded \SI{250}{Hz} sequences.  If a uniform grid is needed by
+an analysis tool, resample both signals once onto the same \SI{250}{Hz} grid
+after clock mapping and document the interpolation and filtering used.
+
+After applying the measured sensor orientation/sign, scale and static-bias
+correction, define
+
+\begin{equation}
+    e_a[k] = a_{\mathrm{ref}}(t_k)-a_{\mathrm{meas}}(t_k),
+    \qquad
+    \operatorname{RMSE}_a =
+    \sqrt{\frac{1}{N}\sum_{k=1}^{N} e_a[k]^2}.
+    \label{eq:accel-rmse}
+\end{equation}
+
+Report Equation~\eqref{eq:accel-rmse} in \si{mm.s^{-2}}, optionally normalised
+by the RMS reference acceleration.  Also fit the \SI{10}{Hz} or \SI{35}{Hz}
+sine and cosine components to report error amplitude and phase.  This
+narrow-band result is less sensitive to out-of-band noise and aliasing than an
+unqualified broadband RMS value.
+
+Use the same steady central-wall interval in every run and exclude warm-up,
+parking and the real end-cap corner transients.  State explicitly whether a
+constant instrumentation delay was corrected.  If no delay correction is
+made, call the result \emph{end-to-end acceleration error}; this remains useful
+for relative compensated/uncompensated comparison because the acquisition path
+is common, but delay contributes to the numerical error.
+
+Do not label Equation~\eqref{eq:accel-rmse} as the paper's position tracking
+error.  For a nearly single-frequency error only, an equivalent displacement
+phasor can be estimated from
+
+\begin{equation}
+    X_e(j\omega)=-\frac{A_e(j\omega)}{\omega^2},
+    \qquad \omega=2\pi f .
+\end{equation}
+
+This conversion must be described as narrow-band; double-integrating a general
+accelerometer record will otherwise amplify bias and drift.  A genuine
+position-domain RMS comparison requires the Luenberger observer used in the
+reference study, an equivalently validated estimator, or an independent
+position measurement.
+
+\subsection{Printed-part metric}
+
+The proposed physical evaluation follows the reference paper's two forms of
+evidence: visible print quality and a repeated geometric measurement.  For each
+frequency and controller condition:
+
+\begin{enumerate}
+    \item keep filament, temperature, layer height, flow, acceleration limits,
+    thermal state and all other settings fixed; keep input shaping disabled;
+    \item photograph the same central wall region with fixed lighting,
+    orientation, distance and scale;
+    \item measure the nominal \SI{3.4}{mm} outside width at ten predefined,
+    equally spaced locations in the central region; and
+    \item report the mean width, standard deviation, mean signed dimensional
+    error, and the measurement locations.  Repeat whole prints where time
+    permits so print-to-print variability is not confused with controller
+    performance.
+\end{enumerate}
+
+The paper compared uncompensated, standard FBF and hybrid FBF cases at low and
+high excitation frequencies, using both part measurements and RMS tracking
+error.  The present uncompensated-versus-filtered-B-spline comparison therefore
+follows the same evaluation structure, but with fewer controller conditions and
+an acceleration-domain dynamic metric until a position observer is
+available~\cite{chou2022}.
+
+\section{Implication for the later hybrid controller}
+
+A \SI{1}{kHz}, \(140\)-sample controller window spans \SI{140}{ms}.  A
+\SI{250}{Hz} sensor supplies only 35 independent measurement epochs in that
+window.  This is not a problem for the evaluation above: its error sum simply
+uses the 35 real epochs.  It \emph{is} an implementation issue for the hybrid
+controller if its lifted model expects 140 output values.
+
+The appropriate future solution is a multirate observer: predict the estimated
+state every \SI{1}{ms} from the known command and apply a measurement correction
+whenever a new \SI{250}{Hz} accelerometer sample arrives.  The observer then
+supplies a \SI{1}{kHz} estimated output sequence to the lifted controller while
+preserving the fact that only every fourth step contains new measurement
+information.  Simple interpolation or sample repetition may produce a vector
+of length 140, but does not create 140 independent observations and should not
+be presented as such.  Timestamped measurement delay must also be included in
+the observer or batch-history alignment.
+
+Thus the final decision is:
+
+\begin{itemize}
+    \item \textbf{baseline compensator evaluation now:} use the real
+    \SI{250}{Hz} samples, without missing-sample estimation;
+    \item \textbf{paper-comparable position error:} add a validated observer;
+    and
+    \item \textbf{future hybrid feedback implementation:} retain the
+    \SI{1}{kHz} controller and use an explicit multirate observer/residual
+    construction rather than treating interpolated samples as measurements.
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{chou2022}
+C.-H. Chou, M. Duan, and C. E. Okwudire,
+\newblock ``A Physics-Guided Data-Driven Feedforward Tracking Controller for
+Systems with Unmodeled Dynamics---Applied to 3D Printing,'' 2022.
+\newblock doi: \href{https://doi.org/10.48550/arXiv.2206.11960}%
+{10.48550/arXiv.2206.11960}.
+
+\bibitem{bno055}
+Bosch Sensortec,
+\newblock ``BNO055 Intelligent 9-axis absolute orientation sensor: Data sheet,''
+BST-BNO055-DS000.
+\newblock \url{https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bno055-ds000.pdf}.
+
+\end{thebibliography}
+
+\end{document}
