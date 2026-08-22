@@ -4,7 +4,8 @@ function inspect = frf_sweep_inspect_point(runDir, axisName, frequencyHz)
 % Example:
 %
 %   addpath("analysis/matlab/frf");
-%   inspect = frf_sweep_inspect_point("data/raw/2026-07-16_2ms", "X", 30);
+%   inspect = frf_sweep_inspect_point( ...
+%       "data/raw/frf_sweeps/2026-07-16_2ms", "X", 30);
 
 if nargin ~= 3
     error("Usage: inspect = frf_sweep_inspect_point(runDir, axisName, frequencyHz)");

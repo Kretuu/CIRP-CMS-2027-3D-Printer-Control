@@ -1,0 +1,5 @@
+{
+  "description": "Final sine-print evaluation runs for uncompensated, standard FBF, and hybrid FBF control.",
+  "source": "/home/kretu/Documents/Academic/Dissertation/evaluation/data",
+  "analysis": "analysis/matlab/sine_tracking/sine_tracking_analysis.m"
+}

@@ -4,7 +4,8 @@ This package designs the fixed steady-state Kalman observers used to estimate
 X/Y position from the final motor command and the two Trinkey accelerometers.
 It uses the same identified transfer functions as filtered B-spline feedback.
 
-The design deliberately follows the compact ELE460 lab pattern:
+The design deliberately follows the steady-state Kalman-filter pattern from
+ELE460 laboratory Session 5 (and Lecture 15):
 
 ```matlab
 Q = qOverR * eye(stateCount);
@@ -24,10 +25,10 @@ addpath("analysis/matlab/frf");
 addpath("analysis/matlab/state_space_observer");
 
 runDirs = [
-    "data/raw/2026-08-11_1_5ms"
-    "data/raw/2026-08-11_2ms"
-    "data/raw/2026-08-11_2_5ms"
-    "data/raw/2026-08-11_3ms"
+    "data/raw/frf_sweeps/2026-08-11_1_5ms"
+    "data/raw/frf_sweeps/2026-08-11_2ms"
+    "data/raw/frf_sweeps/2026-08-11_2_5ms"
+    "data/raw/frf_sweeps/2026-08-11_3ms"
 ];
 
 [~, models] = frf_sweep_analysis(runDirs);

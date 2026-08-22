@@ -21,7 +21,7 @@ discretePlant = c2d(plant, sampleTimeS, "zoh");
 [Ad, Bd] = ssdata(discretePlant);
 stateCount = size(A, 1);
 
-% This is the same full-state process-noise model used in the ELE460 lab.
+% This is the full-state process-noise model from ELE460 lab Session 5.
 % Only Q/R affects the steady-state gain, so R is normalised to one.
 Q = processMeasurementRatio * eye(stateCount);
 R = 1.0;

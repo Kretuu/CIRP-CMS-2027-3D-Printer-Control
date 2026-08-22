@@ -74,10 +74,13 @@ pip-wheel-metadata/
 # Experiment data and generated trajectories
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/README.md
 !data/raw/*/
 data/raw/*/*
 !data/raw/*/analysis_metadata.json
-data/processed/*
+!data/raw/frf_sweeps/*/
+data/raw/frf_sweeps/*/*
+!data/raw/frf_sweeps/*/analysis_metadata.json
 !data/processed/.gitkeep
 trajectories/generated/*
 !trajectories/generated/.gitkeep

@@ -5,10 +5,10 @@ function [results, models] = frf_sweep_analysis(runDirs)
 %
 %   addpath("analysis/matlab/frf");
 %   runDirs = [
-%       "data/raw/2026-08-11_1_5ms"
-%       "data/raw/2026-08-11_2ms"
-%       "data/raw/2026-08-11_2_5ms"
-%       "data/raw/2026-08-11_3ms"
+%       "data/raw/frf_sweeps/2026-08-11_1_5ms"
+%       "data/raw/frf_sweeps/2026-08-11_2ms"
+%       "data/raw/frf_sweeps/2026-08-11_2_5ms"
+%       "data/raw/frf_sweeps/2026-08-11_3ms"
 %   ];
 %   [results, models] = frf_sweep_analysis(runDirs);
 %

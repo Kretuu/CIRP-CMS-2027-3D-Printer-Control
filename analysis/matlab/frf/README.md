@@ -22,7 +22,7 @@ From the repository root:
 
 ```matlab
 addpath("analysis/matlab/frf");
-inspect = frf_sweep_inspect_point("data/raw/<run-id>", "X", 35);
+inspect = frf_sweep_inspect_point("data/raw/frf_sweeps/<run-id>", "X", 35);
 ```
 
 This plots the aligned command and acceleration samples together with the
@@ -35,7 +35,8 @@ For one 3 m/s^2 sweep:
 
 ```matlab
 addpath("analysis/matlab/frf");
-[results, models] = frf_sweep_analysis("data/raw/<3000-run-id>");
+[results, models] = frf_sweep_analysis( ...
+    "data/raw/frf_sweeps/<3000-run-id>");
 ```
 
 To compare all collected acceleration levels while identifying the model from
@@ -43,10 +44,10 @@ the required 3 m/s^2 run:
 
 ```matlab
 runDirs = [
-    "data/raw/<1500-run-id>"
-    "data/raw/<2000-run-id>"
-    "data/raw/<2500-run-id>"
-    "data/raw/<3000-run-id>"
+    "data/raw/frf_sweeps/<1500-run-id>"
+    "data/raw/frf_sweeps/<2000-run-id>"
+    "data/raw/frf_sweeps/<2500-run-id>"
+    "data/raw/frf_sweeps/<3000-run-id>"
 ];
 [results, models] = frf_sweep_analysis(runDirs);
 ```

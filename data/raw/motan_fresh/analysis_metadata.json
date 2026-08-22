@@ -1,0 +1,5 @@
+{
+  "description": "Exploratory and unsuccessful Motan runs retained for diagnostics and observer comparison.",
+  "source": "/home/kretu/Documents/Academic/Dissertation/evaluation/motan_fresh",
+  "analysis": "analysis/matlab/observer_comparison/observer_comparison_analysis.m"
+}

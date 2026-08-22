@@ -86,7 +86,7 @@ Klipper independently checks homing, travel, kinematic and motion limits.
 The local orchestrator writes its plan and completion status to:
 
 ```text
-data/raw/<timestamp>_klipper_xy_frf_sweep/metadata.json
+data/raw/frf_sweeps/<timestamp>_klipper_xy_frf_sweep/metadata.json
 ```
 
 Klipper normally writes one directory per frequency point under:

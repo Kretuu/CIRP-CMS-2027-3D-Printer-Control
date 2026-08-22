@@ -8,7 +8,8 @@ names remain unchanged.
 | Directory | Purpose | Main entry point |
 |---|---|---|
 | [`frf/`](frf/) | Vibration-sweep alignment, FRF extraction, model identification, and point inspection | `frf_sweep_analysis` |
-| [`state_space_observer/`](state_space_observer/) | Plant-based Luenberger observer design from the identified FBF models | `state_space_observer_design` |
+| [`state_space_observer/`](state_space_observer/) | Steady-state Kalman observer design from the identified FBF models | `state_space_observer_design` |
+| [`observer_comparison/`](observer_comparison/) | Controlled replay comparing the original Luenberger and final Kalman observers | `observer_comparison_analysis` |
 | [`sine_tracking/`](sine_tracking/) | Lightweight-Motan validation and compensated/uncompensated sine-print comparison | `sine_tracking_analysis` |
 | [`diss_figures/`](diss_figures/) | Self-contained scripts and generated assets for dissertation diagrams | individual scripts |
 
