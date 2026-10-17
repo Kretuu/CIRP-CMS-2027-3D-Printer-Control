@@ -61,7 +61,7 @@ ignore rules. Previously tracked metadata, processed results and legacy captures
 remain tracked. The local `data/processed/` directory may contain another
 analysis revision; use the release's frozen reference tables for this paper.
 
-This release covers the FRF and dynamic tracking results. Specimen photographs
-and the ten individual caliper readings per specimen were not found in this
-`data/` tree; the manuscript has photographs and summary widths, but this raw
-release should not be described as containing all physical-measurement records.
+The release also includes [original physical evidence](../releases/cirp-cms-2027/physical/README.md)
+from the dissertation archive: six specimen photographs and the measurement
+sheet. Two selected specimens have eleven recorded widths, conflicting with
+the paper's stated ten; the source is preserved and reconciliation remains open.

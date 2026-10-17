@@ -43,9 +43,10 @@ These tables are not independent experimental replicates.
 
 ## Limits
 
-This archive covers identification and dynamic tracking. It does not yet contain
-the original physical-width measurement sheet or specimen photographs. No
-license or public availability is asserted by this file. Confirm the public
-release terms and add the physical evidence before claiming complete access
-to all underlying paper data. Older development data remain documented but
-are not included in this selection.
+The [physical evidence](physical/README.md) now includes the six original
+specimen photographs, existing PNGs, paper JPEG crops and original measurement
+sheet, with a transcription of all 62 readings for the selected specimens.
+Two eleven-reading groups conflict with the paper's stated ten readings, and
+one sample SD differs on recalculation; author reconciliation is pending.
+No license or public availability is asserted by this file. Older development
+data remain documented but are not included in this selection.

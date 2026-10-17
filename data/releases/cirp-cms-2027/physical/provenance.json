@@ -1,0 +1,150 @@
+{
+  "specimens": [
+    {
+      "capture": "sine10_uncomp_r6",
+      "source_measurement_heading": "10Hz uncompensated r6",
+      "original_photograph": "10Hz_uncomp_r6.heic",
+      "existing_png": "sine-10hz-uncompensated.png",
+      "paper_crop": "sine-10hz-uncompensated.jpg",
+      "recorded_reading_count": 10
+    },
+    {
+      "capture": "sine10_standard_r1",
+      "source_measurement_heading": "10Hz standard r1",
+      "original_photograph": "10Hz_standard_r1.HEIC",
+      "existing_png": "sine-10hz-standard-fbf.png",
+      "paper_crop": "sine-10hz-standard-fbf.jpg",
+      "recorded_reading_count": 10
+    },
+    {
+      "capture": "sine10_hybrid_r3",
+      "source_measurement_heading": "10Hz hybrid r3",
+      "original_photograph": "10Hz_hybrid_r3.HEIC",
+      "existing_png": "sine-10hz-hybrid-fbf.png",
+      "paper_crop": "sine-10hz-hybrid-fbf.jpg",
+      "recorded_reading_count": 10
+    },
+    {
+      "capture": "sine35_uncomp_r5",
+      "source_measurement_heading": "35Hz uncompensated r5",
+      "original_photograph": "35Hz_uncomp_r5.HEIC",
+      "existing_png": "sine-35hz-uncompensated.png",
+      "paper_crop": "sine-35hz-uncompensated.jpg",
+      "recorded_reading_count": 10
+    },
+    {
+      "capture": "sine35_standard_r2",
+      "source_measurement_heading": "35Hz standard r2",
+      "original_photograph": "35Hz_standard_r2.HEIC",
+      "existing_png": "sine-35hz-standard-fbf.png",
+      "paper_crop": "sine-35hz-standard-fbf.jpg",
+      "recorded_reading_count": 11
+    },
+    {
+      "capture": "sine35_hybrid_r4",
+      "source_measurement_heading": "35Hz hybrid r4",
+      "original_photograph": "35Hz_hybrid_r4.HEIC",
+      "existing_png": "sine-35hz-hybrid-fbf.png",
+      "paper_crop": "sine-35hz-hybrid-fbf.jpg",
+      "recorded_reading_count": 11
+    }
+  ],
+  "copied_files": [
+    {
+      "file": "data/releases/cirp-cms-2027/physical/measurements/Fresh runs (mm).md",
+      "source": "Academic/Dissertation/evaluation/print_measurements/Fresh runs (mm).md",
+      "sha256": "c62849b77b173b0e0f25ef162676e7c1c8c10e39808759b415acc8b790b7e3a0"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/10Hz_uncomp_r6.heic",
+      "source": "Academic/Dissertation/images/Evaluation/10Hz_uncomp_r6.heic",
+      "sha256": "8a4fe07a7e0fb100b79730b7990aaebe35d46821eb22a7441afed5296ad719f8"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-10hz-uncompensated.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-10hz-uncompensated.png",
+      "sha256": "0ce2ca338c9a60721ed6f98e5e9be62d8c5f26d07eb7887d66e27582fc7a03f4"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-10hz-uncompensated.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-10hz-uncompensated.jpg",
+      "sha256": "346942de14dfca6ce75063abb290b34146a77535b0d4a195e9293b207f4483a3"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/10Hz_standard_r1.HEIC",
+      "source": "Academic/Dissertation/images/Evaluation/10Hz_standard_r1.HEIC",
+      "sha256": "37a7d0028260a54be6efe7939005b44a5b2bb1f0c3236f8b4ba2f2ae95a5ea22"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-10hz-standard-fbf.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-10hz-standard-fbf.png",
+      "sha256": "04d1b7a1bcb88ef93abe32f9a1f2ca37d80558ab6e07b9d7bbe7a6e4c766336b"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-10hz-standard-fbf.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-10hz-standard-fbf.jpg",
+      "sha256": "938a667eb3e1532e4b61d028f1e0106e3d92b618eb0f8e03447f0dfb8a32f741"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/10Hz_hybrid_r3.HEIC",
+      "source": "Academic/Dissertation/images/Evaluation/10Hz_hybrid_r3.HEIC",
+      "sha256": "f38283b772041c5859c4f52469cbebf6bee4c0a0d06ea37d399f1874638073bf"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-10hz-hybrid-fbf.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-10hz-hybrid-fbf.png",
+      "sha256": "18619aa21d2055877d2242f4d825213be10005a2aec6416972a05f0eca5bd0ee"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-10hz-hybrid-fbf.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-10hz-hybrid-fbf.jpg",
+      "sha256": "ca3a09f5506e71c7e28af4bca97d1daa6b399f6d8c03f58ae02f9b926533840a"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/35Hz_uncomp_r5.HEIC",
+      "source": "Academic/Dissertation/images/Evaluation/35Hz_uncomp_r5.HEIC",
+      "sha256": "d73e69069cb74587ad2f2e5673d4bbc62689aae609cea70ed966488d63828ac0"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-35hz-uncompensated.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-35hz-uncompensated.png",
+      "sha256": "b4588bedcfcb4e334d96e5c47c83dd778487f6e39a2fcd79c3863a433818ee24"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-35hz-uncompensated.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-35hz-uncompensated.jpg",
+      "sha256": "d529af3f707a840e6cb49cc7d40ea509fb8e79e9e749a077686ec5a8878bae18"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/35Hz_standard_r2.HEIC",
+      "source": "Academic/Dissertation/images/Evaluation/35Hz_standard_r2.HEIC",
+      "sha256": "c285a4b6f5dec9dc16eaadd2a0e3c8798835528080c7198ecec9f16906e6d983"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-35hz-standard-fbf.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-35hz-standard-fbf.png",
+      "sha256": "0b7a348f4d94e43c1923a01908051cbd233d70b83d7174d01937d01fab102fa5"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-35hz-standard-fbf.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-35hz-standard-fbf.jpg",
+      "sha256": "0faafd12c86aa9810db8e41bb936a32301ce12a800e6adfb3ef000e7618161b4"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/original_photographs/35Hz_hybrid_r4.HEIC",
+      "source": "Academic/Dissertation/images/Evaluation/35Hz_hybrid_r4.HEIC",
+      "sha256": "8475b67948deef8632a3315e3660a6715cb0b295c86bf9d478cdc9a56f335eca"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/existing_pngs/sine-35hz-hybrid-fbf.png",
+      "source": "Academic/Dissertation/images/Evaluation/sine-35hz-hybrid-fbf.png",
+      "sha256": "9c897c4b21524f0eca19db82f384d191d773c7d7425cc3daa43fedc498271d87"
+    },
+    {
+      "file": "data/releases/cirp-cms-2027/physical/paper_crops/sine-35hz-hybrid-fbf.jpg",
+      "source": "cirp-cms-2027-paper/figures/sine-35hz-hybrid-fbf.jpg",
+      "sha256": "cf031438a3ffc7a01b328aa61d35e712799b7fe752ddda999fbfc88a894a3b54"
+    }
+  ],
+  "measurement_status": "Unresolved: two source groups have eleven readings; first-ten comparison is diagnostic, not an approved exclusion rule."
+}

@@ -4,3 +4,6 @@ tools/klipper-c-helper/*.sh text eol=lf
 
 # Preserve original acquisition bytes, including CSV line endings.
 data/raw/frf_sweeps/2026-08-11_*/** -text
+
+# Preserve copied physical source files byte-for-byte.
+data/releases/cirp-cms-2027/physical/** -text
