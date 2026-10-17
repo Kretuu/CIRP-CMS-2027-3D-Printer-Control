@@ -63,5 +63,6 @@ analysis revision; use the release's frozen reference tables for this paper.
 
 The release also includes [original physical evidence](../releases/cirp-cms-2027/physical/README.md)
 from the dissertation archive: six specimen photographs and the measurement
-sheet. Two selected specimens have eleven recorded widths, conflicting with
-the paper's stated ten; the source is preserved and reconciliation remains open.
+sheet. The author approved retaining the first ten readings per specimen;
+original notes and the two extra entries are preserved separately. The selected
+standard-r2 sample SD is corrected to 0.063 mm.

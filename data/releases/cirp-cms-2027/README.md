@@ -45,8 +45,9 @@ These tables are not independent experimental replicates.
 
 The [physical evidence](physical/README.md) now includes the six original
 specimen photographs, existing PNGs, paper JPEG crops and original measurement
-sheet, with a transcription of all 62 readings for the selected specimens.
-Two eleven-reading groups conflict with the paper's stated ten readings, and
-one sample SD differs on recalculation; author reconciliation is pending.
+sheet and all 62 source readings. The author approved the first-ten selection
+(60 analysis readings); both excluded entries remain documented. Standard-r2
+sample SD is corrected to 0.063 mm. Run the physical-data verification script
+for the width summaries; the MATLAB script checks FRF/tracking results.
 No license or public availability is asserted by this file. Older development
 data remain documented but are not included in this selection.

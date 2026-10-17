@@ -1,0 +1,3 @@
+capture,source_reading_number,width_mm,status
+sine35_standard_r2,11,3.96,excluded_from_analysis_first_ten_selection
+sine35_hybrid_r4,11,3.96,excluded_from_analysis_first_ten_selection

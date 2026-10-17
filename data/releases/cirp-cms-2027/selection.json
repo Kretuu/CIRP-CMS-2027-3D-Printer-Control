@@ -18,5 +18,5 @@
   "evaluation_directory": "data/raw/final_evaluation",
   "selection_note": "35 Hz hybrid r4 is paired with physical measurements and photograph; later unpaired r5 is not used.",
   "physical_measurement_records_included": true,
-  "physical_measurement_status": "Source archived; two eleven-reading groups and standard-r2 sample SD require author reconciliation."
+  "physical_measurement_status": "First ten readings per selected specimen, approved by the author; original notes and excluded entries preserved. Standard-r2 sample SD corrected to 0.063 mm."
 }
