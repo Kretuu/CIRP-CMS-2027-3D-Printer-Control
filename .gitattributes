@@ -1,3 +1,6 @@
 compose.yaml text eol=lf
 tools/klipper-c-helper/Dockerfile text eol=lf
 tools/klipper-c-helper/*.sh text eol=lf
+
+# Preserve original acquisition bytes, including CSV line endings.
+data/raw/frf_sweeps/2026-08-11_*/** -text
