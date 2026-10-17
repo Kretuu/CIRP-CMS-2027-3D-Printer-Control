@@ -1,0 +1,4909 @@
+{
+  "run_id": "20260811T111529Z_klipper_xy_frf_sweep",
+  "started_utc": "2026-08-11T11:15:29.044505+00:00",
+  "run_dir": "/Users/kretu/projects/clion/meng-diss-accelerometers-firmware/data/raw/20260811T111529Z_klipper_xy_frf_sweep",
+  "experiment": "xy_fixed_accel_frf_sweep_klipper_logged",
+  "printer": "Creality Ender 3 V3",
+  "moonraker_url": "http://192.168.0.2:7125",
+  "sync_count": 20,
+  "axes": [
+    "X",
+    "Y"
+  ],
+  "frequency_start_hz": 1,
+  "frequency_end_hz": 100,
+  "frequency_step_hz": 1,
+  "commanded_accel_amplitude_mm_s2": 3000.0,
+  "max_displacement_amplitude_mm": 100.0,
+  "test_cycles": 8.0,
+  "min_duration_seconds": 2.0,
+  "segments_per_cycle": 32,
+  "max_segment_rate": 6000.0,
+  "chunk_time_seconds": 0.25,
+  "point_retries": 2,
+  "point_retry_delay_seconds": 2.0,
+  "axis_sensor_map": {
+    "X": {
+      "trinkey_chip": "toolhead",
+      "accel_column": "ax_raw"
+    },
+    "Y": {
+      "trinkey_chip": "base",
+      "accel_column": "ay_raw"
+    }
+  },
+  "timebase": "Input segments are logged by Klipper in print_time. Trinkey samples are logged by Klipper in Trinkey t_us, with sync.csv used to map Trinkey t_us to Klipper print_time.",
+  "setup_gcode": "G90\nG1 Z20.000 F6000\nG1 X110.000 Y110.000 F6000\nM400",
+  "points": [
+    {
+      "axis": "X",
+      "frequency_hz": 1,
+      "displacement_amplitude_mm": 75.99088773175333,
+      "velocity_amplitude_mm_s": 477.464829275686,
+      "duration_s": 8.0,
+      "ramp_time_s": 2.0,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_001Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 2,
+      "displacement_amplitude_mm": 18.997721932938333,
+      "velocity_amplitude_mm_s": 238.732414637843,
+      "duration_s": 4.0,
+      "ramp_time_s": 1.0,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_002Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 3,
+      "displacement_amplitude_mm": 8.443431970194814,
+      "velocity_amplitude_mm_s": 159.15494309189532,
+      "duration_s": 2.6666666666666665,
+      "ramp_time_s": 0.6666666666666666,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_003Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 4,
+      "displacement_amplitude_mm": 4.749430483234583,
+      "velocity_amplitude_mm_s": 119.3662073189215,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.5,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_004Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 5,
+      "displacement_amplitude_mm": 3.0396355092701333,
+      "velocity_amplitude_mm_s": 95.4929658551372,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.4,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_005Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 6,
+      "displacement_amplitude_mm": 2.1108579925487034,
+      "velocity_amplitude_mm_s": 79.57747154594766,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.3333333333333333,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_006Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 7,
+      "displacement_amplitude_mm": 1.55083444350517,
+      "velocity_amplitude_mm_s": 68.209261325098,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2857142857142857,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_007Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 8,
+      "displacement_amplitude_mm": 1.1873576208086458,
+      "velocity_amplitude_mm_s": 59.68310365946075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.25,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_008Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 9,
+      "displacement_amplitude_mm": 0.9381591077994239,
+      "velocity_amplitude_mm_s": 53.05164769729845,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2222222222222222,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_009Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 10,
+      "displacement_amplitude_mm": 0.7599088773175333,
+      "velocity_amplitude_mm_s": 47.7464829275686,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_010Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 11,
+      "displacement_amplitude_mm": 0.6280238655516805,
+      "velocity_amplitude_mm_s": 43.405893570516916,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.18181818181818182,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_011Hz_retry01"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 12,
+      "displacement_amplitude_mm": 0.5277144981371759,
+      "velocity_amplitude_mm_s": 39.78873577297383,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.16666666666666666,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_012Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 13,
+      "displacement_amplitude_mm": 0.4496502232648126,
+      "velocity_amplitude_mm_s": 36.72806379043738,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.15384615384615385,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_013Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 14,
+      "displacement_amplitude_mm": 0.3877086108762925,
+      "velocity_amplitude_mm_s": 34.104630662549,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.14285714285714285,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_014Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 15,
+      "displacement_amplitude_mm": 0.3377372788077927,
+      "velocity_amplitude_mm_s": 31.830988618379074,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.13333333333333333,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_015Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 16,
+      "displacement_amplitude_mm": 0.29683940520216145,
+      "velocity_amplitude_mm_s": 29.841551829730374,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.125,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_016Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 17,
+      "displacement_amplitude_mm": 0.26294424820675893,
+      "velocity_amplitude_mm_s": 28.08616642798153,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.11764705882352941,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_017Hz_retry01"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 18,
+      "displacement_amplitude_mm": 0.23453977694985598,
+      "velocity_amplitude_mm_s": 26.525823848649225,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.1111111111111111,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_018Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 19,
+      "displacement_amplitude_mm": 0.21050107404917823,
+      "velocity_amplitude_mm_s": 25.129727856615055,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.10526315789473684,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_019Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 20,
+      "displacement_amplitude_mm": 0.18997721932938333,
+      "velocity_amplitude_mm_s": 23.8732414637843,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.1,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_020Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 21,
+      "displacement_amplitude_mm": 0.1723149381672411,
+      "velocity_amplitude_mm_s": 22.736420441699334,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.09523809523809523,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_021Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 22,
+      "displacement_amplitude_mm": 0.15700596638792014,
+      "velocity_amplitude_mm_s": 21.702946785258458,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.09090909090909091,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_022Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 23,
+      "displacement_amplitude_mm": 0.14365007132656588,
+      "velocity_amplitude_mm_s": 20.7593404032907,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08695652173913043,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_023Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 24,
+      "displacement_amplitude_mm": 0.13192862453429396,
+      "velocity_amplitude_mm_s": 19.894367886486915,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08333333333333333,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_024Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 25,
+      "displacement_amplitude_mm": 0.12158542037080533,
+      "velocity_amplitude_mm_s": 19.098593171027442,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_025Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 26,
+      "displacement_amplitude_mm": 0.11241255581620314,
+      "velocity_amplitude_mm_s": 18.36403189521869,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07692307692307693,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_026Hz_retry01"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 27,
+      "displacement_amplitude_mm": 0.10423990086660266,
+      "velocity_amplitude_mm_s": 17.68388256576615,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07407407407407407,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_027Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 28,
+      "displacement_amplitude_mm": 0.09692715271907312,
+      "velocity_amplitude_mm_s": 17.0523153312745,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07142857142857142,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_028Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 29,
+      "displacement_amplitude_mm": 0.09035777375951644,
+      "velocity_amplitude_mm_s": 16.464304457782276,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06896551724137931,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_029Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 30,
+      "displacement_amplitude_mm": 0.08443431970194817,
+      "velocity_amplitude_mm_s": 15.915494309189537,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06666666666666667,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_030Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 31,
+      "displacement_amplitude_mm": 0.07907480513189734,
+      "velocity_amplitude_mm_s": 15.402091266957616,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06451612903225806,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_031Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 32,
+      "displacement_amplitude_mm": 0.07420985130054036,
+      "velocity_amplitude_mm_s": 14.920775914865187,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0625,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_032Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 33,
+      "displacement_amplitude_mm": 0.06978042950574226,
+      "velocity_amplitude_mm_s": 14.468631190172301,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06060606060606061,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_033Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 34,
+      "displacement_amplitude_mm": 0.06573606205168973,
+      "velocity_amplitude_mm_s": 14.043083213990766,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.058823529411764705,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_034Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 35,
+      "displacement_amplitude_mm": 0.06203337774020681,
+      "velocity_amplitude_mm_s": 13.641852265019603,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05714285714285714,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_035Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 36,
+      "displacement_amplitude_mm": 0.058634944237463994,
+      "velocity_amplitude_mm_s": 13.262911924324612,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05555555555555555,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_036Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 37,
+      "displacement_amplitude_mm": 0.05550831828469929,
+      "velocity_amplitude_mm_s": 12.90445484528881,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05405405405405406,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_037Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 38,
+      "displacement_amplitude_mm": 0.05262526851229456,
+      "velocity_amplitude_mm_s": 12.564863928307528,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05263157894736842,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_038Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 39,
+      "displacement_amplitude_mm": 0.04996113591831252,
+      "velocity_amplitude_mm_s": 12.242687930145797,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05128205128205128,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_039Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 40,
+      "displacement_amplitude_mm": 0.04749430483234583,
+      "velocity_amplitude_mm_s": 11.93662073189215,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_040Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 41,
+      "displacement_amplitude_mm": 0.045205763076593304,
+      "velocity_amplitude_mm_s": 11.645483640870392,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04878048780487805,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_041Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 42,
+      "displacement_amplitude_mm": 0.04307873454181028,
+      "velocity_amplitude_mm_s": 11.368210220849667,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.047619047619047616,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_042Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 43,
+      "displacement_amplitude_mm": 0.041098370866280876,
+      "velocity_amplitude_mm_s": 11.103833238969443,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.046511627906976744,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_043Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 44,
+      "displacement_amplitude_mm": 0.039251491596980034,
+      "velocity_amplitude_mm_s": 10.851473392629229,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.045454545454545456,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_044Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 45,
+      "displacement_amplitude_mm": 0.03752636431197696,
+      "velocity_amplitude_mm_s": 10.610329539459691,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.044444444444444446,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_045Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 46,
+      "displacement_amplitude_mm": 0.03591251783164147,
+      "velocity_amplitude_mm_s": 10.37967020164535,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.043478260869565216,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_046Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 47,
+      "displacement_amplitude_mm": 0.03440058294782857,
+      "velocity_amplitude_mm_s": 10.158826154801828,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0425531914893617,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_047Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 48,
+      "displacement_amplitude_mm": 0.03298215613357349,
+      "velocity_amplitude_mm_s": 9.947183943243457,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.041666666666666664,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_048Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 49,
+      "displacement_amplitude_mm": 0.03164968252051368,
+      "velocity_amplitude_mm_s": 9.744180189299716,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04081632653061224,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_049Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 50,
+      "displacement_amplitude_mm": 0.030396355092701333,
+      "velocity_amplitude_mm_s": 9.549296585513721,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_050Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 51,
+      "displacement_amplitude_mm": 0.029216027578528772,
+      "velocity_amplitude_mm_s": 9.362055475993843,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0392156862745098,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_051Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 52,
+      "displacement_amplitude_mm": 0.028103138954050786,
+      "velocity_amplitude_mm_s": 9.182015947609345,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.038461538461538464,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_052Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 53,
+      "displacement_amplitude_mm": 0.027052647821912898,
+      "velocity_amplitude_mm_s": 9.00877036369219,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03773584905660377,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_053Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 54,
+      "displacement_amplitude_mm": 0.026059975216650665,
+      "velocity_amplitude_mm_s": 8.841941282883075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.037037037037037035,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_054Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 55,
+      "displacement_amplitude_mm": 0.025120954622067215,
+      "velocity_amplitude_mm_s": 8.681178714103382,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03636363636363636,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_055Hz_retry01"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 56,
+      "displacement_amplitude_mm": 0.02423178817976828,
+      "velocity_amplitude_mm_s": 8.52615766563725,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03571428571428571,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_056Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 57,
+      "displacement_amplitude_mm": 0.02338900822768647,
+      "velocity_amplitude_mm_s": 8.376575952205018,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03508771929824561,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_057Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 58,
+      "displacement_amplitude_mm": 0.02258944343987911,
+      "velocity_amplitude_mm_s": 8.232152228891138,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.034482758620689655,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_058Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 59,
+      "displacement_amplitude_mm": 0.021830188949081685,
+      "velocity_amplitude_mm_s": 8.092624225011628,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03389830508474576,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_059Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 60,
+      "displacement_amplitude_mm": 0.021108579925487043,
+      "velocity_amplitude_mm_s": 7.9577471545947684,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03333333333333333,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_060Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 61,
+      "displacement_amplitude_mm": 0.020422168162255665,
+      "velocity_amplitude_mm_s": 7.827292283207967,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03278688524590164,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_061Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 62,
+      "displacement_amplitude_mm": 0.019768701282974335,
+      "velocity_amplitude_mm_s": 7.701045633478808,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03225806451612903,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_062Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 63,
+      "displacement_amplitude_mm": 0.019146104240804568,
+      "velocity_amplitude_mm_s": 7.578806813899778,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.031746031746031744,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_063Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 64,
+      "displacement_amplitude_mm": 0.01855246282513509,
+      "velocity_amplitude_mm_s": 7.4603879574325935,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03125,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_064Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 65,
+      "displacement_amplitude_mm": 0.017986008930592507,
+      "velocity_amplitude_mm_s": 7.345612758087477,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03076923076923077,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_065Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 66,
+      "displacement_amplitude_mm": 0.017445107376435565,
+      "velocity_amplitude_mm_s": 7.234315595086151,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.030303030303030304,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_066Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 67,
+      "displacement_amplitude_mm": 0.016928244092616025,
+      "velocity_amplitude_mm_s": 7.126340735458,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.029850746268656716,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_067Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 68,
+      "displacement_amplitude_mm": 0.016434015512922433,
+      "velocity_amplitude_mm_s": 7.021541606995383,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.029411764705882353,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_068Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 69,
+      "displacement_amplitude_mm": 0.015961119036285092,
+      "velocity_amplitude_mm_s": 6.919780134430232,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.028985507246376812,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_069Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 70,
+      "displacement_amplitude_mm": 0.015508344435051703,
+      "velocity_amplitude_mm_s": 6.820926132509801,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02857142857142857,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_070Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 71,
+      "displacement_amplitude_mm": 0.015074566104295443,
+      "velocity_amplitude_mm_s": 6.724856750361774,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.028169014084507043,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_071Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 72,
+      "displacement_amplitude_mm": 0.014658736059365999,
+      "velocity_amplitude_mm_s": 6.631455962162306,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.027777777777777776,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_072Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 73,
+      "displacement_amplitude_mm": 0.014259877600253958,
+      "velocity_amplitude_mm_s": 6.540614099666932,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0273972602739726,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_073Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 74,
+      "displacement_amplitude_mm": 0.013877079571174823,
+      "velocity_amplitude_mm_s": 6.452227422644405,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02702702702702703,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_074Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 75,
+      "displacement_amplitude_mm": 0.013509491152311705,
+      "velocity_amplitude_mm_s": 6.366197723675814,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02666666666666667,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_075Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 76,
+      "displacement_amplitude_mm": 0.01315631712807364,
+      "velocity_amplitude_mm_s": 6.282431964153764,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02631578947368421,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_076Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 77,
+      "displacement_amplitude_mm": 0.012816813582687357,
+      "velocity_amplitude_mm_s": 6.200841938645273,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.025974025974025976,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_077Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 78,
+      "displacement_amplitude_mm": 0.01249028397957813,
+      "velocity_amplitude_mm_s": 6.1213439650728985,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02564102564102564,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_078Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 79,
+      "displacement_amplitude_mm": 0.012176075585924264,
+      "velocity_amplitude_mm_s": 6.0438585984264055,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02531645569620253,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_079Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 80,
+      "displacement_amplitude_mm": 0.011873576208086458,
+      "velocity_amplitude_mm_s": 5.968310365946075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.025,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_080Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 81,
+      "displacement_amplitude_mm": 0.011582211207400295,
+      "velocity_amplitude_mm_s": 5.894627521922049,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024691358024691357,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_081Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 82,
+      "displacement_amplitude_mm": 0.011301440769148326,
+      "velocity_amplitude_mm_s": 5.822741820435196,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024390243902439025,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_082Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 83,
+      "displacement_amplitude_mm": 0.011030757400457732,
+      "velocity_amplitude_mm_s": 5.752588304526337,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024096385542168676,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_083Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 84,
+      "displacement_amplitude_mm": 0.01076968363545257,
+      "velocity_amplitude_mm_s": 5.6841051104248335,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023809523809523808,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_084Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 85,
+      "displacement_amplitude_mm": 0.010517769928270356,
+      "velocity_amplitude_mm_s": 5.617233285596305,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023529411764705882,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_085Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 86,
+      "displacement_amplitude_mm": 0.010274592716570219,
+      "velocity_amplitude_mm_s": 5.551916619484722,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023255813953488372,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_086Hz_retry01"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 87,
+      "displacement_amplitude_mm": 0.010039752639946274,
+      "velocity_amplitude_mm_s": 5.488101485927426,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022988505747126436,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_087Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 88,
+      "displacement_amplitude_mm": 0.009812872899245009,
+      "velocity_amplitude_mm_s": 5.4257366963146145,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022727272727272728,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_088Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 89,
+      "displacement_amplitude_mm": 0.009593597744193072,
+      "velocity_amplitude_mm_s": 5.364773362648157,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02247191011235955,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_089Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 90,
+      "displacement_amplitude_mm": 0.00938159107799424,
+      "velocity_amplitude_mm_s": 5.305164769729846,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022222222222222223,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_090Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 91,
+      "displacement_amplitude_mm": 0.009176535168669646,
+      "velocity_amplitude_mm_s": 5.246866255776769,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02197802197802198,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_091Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 92,
+      "displacement_amplitude_mm": 0.008978129457910367,
+      "velocity_amplitude_mm_s": 5.189835100822675,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021739130434782608,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_092Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 93,
+      "displacement_amplitude_mm": 0.008786089459099705,
+      "velocity_amplitude_mm_s": 5.134030422319205,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021505376344086023,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_093Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 94,
+      "displacement_amplitude_mm": 0.008600145736957143,
+      "velocity_amplitude_mm_s": 5.079413077400914,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02127659574468085,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_094Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 95,
+      "displacement_amplitude_mm": 0.008420042961967128,
+      "velocity_amplitude_mm_s": 5.025945571323011,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021052631578947368,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_095Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 96,
+      "displacement_amplitude_mm": 0.008245539033393373,
+      "velocity_amplitude_mm_s": 4.973591971621729,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020833333333333332,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_096Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 97,
+      "displacement_amplitude_mm": 0.00807640426525171,
+      "velocity_amplitude_mm_s": 4.922317827584393,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020618556701030927,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_097Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 98,
+      "displacement_amplitude_mm": 0.00791242063012842,
+      "velocity_amplitude_mm_s": 4.872090094649858,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02040816326530612,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_098Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 99,
+      "displacement_amplitude_mm": 0.007753381056193585,
+      "velocity_amplitude_mm_s": 4.822877063390767,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020202020202020204,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_099Hz"
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 100,
+      "displacement_amplitude_mm": 0.007599088773175333,
+      "velocity_amplitude_mm_s": 4.7746482927568605,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02,
+      "sensor_chip": "toolhead",
+      "sensor_column": "ax_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_100Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 1,
+      "displacement_amplitude_mm": 75.99088773175333,
+      "velocity_amplitude_mm_s": 477.464829275686,
+      "duration_s": 8.0,
+      "ramp_time_s": 2.0,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_001Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 2,
+      "displacement_amplitude_mm": 18.997721932938333,
+      "velocity_amplitude_mm_s": 238.732414637843,
+      "duration_s": 4.0,
+      "ramp_time_s": 1.0,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_002Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 3,
+      "displacement_amplitude_mm": 8.443431970194814,
+      "velocity_amplitude_mm_s": 159.15494309189532,
+      "duration_s": 2.6666666666666665,
+      "ramp_time_s": 0.6666666666666666,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_003Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 4,
+      "displacement_amplitude_mm": 4.749430483234583,
+      "velocity_amplitude_mm_s": 119.3662073189215,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.5,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_004Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 5,
+      "displacement_amplitude_mm": 3.0396355092701333,
+      "velocity_amplitude_mm_s": 95.4929658551372,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.4,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_005Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 6,
+      "displacement_amplitude_mm": 2.1108579925487034,
+      "velocity_amplitude_mm_s": 79.57747154594766,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.3333333333333333,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_006Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 7,
+      "displacement_amplitude_mm": 1.55083444350517,
+      "velocity_amplitude_mm_s": 68.209261325098,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2857142857142857,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_007Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 8,
+      "displacement_amplitude_mm": 1.1873576208086458,
+      "velocity_amplitude_mm_s": 59.68310365946075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.25,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_008Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 9,
+      "displacement_amplitude_mm": 0.9381591077994239,
+      "velocity_amplitude_mm_s": 53.05164769729845,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2222222222222222,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_009Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 10,
+      "displacement_amplitude_mm": 0.7599088773175333,
+      "velocity_amplitude_mm_s": 47.7464829275686,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.2,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_010Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 11,
+      "displacement_amplitude_mm": 0.6280238655516805,
+      "velocity_amplitude_mm_s": 43.405893570516916,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.18181818181818182,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_011Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 12,
+      "displacement_amplitude_mm": 0.5277144981371759,
+      "velocity_amplitude_mm_s": 39.78873577297383,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.16666666666666666,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_012Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 13,
+      "displacement_amplitude_mm": 0.4496502232648126,
+      "velocity_amplitude_mm_s": 36.72806379043738,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.15384615384615385,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_013Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 14,
+      "displacement_amplitude_mm": 0.3877086108762925,
+      "velocity_amplitude_mm_s": 34.104630662549,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.14285714285714285,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_014Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 15,
+      "displacement_amplitude_mm": 0.3377372788077927,
+      "velocity_amplitude_mm_s": 31.830988618379074,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.13333333333333333,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_015Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 16,
+      "displacement_amplitude_mm": 0.29683940520216145,
+      "velocity_amplitude_mm_s": 29.841551829730374,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.125,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_016Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 17,
+      "displacement_amplitude_mm": 0.26294424820675893,
+      "velocity_amplitude_mm_s": 28.08616642798153,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.11764705882352941,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_017Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 18,
+      "displacement_amplitude_mm": 0.23453977694985598,
+      "velocity_amplitude_mm_s": 26.525823848649225,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.1111111111111111,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_018Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 19,
+      "displacement_amplitude_mm": 0.21050107404917823,
+      "velocity_amplitude_mm_s": 25.129727856615055,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.10526315789473684,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_019Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 20,
+      "displacement_amplitude_mm": 0.18997721932938333,
+      "velocity_amplitude_mm_s": 23.8732414637843,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.1,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_020Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 21,
+      "displacement_amplitude_mm": 0.1723149381672411,
+      "velocity_amplitude_mm_s": 22.736420441699334,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.09523809523809523,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_021Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 22,
+      "displacement_amplitude_mm": 0.15700596638792014,
+      "velocity_amplitude_mm_s": 21.702946785258458,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.09090909090909091,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_022Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 23,
+      "displacement_amplitude_mm": 0.14365007132656588,
+      "velocity_amplitude_mm_s": 20.7593404032907,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08695652173913043,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_023Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 24,
+      "displacement_amplitude_mm": 0.13192862453429396,
+      "velocity_amplitude_mm_s": 19.894367886486915,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08333333333333333,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_024Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 25,
+      "displacement_amplitude_mm": 0.12158542037080533,
+      "velocity_amplitude_mm_s": 19.098593171027442,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.08,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_025Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 26,
+      "displacement_amplitude_mm": 0.11241255581620314,
+      "velocity_amplitude_mm_s": 18.36403189521869,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07692307692307693,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_026Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 27,
+      "displacement_amplitude_mm": 0.10423990086660266,
+      "velocity_amplitude_mm_s": 17.68388256576615,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07407407407407407,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_027Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 28,
+      "displacement_amplitude_mm": 0.09692715271907312,
+      "velocity_amplitude_mm_s": 17.0523153312745,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.07142857142857142,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_028Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 29,
+      "displacement_amplitude_mm": 0.09035777375951644,
+      "velocity_amplitude_mm_s": 16.464304457782276,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06896551724137931,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_029Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 30,
+      "displacement_amplitude_mm": 0.08443431970194817,
+      "velocity_amplitude_mm_s": 15.915494309189537,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06666666666666667,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_030Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 31,
+      "displacement_amplitude_mm": 0.07907480513189734,
+      "velocity_amplitude_mm_s": 15.402091266957616,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06451612903225806,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_031Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 32,
+      "displacement_amplitude_mm": 0.07420985130054036,
+      "velocity_amplitude_mm_s": 14.920775914865187,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0625,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_032Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 33,
+      "displacement_amplitude_mm": 0.06978042950574226,
+      "velocity_amplitude_mm_s": 14.468631190172301,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.06060606060606061,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_033Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 34,
+      "displacement_amplitude_mm": 0.06573606205168973,
+      "velocity_amplitude_mm_s": 14.043083213990766,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.058823529411764705,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_034Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 35,
+      "displacement_amplitude_mm": 0.06203337774020681,
+      "velocity_amplitude_mm_s": 13.641852265019603,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05714285714285714,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_035Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 36,
+      "displacement_amplitude_mm": 0.058634944237463994,
+      "velocity_amplitude_mm_s": 13.262911924324612,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05555555555555555,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_036Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 37,
+      "displacement_amplitude_mm": 0.05550831828469929,
+      "velocity_amplitude_mm_s": 12.90445484528881,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05405405405405406,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_037Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 38,
+      "displacement_amplitude_mm": 0.05262526851229456,
+      "velocity_amplitude_mm_s": 12.564863928307528,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05263157894736842,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_038Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 39,
+      "displacement_amplitude_mm": 0.04996113591831252,
+      "velocity_amplitude_mm_s": 12.242687930145797,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05128205128205128,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_039Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 40,
+      "displacement_amplitude_mm": 0.04749430483234583,
+      "velocity_amplitude_mm_s": 11.93662073189215,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.05,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_040Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 41,
+      "displacement_amplitude_mm": 0.045205763076593304,
+      "velocity_amplitude_mm_s": 11.645483640870392,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04878048780487805,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_041Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 42,
+      "displacement_amplitude_mm": 0.04307873454181028,
+      "velocity_amplitude_mm_s": 11.368210220849667,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.047619047619047616,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_042Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 43,
+      "displacement_amplitude_mm": 0.041098370866280876,
+      "velocity_amplitude_mm_s": 11.103833238969443,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.046511627906976744,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_043Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 44,
+      "displacement_amplitude_mm": 0.039251491596980034,
+      "velocity_amplitude_mm_s": 10.851473392629229,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.045454545454545456,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_044Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 45,
+      "displacement_amplitude_mm": 0.03752636431197696,
+      "velocity_amplitude_mm_s": 10.610329539459691,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.044444444444444446,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_045Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 46,
+      "displacement_amplitude_mm": 0.03591251783164147,
+      "velocity_amplitude_mm_s": 10.37967020164535,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.043478260869565216,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_046Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 47,
+      "displacement_amplitude_mm": 0.03440058294782857,
+      "velocity_amplitude_mm_s": 10.158826154801828,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0425531914893617,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_047Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 48,
+      "displacement_amplitude_mm": 0.03298215613357349,
+      "velocity_amplitude_mm_s": 9.947183943243457,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.041666666666666664,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_048Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 49,
+      "displacement_amplitude_mm": 0.03164968252051368,
+      "velocity_amplitude_mm_s": 9.744180189299716,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04081632653061224,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_049Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 50,
+      "displacement_amplitude_mm": 0.030396355092701333,
+      "velocity_amplitude_mm_s": 9.549296585513721,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.04,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_050Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 51,
+      "displacement_amplitude_mm": 0.029216027578528772,
+      "velocity_amplitude_mm_s": 9.362055475993843,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0392156862745098,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_051Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 52,
+      "displacement_amplitude_mm": 0.028103138954050786,
+      "velocity_amplitude_mm_s": 9.182015947609345,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.038461538461538464,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_052Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 53,
+      "displacement_amplitude_mm": 0.027052647821912898,
+      "velocity_amplitude_mm_s": 9.00877036369219,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03773584905660377,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_053Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 54,
+      "displacement_amplitude_mm": 0.026059975216650665,
+      "velocity_amplitude_mm_s": 8.841941282883075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.037037037037037035,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_054Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 55,
+      "displacement_amplitude_mm": 0.025120954622067215,
+      "velocity_amplitude_mm_s": 8.681178714103382,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03636363636363636,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_055Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 56,
+      "displacement_amplitude_mm": 0.02423178817976828,
+      "velocity_amplitude_mm_s": 8.52615766563725,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03571428571428571,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_056Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 57,
+      "displacement_amplitude_mm": 0.02338900822768647,
+      "velocity_amplitude_mm_s": 8.376575952205018,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03508771929824561,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_057Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 58,
+      "displacement_amplitude_mm": 0.02258944343987911,
+      "velocity_amplitude_mm_s": 8.232152228891138,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.034482758620689655,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_058Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 59,
+      "displacement_amplitude_mm": 0.021830188949081685,
+      "velocity_amplitude_mm_s": 8.092624225011628,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03389830508474576,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_059Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 60,
+      "displacement_amplitude_mm": 0.021108579925487043,
+      "velocity_amplitude_mm_s": 7.9577471545947684,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03333333333333333,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_060Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 61,
+      "displacement_amplitude_mm": 0.020422168162255665,
+      "velocity_amplitude_mm_s": 7.827292283207967,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03278688524590164,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_061Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 62,
+      "displacement_amplitude_mm": 0.019768701282974335,
+      "velocity_amplitude_mm_s": 7.701045633478808,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03225806451612903,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_062Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 63,
+      "displacement_amplitude_mm": 0.019146104240804568,
+      "velocity_amplitude_mm_s": 7.578806813899778,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.031746031746031744,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_063Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 64,
+      "displacement_amplitude_mm": 0.01855246282513509,
+      "velocity_amplitude_mm_s": 7.4603879574325935,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03125,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_064Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 65,
+      "displacement_amplitude_mm": 0.017986008930592507,
+      "velocity_amplitude_mm_s": 7.345612758087477,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.03076923076923077,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_065Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 66,
+      "displacement_amplitude_mm": 0.017445107376435565,
+      "velocity_amplitude_mm_s": 7.234315595086151,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.030303030303030304,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_066Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 67,
+      "displacement_amplitude_mm": 0.016928244092616025,
+      "velocity_amplitude_mm_s": 7.126340735458,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.029850746268656716,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_067Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 68,
+      "displacement_amplitude_mm": 0.016434015512922433,
+      "velocity_amplitude_mm_s": 7.021541606995383,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.029411764705882353,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_068Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 69,
+      "displacement_amplitude_mm": 0.015961119036285092,
+      "velocity_amplitude_mm_s": 6.919780134430232,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.028985507246376812,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_069Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 70,
+      "displacement_amplitude_mm": 0.015508344435051703,
+      "velocity_amplitude_mm_s": 6.820926132509801,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02857142857142857,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_070Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 71,
+      "displacement_amplitude_mm": 0.015074566104295443,
+      "velocity_amplitude_mm_s": 6.724856750361774,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.028169014084507043,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_071Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 72,
+      "displacement_amplitude_mm": 0.014658736059365999,
+      "velocity_amplitude_mm_s": 6.631455962162306,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.027777777777777776,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_072Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 73,
+      "displacement_amplitude_mm": 0.014259877600253958,
+      "velocity_amplitude_mm_s": 6.540614099666932,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.0273972602739726,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_073Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 74,
+      "displacement_amplitude_mm": 0.013877079571174823,
+      "velocity_amplitude_mm_s": 6.452227422644405,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02702702702702703,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_074Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 75,
+      "displacement_amplitude_mm": 0.013509491152311705,
+      "velocity_amplitude_mm_s": 6.366197723675814,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02666666666666667,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_075Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 76,
+      "displacement_amplitude_mm": 0.01315631712807364,
+      "velocity_amplitude_mm_s": 6.282431964153764,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02631578947368421,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_076Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 77,
+      "displacement_amplitude_mm": 0.012816813582687357,
+      "velocity_amplitude_mm_s": 6.200841938645273,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.025974025974025976,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_077Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 78,
+      "displacement_amplitude_mm": 0.01249028397957813,
+      "velocity_amplitude_mm_s": 6.1213439650728985,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02564102564102564,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_078Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 79,
+      "displacement_amplitude_mm": 0.012176075585924264,
+      "velocity_amplitude_mm_s": 6.0438585984264055,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02531645569620253,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_079Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 80,
+      "displacement_amplitude_mm": 0.011873576208086458,
+      "velocity_amplitude_mm_s": 5.968310365946075,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.025,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_080Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 81,
+      "displacement_amplitude_mm": 0.011582211207400295,
+      "velocity_amplitude_mm_s": 5.894627521922049,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024691358024691357,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_081Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 82,
+      "displacement_amplitude_mm": 0.011301440769148326,
+      "velocity_amplitude_mm_s": 5.822741820435196,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024390243902439025,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_082Hz_retry01"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 83,
+      "displacement_amplitude_mm": 0.011030757400457732,
+      "velocity_amplitude_mm_s": 5.752588304526337,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.024096385542168676,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_083Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 84,
+      "displacement_amplitude_mm": 0.01076968363545257,
+      "velocity_amplitude_mm_s": 5.6841051104248335,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023809523809523808,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_084Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 85,
+      "displacement_amplitude_mm": 0.010517769928270356,
+      "velocity_amplitude_mm_s": 5.617233285596305,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023529411764705882,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_085Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 86,
+      "displacement_amplitude_mm": 0.010274592716570219,
+      "velocity_amplitude_mm_s": 5.551916619484722,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.023255813953488372,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_086Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 87,
+      "displacement_amplitude_mm": 0.010039752639946274,
+      "velocity_amplitude_mm_s": 5.488101485927426,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022988505747126436,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_087Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 88,
+      "displacement_amplitude_mm": 0.009812872899245009,
+      "velocity_amplitude_mm_s": 5.4257366963146145,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022727272727272728,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_088Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 89,
+      "displacement_amplitude_mm": 0.009593597744193072,
+      "velocity_amplitude_mm_s": 5.364773362648157,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02247191011235955,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_089Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 90,
+      "displacement_amplitude_mm": 0.00938159107799424,
+      "velocity_amplitude_mm_s": 5.305164769729846,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.022222222222222223,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_090Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 91,
+      "displacement_amplitude_mm": 0.009176535168669646,
+      "velocity_amplitude_mm_s": 5.246866255776769,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02197802197802198,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_091Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 92,
+      "displacement_amplitude_mm": 0.008978129457910367,
+      "velocity_amplitude_mm_s": 5.189835100822675,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021739130434782608,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_092Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 93,
+      "displacement_amplitude_mm": 0.008786089459099705,
+      "velocity_amplitude_mm_s": 5.134030422319205,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021505376344086023,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_093Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 94,
+      "displacement_amplitude_mm": 0.008600145736957143,
+      "velocity_amplitude_mm_s": 5.079413077400914,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02127659574468085,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_094Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 95,
+      "displacement_amplitude_mm": 0.008420042961967128,
+      "velocity_amplitude_mm_s": 5.025945571323011,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.021052631578947368,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_095Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 96,
+      "displacement_amplitude_mm": 0.008245539033393373,
+      "velocity_amplitude_mm_s": 4.973591971621729,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020833333333333332,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_096Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 97,
+      "displacement_amplitude_mm": 0.00807640426525171,
+      "velocity_amplitude_mm_s": 4.922317827584393,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020618556701030927,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_097Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 98,
+      "displacement_amplitude_mm": 0.00791242063012842,
+      "velocity_amplitude_mm_s": 4.872090094649858,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02040816326530612,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_098Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 99,
+      "displacement_amplitude_mm": 0.007753381056193585,
+      "velocity_amplitude_mm_s": 4.822877063390767,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.020202020202020204,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_099Hz"
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 100,
+      "displacement_amplitude_mm": 0.007599088773175333,
+      "velocity_amplitude_mm_s": 4.7746482927568605,
+      "duration_s": 2.0,
+      "ramp_time_s": 0.02,
+      "sensor_chip": "base",
+      "sensor_column": "ay_raw",
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_100Hz"
+    }
+  ],
+  "results": [
+    {
+      "axis": "X",
+      "frequency_hz": 1,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_001Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85392.270416958,
+      "completed_monotonic_s": 85404.117230833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 2,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_002Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85404.122073666,
+      "completed_monotonic_s": 85410.753272333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 3,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_003Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85410.75843325,
+      "completed_monotonic_s": 85415.668315041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 4,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_004Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85415.673241291,
+      "completed_monotonic_s": 85419.661718,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 5,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_005Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85419.666205,
+      "completed_monotonic_s": 85423.552818958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 6,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_006Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85423.557810916,
+      "completed_monotonic_s": 85427.548551416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 7,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_007Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85427.554717333,
+      "completed_monotonic_s": 85431.557670625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 8,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_008Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85431.563515083,
+      "completed_monotonic_s": 85435.6373195,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 9,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_009Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85435.64336425,
+      "completed_monotonic_s": 85439.835395375,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 10,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_010Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85439.840939833,
+      "completed_monotonic_s": 85443.828804333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 11,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_011Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85443.83379225,
+      "completed_monotonic_s": 85447.981074458,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 11,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_011Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 85449.98646275,
+      "completed_monotonic_s": 85454.130628666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 12,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_012Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85454.139165666,
+      "completed_monotonic_s": 85458.224643833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 13,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_013Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85458.23088025,
+      "completed_monotonic_s": 85462.234670291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 14,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_014Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85462.240111125,
+      "completed_monotonic_s": 85466.373139958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 15,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_015Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85466.379461791,
+      "completed_monotonic_s": 85470.453642125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 16,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_016Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85470.461789375,
+      "completed_monotonic_s": 85474.651360875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 17,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_017Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85474.656452583,
+      "completed_monotonic_s": 85478.952919541,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 17,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_017Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 85480.961123333,
+      "completed_monotonic_s": 85485.199726291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 18,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_018Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85485.205105708,
+      "completed_monotonic_s": 85489.395218125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 19,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_019Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85489.401285083,
+      "completed_monotonic_s": 85493.609666416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 20,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_020Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85493.616342291,
+      "completed_monotonic_s": 85497.896957291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 21,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_021Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85497.905897333,
+      "completed_monotonic_s": 85502.197631791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 22,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_022Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85502.204055291,
+      "completed_monotonic_s": 85506.499141625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 23,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_023Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85506.505543791,
+      "completed_monotonic_s": 85510.800309125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 24,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_024Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85510.80710075,
+      "completed_monotonic_s": 85515.204912875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 25,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_025Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85515.209953708,
+      "completed_monotonic_s": 85519.519820083,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 26,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_026Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85519.525561166,
+      "completed_monotonic_s": 85523.90642525,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 26,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_026Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 85525.911545458,
+      "completed_monotonic_s": 85530.2727435,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 27,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_027Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85530.279075708,
+      "completed_monotonic_s": 85534.85716025,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 28,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_028Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85534.863535666,
+      "completed_monotonic_s": 85539.280396958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 29,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_029Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85539.285860791,
+      "completed_monotonic_s": 85543.7729235,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 30,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_030Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85543.780636041,
+      "completed_monotonic_s": 85548.244162583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 31,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_031Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85548.250868958,
+      "completed_monotonic_s": 85552.683375416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 32,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_032Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85552.6896875,
+      "completed_monotonic_s": 85557.187681125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 33,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_033Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85557.19409225,
+      "completed_monotonic_s": 85561.693444583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 34,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_034Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85561.701258416,
+      "completed_monotonic_s": 85566.198659625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 35,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_035Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85566.205442875,
+      "completed_monotonic_s": 85570.704577416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 36,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_036Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85570.711085791,
+      "completed_monotonic_s": 85575.242003833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 37,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_037Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85575.24855825,
+      "completed_monotonic_s": 85579.89385875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 38,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_038Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85579.899972791,
+      "completed_monotonic_s": 85584.35009425,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 39,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_039Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85584.3592625,
+      "completed_monotonic_s": 85588.8295415,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 40,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_040Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85588.836481625,
+      "completed_monotonic_s": 85593.334907375,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 41,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_041Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85593.341650875,
+      "completed_monotonic_s": 85597.840864291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 42,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_042Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85597.847592416,
+      "completed_monotonic_s": 85602.381456208,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 43,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_043Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85602.3877545,
+      "completed_monotonic_s": 85606.95123075,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 44,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_044Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85606.959258583,
+      "completed_monotonic_s": 85611.516272333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 45,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_045Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85611.525280375,
+      "completed_monotonic_s": 85616.145665375,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 46,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_046Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85616.152361416,
+      "completed_monotonic_s": 85620.776171791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 47,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_047Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85620.783840791,
+      "completed_monotonic_s": 85625.490613666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 48,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_048Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85625.498637833,
+      "completed_monotonic_s": 85630.206462708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 49,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_049Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85630.213137833,
+      "completed_monotonic_s": 85634.910265458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 50,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_050Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85634.918576166,
+      "completed_monotonic_s": 85639.720532333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 51,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_051Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85639.727578,
+      "completed_monotonic_s": 85644.458312958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 52,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_052Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85644.466102125,
+      "completed_monotonic_s": 85649.168119041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 53,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_053Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85649.174737791,
+      "completed_monotonic_s": 85653.956569583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 54,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_054Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85653.963842625,
+      "completed_monotonic_s": 85658.641758541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 55,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_055Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85658.647260708,
+      "completed_monotonic_s": 85663.480316333,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 55,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_055Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 85665.48992575,
+      "completed_monotonic_s": 85670.260713833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 56,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_056Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85670.267889916,
+      "completed_monotonic_s": 85675.051390583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 57,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_057Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85675.058088208,
+      "completed_monotonic_s": 85679.864502041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 58,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_058Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85679.871997,
+      "completed_monotonic_s": 85684.682157916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 59,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_059Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85684.688186458,
+      "completed_monotonic_s": 85689.594105041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 60,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_060Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85689.601342583,
+      "completed_monotonic_s": 85694.506272541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 61,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_061Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85694.513081833,
+      "completed_monotonic_s": 85699.422971125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 62,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_062Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85699.430029708,
+      "completed_monotonic_s": 85704.338596041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 63,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_063Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85704.346187458,
+      "completed_monotonic_s": 85709.2534095,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 64,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_064Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85709.260660875,
+      "completed_monotonic_s": 85714.1974375,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 65,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_065Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85714.203736791,
+      "completed_monotonic_s": 85719.186706791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 66,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_066Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85719.196134458,
+      "completed_monotonic_s": 85724.204785541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 67,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_067Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85724.212296125,
+      "completed_monotonic_s": 85729.225517416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 68,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_068Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85729.234995916,
+      "completed_monotonic_s": 85734.246435125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 69,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_069Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85734.254440208,
+      "completed_monotonic_s": 85739.362746666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 70,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_070Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85739.371087958,
+      "completed_monotonic_s": 85744.3541175,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 71,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_071Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85744.361868958,
+      "completed_monotonic_s": 85749.431295458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 72,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_072Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85749.436213166,
+      "completed_monotonic_s": 85754.514562583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 73,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_073Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85754.521235541,
+      "completed_monotonic_s": 85759.646468333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 74,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_074Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85759.653006458,
+      "completed_monotonic_s": 85764.860517,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 75,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_075Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85764.867262541,
+      "completed_monotonic_s": 85770.016936458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 76,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_076Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85770.023326875,
+      "completed_monotonic_s": 85775.109221125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 77,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_077Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85775.116342333,
+      "completed_monotonic_s": 85780.320159416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 78,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_078Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85780.327241083,
+      "completed_monotonic_s": 85785.542231125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 79,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_079Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85785.549956416,
+      "completed_monotonic_s": 85790.801460958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 80,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_080Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85790.80919675,
+      "completed_monotonic_s": 85796.026311833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 81,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_081Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85796.033890291,
+      "completed_monotonic_s": 85801.312157916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 82,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_082Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85801.31927975,
+      "completed_monotonic_s": 85806.6370865,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 83,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_083Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85806.6463605,
+      "completed_monotonic_s": 85812.002714625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 84,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_084Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85812.010913875,
+      "completed_monotonic_s": 85817.184613333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 85,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_085Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85817.191695708,
+      "completed_monotonic_s": 85822.509289666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 86,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_086Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85822.515528958,
+      "completed_monotonic_s": 85827.732807208,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 86,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_086Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 85829.737048166,
+      "completed_monotonic_s": 85835.03836075,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 87,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_087Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85835.046969291,
+      "completed_monotonic_s": 85840.327294041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 88,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_088Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85840.334597208,
+      "completed_monotonic_s": 85845.673427291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 89,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_089Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85845.679885875,
+      "completed_monotonic_s": 85850.978178458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 90,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_090Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85850.9826315,
+      "completed_monotonic_s": 85856.301243625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 91,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_091Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85856.30673225,
+      "completed_monotonic_s": 85861.729401916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 92,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_092Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85861.736948333,
+      "completed_monotonic_s": 85867.078429958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 93,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_093Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85867.084176125,
+      "completed_monotonic_s": 85872.585377833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 94,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_094Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85872.592344875,
+      "completed_monotonic_s": 85878.10414175,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 95,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_095Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85878.110787791,
+      "completed_monotonic_s": 85883.643144541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 96,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_096Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85883.650802833,
+      "completed_monotonic_s": 85889.087412,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 97,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_097Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85889.092527,
+      "completed_monotonic_s": 85894.6000415,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 98,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_098Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85894.606750041,
+      "completed_monotonic_s": 85900.127524708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 99,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_099Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85900.131198333,
+      "completed_monotonic_s": 85905.587807916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "X",
+      "frequency_hz": 100,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_x_100Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85905.5954995,
+      "completed_monotonic_s": 85911.053563333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 1,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_001Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85911.059802625,
+      "completed_monotonic_s": 85922.864022291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 2,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_002Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85922.87327775,
+      "completed_monotonic_s": 85929.416393833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 3,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_003Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85929.423637541,
+      "completed_monotonic_s": 85934.204519333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 4,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_004Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85934.213316916,
+      "completed_monotonic_s": 85938.225362333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 5,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_005Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85938.233012583,
+      "completed_monotonic_s": 85942.146411,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 6,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_006Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85942.155164041,
+      "completed_monotonic_s": 85946.109454375,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 7,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_007Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85946.118904625,
+      "completed_monotonic_s": 85950.102228416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 8,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_008Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85950.110709875,
+      "completed_monotonic_s": 85954.102302833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 9,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_009Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85954.109619708,
+      "completed_monotonic_s": 85958.097666958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 10,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_010Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85958.105221458,
+      "completed_monotonic_s": 85962.110568541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 11,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_011Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85962.1186045,
+      "completed_monotonic_s": 85966.136326666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 12,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_012Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85966.14248575,
+      "completed_monotonic_s": 85970.191287291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 13,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_013Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85970.200311791,
+      "completed_monotonic_s": 85974.273746041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 14,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_014Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85974.281939166,
+      "completed_monotonic_s": 85978.236437708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 15,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_015Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85978.244525375,
+      "completed_monotonic_s": 85982.326769083,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 16,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_016Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85982.332520083,
+      "completed_monotonic_s": 85986.453471958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 17,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_017Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85986.459018708,
+      "completed_monotonic_s": 85990.653895916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 18,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_018Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85990.661673541,
+      "completed_monotonic_s": 85994.952683041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 19,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_019Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85994.960391083,
+      "completed_monotonic_s": 85999.2093045,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 20,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_020Hz",
+      "attempt": 1,
+      "started_monotonic_s": 85999.216742791,
+      "completed_monotonic_s": 86003.391828541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 21,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_021Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86003.399116458,
+      "completed_monotonic_s": 86007.63560025,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 22,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_022Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86007.642883125,
+      "completed_monotonic_s": 86011.849466166,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 23,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_023Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86011.856384666,
+      "completed_monotonic_s": 86016.150493958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 24,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_024Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86016.15810925,
+      "completed_monotonic_s": 86020.395993458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 25,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_025Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86020.403601125,
+      "completed_monotonic_s": 86024.669451583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 26,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_026Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86024.679375625,
+      "completed_monotonic_s": 86028.85577725,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 27,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_027Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86028.864041041,
+      "completed_monotonic_s": 86033.152788708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 28,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_028Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86033.161636875,
+      "completed_monotonic_s": 86037.552222875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 29,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_029Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86037.559832791,
+      "completed_monotonic_s": 86041.756012916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 30,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_030Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86041.763777833,
+      "completed_monotonic_s": 86046.168064833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 31,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_031Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86046.174572375,
+      "completed_monotonic_s": 86050.557240833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 32,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_032Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86050.565229833,
+      "completed_monotonic_s": 86054.959764875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 33,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_033Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86054.965091083,
+      "completed_monotonic_s": 86059.384844958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 34,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_034Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86059.392012625,
+      "completed_monotonic_s": 86063.79571225,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 35,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_035Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86063.8036955,
+      "completed_monotonic_s": 86068.273368333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 36,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_036Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86068.280542125,
+      "completed_monotonic_s": 86072.779287958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 37,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_037Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86072.785868125,
+      "completed_monotonic_s": 86077.283786666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 38,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_038Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86077.29198925,
+      "completed_monotonic_s": 86081.686698166,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 39,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_039Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86081.694062958,
+      "completed_monotonic_s": 86086.294523958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 40,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_040Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86086.300667333,
+      "completed_monotonic_s": 86090.822493625,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 41,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_041Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86090.832243958,
+      "completed_monotonic_s": 86095.329370666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 42,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_042Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86095.339383916,
+      "completed_monotonic_s": 86099.812887041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 43,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_043Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86099.820372208,
+      "completed_monotonic_s": 86104.318852833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 44,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_044Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86104.326480083,
+      "completed_monotonic_s": 86108.924410166,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 45,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_045Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86108.9303575,
+      "completed_monotonic_s": 86113.448037958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 46,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_046Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86113.454787125,
+      "completed_monotonic_s": 86118.039076,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 47,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_047Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86118.0465315,
+      "completed_monotonic_s": 86122.64432875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 48,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_048Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86122.652624208,
+      "completed_monotonic_s": 86127.272465875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 49,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_049Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86127.277181666,
+      "completed_monotonic_s": 86131.966308791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 50,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_050Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86131.975894083,
+      "completed_monotonic_s": 86136.639574583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 51,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_051Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86136.646279916,
+      "completed_monotonic_s": 86141.331004333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 52,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_052Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86141.337781416,
+      "completed_monotonic_s": 86146.097615541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 53,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_053Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86146.105871291,
+      "completed_monotonic_s": 86150.730033666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 54,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_054Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86150.736202833,
+      "completed_monotonic_s": 86155.41621575,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 55,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_055Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86155.424362583,
+      "completed_monotonic_s": 86160.228920833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 56,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_056Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86160.237360125,
+      "completed_monotonic_s": 86164.9389745,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 57,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_057Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86164.948495208,
+      "completed_monotonic_s": 86169.638164125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 58,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_058Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86169.645774166,
+      "completed_monotonic_s": 86174.385617333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 59,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_059Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86174.394545958,
+      "completed_monotonic_s": 86179.175073708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 60,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_060Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86179.183391208,
+      "completed_monotonic_s": 86184.089038916,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 61,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_061Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86184.097376916,
+      "completed_monotonic_s": 86188.9014845,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 62,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_062Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86188.909596708,
+      "completed_monotonic_s": 86193.711272125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 63,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_063Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86193.719655583,
+      "completed_monotonic_s": 86198.559093291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 64,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_064Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86198.565534583,
+      "completed_monotonic_s": 86203.453272291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 65,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_065Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86203.462224208,
+      "completed_monotonic_s": 86208.460330458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 66,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_066Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86208.468318083,
+      "completed_monotonic_s": 86213.375960833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 67,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_067Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86213.384402125,
+      "completed_monotonic_s": 86218.392871416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 68,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_068Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86218.40177025,
+      "completed_monotonic_s": 86223.410705541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 69,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_069Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86223.419614,
+      "completed_monotonic_s": 86228.4369995,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 70,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_070Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86228.445431875,
+      "completed_monotonic_s": 86233.344194583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 71,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_071Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86233.352167833,
+      "completed_monotonic_s": 86238.2581645,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 72,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_072Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86238.266923791,
+      "completed_monotonic_s": 86243.300367125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 73,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_073Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86243.310072,
+      "completed_monotonic_s": 86248.293129791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 74,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_074Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86248.301108833,
+      "completed_monotonic_s": 86253.312100125,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 75,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_075Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86253.321139291,
+      "completed_monotonic_s": 86258.330412041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 76,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_076Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86258.339345125,
+      "completed_monotonic_s": 86263.347623791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 77,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_077Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86263.356823291,
+      "completed_monotonic_s": 86268.467829458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 78,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_078Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86268.476810166,
+      "completed_monotonic_s": 86273.693921666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 79,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_079Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86273.703016875,
+      "completed_monotonic_s": 86278.798493541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 80,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_080Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86278.804249,
+      "completed_monotonic_s": 86283.926028833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 81,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_081Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86283.933170083,
+      "completed_monotonic_s": 86289.082838416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 82,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_082Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86289.088382333,
+      "completed_monotonic_s": 86294.277216833,
+      "moonraker_response": null,
+      "error": "HTTPError('400 Client Error: Incomplete Trinkey dump: sampling_overruns=1 for url: http://192.168.0.2:7125/printer/gcode/script')\n{\"error\":{\"code\":400,\"message\":\"Incomplete Trinkey dump: sampling_overruns=1\",\"traceback\":\"Traceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 701, in _process_http_request\\n    result = await self.api_defintion.request(\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 617, in request\\n    return await self._request_standard(web_request)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 714, in _request_standard\\n    return await base_request.wait(timeout)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/klippy_connection.py\\\", line 825, in wait\\n    return await asyncio.wait_for(asyncio.shield(self._fut), to)\\n\\n  File \\\"/usr/lib/python3.8/asyncio/tasks.py\\\", line 483, in wait_for\\n    return fut.result()\\n\\nmoonraker.utils.exceptions.ServerError: Incomplete Trinkey dump: sampling_overruns=1\\n\\n\\nThe above exception was the direct cause of the following exception:\\n\\n\\nTraceback (most recent call last):\\n\\n  File \\\"/usr/data/moonraker/moonraker-env/lib/python3.8/site-packages/tornado/web.py\\\", line 1790, in _execute\\n    result = await result\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 687, in post\\n    await self._process_http_request(RequestType.POST)\\n\\n  File \\\"/usr/data/moonraker/moonraker/moonraker/components/application.py\\\", line 707, in _process_http_request\\n    raise tornado.web.HTTPError(\\n\\ntornado.web.HTTPError: HTTP 400: Incomplete Trinkey dump: sampling_overruns=1\\n\"}}",
+      "retryable": true
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 82,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_082Hz_retry01",
+      "attempt": 2,
+      "started_monotonic_s": 86296.28730625,
+      "completed_monotonic_s": 86301.5439145,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 83,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_083Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86301.552477083,
+      "completed_monotonic_s": 86306.815746958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 84,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_084Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86306.825397708,
+      "completed_monotonic_s": 86311.947001708,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 85,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_085Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86311.954644,
+      "completed_monotonic_s": 86317.320083666,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 86,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_086Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86317.3296185,
+      "completed_monotonic_s": 86322.637179041,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 87,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_087Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86322.646725708,
+      "completed_monotonic_s": 86327.919961583,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 88,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_088Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86327.925621083,
+      "completed_monotonic_s": 86333.189459166,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 89,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_089Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86333.215836416,
+      "completed_monotonic_s": 86338.520946458,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 90,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_090Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86338.530673458,
+      "completed_monotonic_s": 86343.821339791,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 91,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_091Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86343.829143,
+      "completed_monotonic_s": 86349.089108333,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 92,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_092Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86349.100388625,
+      "completed_monotonic_s": 86354.393475875,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 93,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_093Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86354.406519333,
+      "completed_monotonic_s": 86359.791625416,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 94,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_094Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86359.800661625,
+      "completed_monotonic_s": 86365.245298083,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 95,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_095Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86365.253601166,
+      "completed_monotonic_s": 86370.766977833,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 96,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_096Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86370.773325208,
+      "completed_monotonic_s": 86376.295886291,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 97,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_097Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86376.3049535,
+      "completed_monotonic_s": 86381.729289,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 98,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_098Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86381.737992291,
+      "completed_monotonic_s": 86387.204664083,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 99,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_099Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86387.213742625,
+      "completed_monotonic_s": 86392.703216541,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    },
+    {
+      "axis": "Y",
+      "frequency_hz": 100,
+      "remote_run_id": "20260811T111529Z_klipper_xy_frf_sweep_y_100Hz",
+      "attempt": 1,
+      "started_monotonic_s": 86392.711271541,
+      "completed_monotonic_s": 86398.209570958,
+      "moonraker_response": {
+        "result": "ok"
+      },
+      "error": null,
+      "retryable": false
+    }
+  ],
+  "error": null,
+  "completed_utc": "2026-08-11T11:32:15.007931+00:00"
+}

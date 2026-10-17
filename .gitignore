@@ -89,3 +89,21 @@ trajectories/generated/*
 # Editors
 .idea/
 .vscode/
+
+# Frozen CIRP CMS 2027 raw-data selection (see data/releases/cirp-cms-2027).
+!data/raw/frf_sweeps/2026-08-11_1_5ms/**
+!data/raw/frf_sweeps/2026-08-11_2ms/**
+!data/raw/frf_sweeps/2026-08-11_2_5ms/**
+!data/raw/frf_sweeps/2026-08-11_3ms/**
+!data/raw/final_evaluation/sine10_uncomp_r6.json.gz
+!data/raw/final_evaluation/sine10_uncomp_r6.index.gz
+!data/raw/final_evaluation/sine10_standard_r1.json.gz
+!data/raw/final_evaluation/sine10_standard_r1.index.gz
+!data/raw/final_evaluation/sine10_hybrid_r3.json.gz
+!data/raw/final_evaluation/sine10_hybrid_r3.index.gz
+!data/raw/final_evaluation/sine35_uncomp_r5.json.gz
+!data/raw/final_evaluation/sine35_uncomp_r5.index.gz
+!data/raw/final_evaluation/sine35_standard_r2.json.gz
+!data/raw/final_evaluation/sine35_standard_r2.index.gz
+!data/raw/final_evaluation/sine35_hybrid_r4.json.gz
+!data/raw/final_evaluation/sine35_hybrid_r4.index.gz

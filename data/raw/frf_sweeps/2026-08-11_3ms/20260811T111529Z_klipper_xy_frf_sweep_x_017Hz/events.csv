@@ -1,0 +1,17 @@
+event,host_time_s,print_time_s,trinkey_t_us,line
+logger_started,6850.422000832,,,
+ack_stop,6850.445437832,,6851494166,"ACK_STOP,6851494166,1185,1185,0,0"
+idle_confirmed,6850.446266999,,6851494166,
+pre_sync_start,6850.446422166,,,
+capture_start_sent,6850.739510999,,,toolhead
+ack_start,6850.741768166,,6851789052,"ACK_START,20260811T111529Z_klipper_xy_frf_sweep_x_017Hz,toolhead,6851789052"
+motion_queued,6850.994608832,6835.113155783,,
+motion_queue_end,6850.994837999,6837.113155783,,
+motion_wait_complete,6853.115741332,,,
+capture_stop_sent,6853.129585499,,,
+ack_stop,6853.130602666,,6854172900,"ACK_STOP,6854172900,1192,1192,0,1"
+post_sync_start,6853.182463666,,,
+dump_sent,6853.691625499,,,
+dump_begin,6853.693694332,,6854741412,"DUMP_BEGIN,6854741412,1192,1192,0,1,4608,500,toolhead,1786,0,1783"
+dump_end,6854.437696499,,6855483915,"DUMP_END,6855483915,1192,1192,0,1,4608,500,toolhead,1786,0,1783"
+dump_incomplete,6854.443380666,,,sampling_overruns=1

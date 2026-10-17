@@ -8,7 +8,7 @@ Embedded data-acquisition and experiment orchestration code for the dissertation
 - `orchestrator/` - PC-side experiment runner. The first skeleton logs Trinkey serial output and sends a configured G-code script to Moonraker.
 - `analysis/` - MATLAB and Python post-processing code for logged experiments.
 - `trajectories/` - reference and generated G-code trajectories for test runs.
-- `data/` - raw and processed experiment logs. Contents are ignored by Git except placeholder files.
+- `data/` - experiment data and analysis outputs. The selected CIRP CMS 2027 raw dataset is tracked; other raw captures remain ignored unless already tracked. See [raw-data provenance](data/raw/README.md) and the [frozen paper dataset](data/releases/cirp-cms-2027/README.md).
 - `klipper_extensions/` - notes and patches for later Klipper-side modifications.
 - `tools/klipper-c-helper/` - reproducible Docker build for the Creality host's MIPS `c_helper.so`.
 - `external/pico-sdk/` - Pico SDK checkout used by the root CMake project.

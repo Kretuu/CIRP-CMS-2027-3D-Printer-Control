@@ -1,0 +1,2 @@
+X axis - not reacting from 76Hz excl.
+Y axis - not reacting from 64Hz excl.

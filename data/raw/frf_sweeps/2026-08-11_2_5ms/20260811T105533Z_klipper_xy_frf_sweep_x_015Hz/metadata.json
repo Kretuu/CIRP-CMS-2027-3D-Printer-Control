@@ -1,0 +1,36 @@
+{
+  "accelerometer": {
+    "bandwidth_hz": 250,
+    "buffer_capacity_samples": 4608,
+    "buffered_rate_hz": 500,
+    "model": "BNO055",
+    "range_g": 4
+  },
+  "amplitude_mm": 0.281448,
+  "axis": "X",
+  "axis_index": 0,
+  "chunk_time_s": 0.25,
+  "duration_s": 2.0,
+  "files": {
+    "events": "events.csv",
+    "input": "input.csv",
+    "samples": "samples.csv",
+    "sync": "sync.csv"
+  },
+  "frequency_hz": 15.0,
+  "max_segment_rate": 6000.0,
+  "peak_accel_mm_s2": 2539.666572114448,
+  "peak_velocity_mm_s": 26.611515479003067,
+  "protocol": "trinkey_bno055_buffered_v1",
+  "ramp_time_s": 0.13333333333333333,
+  "run_dir": "/usr/data/printer_data/logs/vibration_tests/20260811T105533Z_klipper_xy_frf_sweep_x_015Hz",
+  "run_id": "20260811T105533Z_klipper_xy_frf_sweep_x_015Hz",
+  "sample_units": {
+    "accel_raw": "BNO055 raw acceleration LSB",
+    "print_time_s": "Klipper primary MCU print_time seconds",
+    "trinkey_t_us": "Trinkey time_us_64 microseconds"
+  },
+  "segment_time_s": 0.0020833333333333333,
+  "segments_per_cycle": 32,
+  "trinkey_port": "/dev/serial/by-id/usb-Raspberry_Pi_Pico_DF6098C0D7221129-if00"
+}

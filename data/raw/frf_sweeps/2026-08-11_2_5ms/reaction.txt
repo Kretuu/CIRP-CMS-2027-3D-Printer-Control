@@ -1,0 +1,2 @@
+X axis - stopped reacting from 100Hz
+Y axis - stopped reacting from 82Hz

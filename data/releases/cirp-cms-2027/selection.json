@@ -1,0 +1,21 @@
+{
+  "description": "Frozen CIRP CMS 2027 identification and tracking inputs",
+  "frf_sweep_directories": [
+    "data/raw/frf_sweeps/2026-08-11_1_5ms",
+    "data/raw/frf_sweeps/2026-08-11_2ms",
+    "data/raw/frf_sweeps/2026-08-11_2_5ms",
+    "data/raw/frf_sweeps/2026-08-11_3ms"
+  ],
+  "model_identification_sweep": "data/raw/frf_sweeps/2026-08-11_3ms",
+  "evaluation_capture_basenames": [
+    "sine10_uncomp_r6",
+    "sine10_standard_r1",
+    "sine10_hybrid_r3",
+    "sine35_uncomp_r5",
+    "sine35_standard_r2",
+    "sine35_hybrid_r4"
+  ],
+  "evaluation_directory": "data/raw/final_evaluation",
+  "selection_note": "35 Hz hybrid r4 is paired with physical measurements and photograph; later unpaired r5 is not used.",
+  "physical_measurement_records_included": false
+}
