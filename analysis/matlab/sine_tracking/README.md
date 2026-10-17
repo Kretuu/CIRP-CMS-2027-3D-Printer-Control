@@ -45,8 +45,12 @@ sine35_hybrid_rN.json.gz
 Keep each matching `.index.gz`, Klippy log, and diagnostic text file in the
 experiment archive, although MATLAB reads the `.json.gz` file directly.
 Earlier exploratory captures are retained separately in `data/raw/motan_fresh`.
-They are not considered by the sine-tracking analysis. Raw payloads are ignored
-by Git because of their size and must be copied with the working data archive.
+They are not considered by the sine-tracking analysis. The six selected paper
+capture pairs are now tracked in Git; other raw attempts remain ignored unless
+already tracked. For the exact frozen selection and reproduction script, see
+[`data/releases/cirp-cms-2027/README.md`](../../../data/releases/cirp-cms-2027/README.md).
+In particular, the paper uses `sine35_hybrid_r4`, paired with the measured and
+photographed specimen, rather than the later capture in `unpaired/`.
 
 Each row must contain at least:
 
