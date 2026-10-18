@@ -4,4 +4,4 @@ sine10_standard,"10 Hz, standard FBF",sine10_standard_r1.json.gz,1,1,1,1,0,1,6,1
 sine10_hybrid,"10 Hz, hybrid FBF",sine10_hybrid_r3.json.gz,3,1,1,1,1,1,6,109560,438.235382144,250,0,0,5.924,61025,103,0,0,0,0,
 sine35_uncomp,"35 Hz, no compensation",sine35_uncomp_r5.json.gz,5,1,1,1,1,1,6,81616,326.460695431,249.937515621095,0,0,5.876,57685,103,0,0,0,0,
 sine35_standard,"35 Hz, standard FBF",sine35_standard_r2.json.gz,2,1,1,1,0,1,6,62920,251.693280055,250,1,1,19.698,38960,104,0,2,0,0,1 sample-sequence break(s); 1 large sample gap(s); 2 host stream diagnostic error(s)
-sine35_hybrid,"35 Hz, hybrid FBF",sine35_hybrid_r5.json.gz,5,1,1,1,1,1,6,99020,396.078023419,250,0,0,5.856,73467,103,0,0,0,0,
+sine35_hybrid,"35 Hz, hybrid FBF",sine35_hybrid_r4.json.gz,4,1,1,1,1,1,6,106252,425.005723663,249.937515621095,0,0,5.814,80866,103,0,0,0,0,

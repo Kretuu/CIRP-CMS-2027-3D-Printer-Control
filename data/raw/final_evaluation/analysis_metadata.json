@@ -1,5 +1,6 @@
 {
   "description": "Final sine-print evaluation runs for uncompensated, standard FBF, and hybrid FBF control.",
   "source": "/home/kretu/Documents/Academic/Dissertation/evaluation/data",
-  "analysis": "analysis/matlab/sine_tracking/sine_tracking_analysis.m"
+  "analysis": "analysis/matlab/sine_tracking/sine_tracking_analysis.m",
+  "selection_note": "The 35 Hz hybrid evaluation uses r4 so its tracking data, photograph, and physical measurements refer to the same specimen. The valid but physically unpaired r5 capture is retained under unpaired/."
 }
