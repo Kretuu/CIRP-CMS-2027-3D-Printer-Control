@@ -99,14 +99,15 @@ Results are written to `data/processed/sine_tracking`:
   comparison for the nominal 35 Hz experiment.
 
 The two figures follow the core paper's Figure 7 presentation: all three
-controllers share one plot and one vertical scale at each frequency. Each
-legend entry states the controller's overall RMS tracking error, calculated
-from every retained sample across all six passes. RMS is the only headline
-scalar metric because it is also the quantitative tracking metric reported by
-the core paper.
+controllers share one plot, and both frequency panels use the same
+`[-1000, 1000]` micrometre vertical scale for direct comparison. Each legend
+entry states the controller's overall RMS tracking error, calculated from every
+retained sample across all six passes. RMS is the only headline scalar metric
+because it is also the quantitative tracking metric reported by the core paper.
 
-The exported figures use 14-point text and are produced in both PNG and vector
-PDF form:
+The exported figures use compact, near-square canvases with 16–22 point text.
+They are intended to be placed side-by-side at equal width on a presentation
+slide and are produced in both PNG and vector PDF form:
 
 ```text
 sine_tracking_position_error_10hz.{png,pdf}
@@ -195,3 +196,6 @@ position error. Use the result together with:
 The six passes in one capture measure within-specimen variation. They are not
 six independent print experiments. Between-print repeatability requires
 multiple complete prints per condition.
+
+The frequency labelled "reference" in each plot is estimated from scheduled
+desired X position, not from an independent physical-motion measurement.

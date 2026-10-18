@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">Standard limited-preview filtered B-spline preview advance</title>
+  <desc id="description">The 140-sample preview advances by a 70-sample committed batch. Past coefficients are retained, the uncommitted half is re-optimised, and new coefficient locations enter the look-ahead.</desc>
+  <defs>
+    <marker id="arrow-grey" viewBox="0 0 12 12" refX="10" refY="6" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" orient="auto-start-reverse"><path d="M0 0 12 6 0 12z" fill="#555555"/></marker>
+    <marker id="arrow-green" viewBox="0 0 12 12" refX="10" refY="6" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" orient="auto-start-reverse"><path d="M0 0 12 6 0 12z" fill="#238b45"/></marker>
+    <marker id="arrow-orange" viewBox="0 0 12 12" refX="10" refY="6" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" orient="auto-start-reverse"><path d="M0 0 12 6 0 12z" fill="#e85d04"/></marker>
+    <style>
+      .row-label{font:700 29px Arial,Helvetica,sans-serif;fill:#222;text-anchor:end;dominant-baseline:middle}.region-label{font:700 29px Arial,Helvetica,sans-serif;text-anchor:middle;dominant-baseline:middle}.box-main{font:700 28px Arial,Helvetica,sans-serif;text-anchor:middle}.box-sub{font:26px Arial,Helvetica,sans-serif;text-anchor:middle}.equation{font:28px Arial,Helvetica,sans-serif;text-anchor:middle}.description{font:700 26px Arial,Helvetica,sans-serif;text-anchor:middle}.axis-label{font:26px Arial,Helvetica,sans-serif;fill:#222;text-anchor:middle}.tick-label{font:25px Arial,Helvetica,sans-serif;fill:#222;text-anchor:middle}.grid{stroke:#b9b9b9;stroke-width:2.5;stroke-dasharray:10 10}.box{stroke-width:4}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#fff"/>
+
+  <g class="grid">
+    <line x1="300" y1="110" x2="300" y2="805"/><line x1="600" y1="110" x2="600" y2="805"/><line x1="900" y1="110" x2="900" y2="805"/><line x1="1200" y1="110" x2="1200" y2="805"/><line x1="1500" y1="110" x2="1500" y2="805"/>
+  </g>
+
+  <text class="row-label" x="270" y="68">P/C/F regions</text>
+  <rect class="box" x="300" y="35" width="300" height="65" rx="7" fill="#e3effa" stroke="#3478c1"/><rect class="box" x="600" y="35" width="600" height="65" rx="7" fill="#e5f4e8" stroke="#238b45"/><rect class="box" x="1200" y="35" width="300" height="65" rx="7" fill="#f2e8f8" stroke="#8246af"/>
+  <text class="region-label" x="450" y="69" fill="#3478c1">past P</text><text class="region-label" x="900" y="69" fill="#238b45">current C</text><text class="region-label" x="1350" y="69" fill="#8246af">future F</text>
+
+  <text x="750" y="135" font-family="Arial,Helvetica,sans-serif" font-size="28" fill="#444" text-anchor="middle">advance by N<tspan baseline-shift="sub" font-size="20">C</tspan> = 70 samples</text>
+  <line x1="600" y1="158" x2="892" y2="158" stroke="#555" stroke-width="4" marker-end="url(#arrow-grey)"/>
+
+  <text class="row-label" x="270" y="238">preview j</text>
+  <rect class="box" x="600" y="190" width="300" height="95" rx="7" fill="#e5f4e8" stroke="#238b45"/><rect class="box" x="900" y="190" width="300" height="95" rx="7" fill="#e3effa" stroke="#3478c1"/>
+  <text class="box-main" x="750" y="228" fill="#238b45">committed batch</text><text class="box-sub" x="750" y="262" fill="#238b45">0,…,69</text>
+  <text class="box-main" x="1050" y="228" fill="#3478c1">look-ahead</text><text class="box-sub" x="1050" y="262" fill="#3478c1">70,…,139</text>
+
+  <text class="row-label" x="270" y="373">preview j+1</text>
+  <rect class="box" x="900" y="325" width="300" height="95" rx="7" fill="#e5f4e8" stroke="#238b45"/><rect class="box" x="1200" y="325" width="300" height="95" rx="7" fill="#f2e8f8" stroke="#8246af"/>
+  <text class="box-main" x="1050" y="363" fill="#238b45">next batch</text><text class="box-sub" x="1050" y="397" fill="#238b45">70,…,139</text>
+  <text class="box-main" x="1350" y="363" fill="#8246af">new look-ahead</text><text class="box-sub" x="1350" y="397" fill="#8246af">140,…,209</text>
+
+  <text class="row-label" x="270" y="528">coefficients j</text>
+  <rect class="box" x="300" y="475" width="300" height="105" rx="7" fill="#e3effa" stroke="#3478c1"/><rect class="box" x="600" y="475" width="300" height="105" rx="7" fill="#e5f4e8" stroke="#238b45"/><rect class="box" x="900" y="475" width="300" height="105" rx="7" fill="#fff0df" stroke="#e85d04"/>
+  <text class="equation" x="450" y="517" fill="#3478c1">γ<tspan baseline-shift="sub" font-size="20">P</tspan><tspan baseline-shift="super" font-size="18">[j]</tspan></text><text class="description" x="450" y="558" fill="#3478c1">fixed history</text>
+  <text class="equation" x="750" y="517" fill="#238b45">γ<tspan baseline-shift="sub" font-size="20">0</tspan><tspan baseline-shift="super" font-size="18">[j]</tspan>,…,γ<tspan baseline-shift="sub" font-size="20">6</tspan><tspan baseline-shift="super" font-size="18">[j]</tspan></text><text class="description" x="750" y="558" fill="#238b45">committed</text>
+  <text class="equation" x="1050" y="517" fill="#e85d04">γ<tspan baseline-shift="sub" font-size="20">7</tspan><tspan baseline-shift="super" font-size="18">[j]</tspan>,…,γ<tspan baseline-shift="sub" font-size="20">13</tspan><tspan baseline-shift="super" font-size="18">[j]</tspan></text><text class="description" x="1050" y="558" fill="#e85d04">not committed</text>
+
+  <line x1="750" y1="590" x2="750" y2="625" stroke="#238b45" stroke-width="4" marker-end="url(#arrow-green)"/><line x1="1050" y1="590" x2="1050" y2="625" stroke="#e85d04" stroke-width="4" marker-end="url(#arrow-orange)"/>
+
+  <text class="row-label" x="270" y="693">coefficients j+1</text>
+  <rect class="box" x="600" y="640" width="300" height="105" rx="7" fill="#e5f4e8" stroke="#238b45"/><rect class="box" x="900" y="640" width="300" height="105" rx="7" fill="#fff0df" stroke="#e85d04"/><rect class="box" x="1200" y="640" width="300" height="105" rx="7" fill="#f2e8f8" stroke="#8246af"/>
+  <text class="equation" x="750" y="682" fill="#238b45">γ<tspan baseline-shift="sub" font-size="20">P</tspan><tspan baseline-shift="super" font-size="18">[j+1]</tspan></text><text class="description" x="750" y="723" fill="#238b45">retained</text>
+  <text class="equation" x="1050" y="682" fill="#e85d04">γ<tspan baseline-shift="sub" font-size="20">0</tspan><tspan baseline-shift="super" font-size="18">[j+1]</tspan>,…,γ<tspan baseline-shift="sub" font-size="20">6</tspan><tspan baseline-shift="super" font-size="18">[j+1]</tspan></text><text class="description" x="1050" y="723" fill="#e85d04">re-optimised</text>
+  <text class="equation" x="1350" y="682" fill="#8246af">γ<tspan baseline-shift="sub" font-size="20">7</tspan><tspan baseline-shift="super" font-size="18">[j+1]</tspan>,…,γ<tspan baseline-shift="sub" font-size="20">13</tspan><tspan baseline-shift="super" font-size="18">[j+1]</tspan></text><text class="description" x="1350" y="723" fill="#8246af">new locations</text>
+
+  <line x1="300" y1="805" x2="1500" y2="805" stroke="#222" stroke-width="3"/>
+  <g stroke="#222" stroke-width="3"><line x1="300" y1="793" x2="300" y2="817"/><line x1="600" y1="793" x2="600" y2="817"/><line x1="900" y1="793" x2="900" y2="817"/><line x1="1200" y1="793" x2="1200" y2="817"/><line x1="1500" y1="793" x2="1500" y2="817"/></g>
+  <text class="tick-label" x="300" y="848">−70</text><text class="tick-label" x="600" y="848">0</text><text class="tick-label" x="900" y="848">70</text><text class="tick-label" x="1200" y="848">140</text><text class="tick-label" x="1500" y="848">210</text>
+  <text class="axis-label" x="900" y="886">Sample coordinate relative to the start of preview j</text>
+</svg>

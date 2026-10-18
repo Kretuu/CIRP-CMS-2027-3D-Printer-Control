@@ -45,7 +45,8 @@ luenberger_kalman_position_comparison.pdf
 luenberger_kalman_position_comparison.csv
 ```
 
-The PDF is vector output and all figure text is 14 points for slides.
+The PDF is vector output. The presentation figure uses 18–22 point text and
+short labels so it remains readable when placed on a 16:9 slide.
 
 ## Suggested caption
 

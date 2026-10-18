@@ -25,3 +25,7 @@ The scripts produce:
 exports from the FRF workflow rather than outputs of the figure-only scripts.
 Generated images are kept beside the source so they can be inserted into the
 dissertation without depending on MATLAB at document-build time.
+
+`filtered-bspline-preview-advance.svg` is the large-font, presentation-scale
+vector source for the Standard limited-preview FBF slide. Its companion 4K PNG
+and PDF exports are provided for software that cannot import SVG reliably.

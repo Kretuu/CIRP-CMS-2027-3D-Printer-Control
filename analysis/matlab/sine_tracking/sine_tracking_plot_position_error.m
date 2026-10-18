@@ -7,14 +7,18 @@ function sine_tracking_plot_position_error( ...
 
 frequencies = [10, 35];
 colors = [0.80, 0.15, 0.15; 0.10, 0.35, 0.85; 0.10, 0.60, 0.25];
-lineWidths = [0.55, 0.8, 1.0];
+lineWidths = [0.65, 1.0, 1.25];
 modes = ["uncompensated", "standard", "hybrid"];
+presentationLabels = ["None", "Standard", "Hybrid"];
+comparisonYLimits = [-1000, 1000];
+comparisonYTicks = -1000:500:1000;
 for frequencyIndex = 1:numel(frequencies)
     frequency = frequencies(frequencyIndex);
     conditions = selectFrequencyConditions(selected, frequency);
     figureHandle = figure( ...
         "Name", sprintf("%g Hz position tracking error", frequency), ...
-        "Color", "w");
+        "Color", "w", "Units", "inches", ...
+        "Position", [1.0, 1.0, 6.4, 5.7]);
     axesHandle = axes(figureHandle); %#ok<LAXES>
     hold(axesHandle, "on");
     yline(axesHandle, 0.0, "k-", "LineWidth", 0.8, ...
@@ -27,8 +31,8 @@ for frequencyIndex = 1:numel(frequencies)
             summaryTable.condition == current.condition.key, :);
         [conditionTime, conditionError] = concatenateSeries( ...
             current.series, "position_error_um");
-        legendLabel = sprintf("%s (RMS %.1f \\mum)", ...
-            current.condition.short_label, ...
+        legendLabel = sprintf("%s\nRMS %.1f \\mum", ...
+            presentationLabels(modeIndex), ...
             summaryRow.overall_position_rms_error_um);
         plot(axesHandle, conditionTime, conditionError, ...
             "Color", colors(modeIndex, :), ...
@@ -37,14 +41,23 @@ for frequencyIndex = 1:numel(frequencies)
     end
 
     configurePlotAxes(axesHandle);
-    title(axesHandle, [sprintf( ...
-        "Observer-derived X tracking error: nominal %g Hz", frequency); ...
-        "Six central sine-pass intervals"]);
-    xlabel(axesHandle, "Concatenated sine-motion time [s]");
-    ylabel(axesHandle, "X tracking error [\mum]");
-    legend(axesHandle, "Location", "northoutside", ...
+    ylim(axesHandle, comparisonYLimits);
+    yticks(axesHandle, comparisonYTicks);
+    meanReferenceFrequency = mean(conditions(1).pass_metrics.actual_frequency_hz);
+    title(axesHandle, sprintf( ...
+        "%g Hz command (%.1f Hz reference)", ...
+        frequency, meanReferenceFrequency));
+    xlabel(axesHandle, "Concatenated pass time [s]");
+    ylabel(axesHandle, "Observer-derived X error [\mum]");
+    legendHandle = legend(axesHandle, "Location", "northoutside", ...
         "Orientation", "horizontal", "NumColumns", 3);
-    fontsize(figureHandle, 14, "points");
+    axesHandle.FontSize = 18;
+    axesHandle.LabelFontSizeMultiplier = 1.08;
+    axesHandle.TitleFontSizeMultiplier = 1.18;
+    legendHandle.FontSize = 16;
+    % These figures are placed side-by-side on a slide. A compact canvas and
+    % generous margins keep text large after each panel is scaled to half width.
+    axesHandle.Position = [0.18, 0.16, 0.77, 0.61];
     exportFigure(figureHandle, outputDirectory, sprintf( ...
         "sine_tracking_position_error_%ghz", frequency));
 end
@@ -101,9 +114,8 @@ end
 function exportFigure(figureHandle, outputDirectory, stem)
 %EXPORTFIGURE Write both raster preview and vector PDF.
 
-figureHandle.Position(3:4) = [1200, 675];
 exportgraphics(figureHandle, fullfile(outputDirectory, stem + ".png"), ...
-    "Resolution", 220);
+    "Resolution", 240);
 exportgraphics(figureHandle, fullfile(outputDirectory, stem + ".pdf"), ...
     "ContentType", "vector");
 close(figureHandle);
